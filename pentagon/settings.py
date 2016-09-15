@@ -83,6 +83,7 @@ try:
     # If not default to {}
 
     if 'DATABASES' not in locals():
+        print 'hello db'
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.mysql',
@@ -95,6 +96,7 @@ try:
         }
 
     if 'DATABASE_URL' in os.environ:
+        print 'using online db'
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
         # Ensure default database exists.
@@ -108,7 +110,6 @@ try:
             'HOST': url.hostname,
             'PORT': url.port,
         })
-
 
         if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
