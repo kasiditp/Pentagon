@@ -1,2 +1,1 @@
-run: python manage.py makemigrations
-web: gunicorn pentagon.wsgi
+web: gunicorn gettingstarted.wsgi
