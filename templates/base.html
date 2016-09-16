@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Hello it's me mario</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'base/css/bootstrap.css' %}" rel="stylesheet">
+    <!-- Footer CSS -->
+    <link href="{% static 'base/css/sticky-footer.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    {% block content %}{% endblock %}
+
+    {% include 'footer.html' %}
+
+    {% block script %}
+        <!-- Jquery Core -->
+        <link href="{% static 'base/js/jquery-3.1.0.min.js' %}">
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
+
+    {% endblock %}
+</body>
+</html>
