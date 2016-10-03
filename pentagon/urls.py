@@ -8,5 +8,6 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', include('base.urls', namespace='home')),
+    url(r'^product/', include('product.urls', namespace='product'))
 
 ]
