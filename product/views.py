@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404
 
 
 # Create your views here.
-from product.models import Product, SEX, PRODUCT_TYPE
 
+from product.models import Product, PRODUCT_TYPE, SEX
 
 def product_view(request):
     product_list = Product.objects.all()
@@ -16,11 +16,13 @@ def product_view(request):
 
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    sex = SEX[product.sex - 1][1]
-    type = PRODUCT_TYPE[product.type - 1][1]
+
+    sex = SEX[(product.sex - 1)][1]
+    product_type = PRODUCT_TYPE[(product.type - 1)][1]
+    #print sex
     context = {
         'product': product,
         'sex': sex,
-        'type': type
+        'type': product_type
     }
     return render(request, 'pages/productdetails/details.html', context)
