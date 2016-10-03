@@ -5,6 +5,21 @@
         <div class="container">
 
             <div class="row">
+            <div class="col-md-3">
+               <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+
+                        <li><a href="#">S</a></li>
+                        <li><a href="#">M</a></li>
+                        <li><a href="#">L</a></li>
+                        <li><a href="#">XL</a></li>
+                        <li><a href="#">XXL</a></li>
+
+                    </ul>
+               </div>
+            </div>
                 {% for product in product_list %}
                     <img src="{{ product.picture }}">
                 {% endfor %}
