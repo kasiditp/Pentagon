@@ -10,5 +10,9 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.11 virtualenv at D:\Work\WSP\ProjectPentagon\v" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.10 virtualenv at ~/Documents/ThePentagonProject/venv" project-jdk-type="Python SDK" />
+>>>>>>> 289b91cd79872e96c851d46577ee867e52d6b80e
 </project>
