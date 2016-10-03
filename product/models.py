@@ -16,6 +16,7 @@ SEX = [
     (3, "Unisex")
 ]
 
+
 # Create your models here.
 class Product(models.Model) :
     name = models.CharField(verbose_name="Name", max_length=64, null=False, blank=False)
