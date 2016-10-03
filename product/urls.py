@@ -1,11 +1,10 @@
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import url
 
-from product.views import product_details
+from product.views import *
 
 urlpatterns = [
-    # Examples:
-    # url(r'^$', 'pentagon.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
+    url(r'^$', product_view, name="product_view"),
     url(r'^(?P<product_id>[0-9]+)/$', product_details, name="product_details")
 ]
+
+\
