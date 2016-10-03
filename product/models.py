@@ -24,7 +24,10 @@ class Product(models.Model) :
     sex = models.IntegerField(verbose_name="Sex", choices=SEX, null=False)
     brand = models.CharField(verbose_name="Brand", max_length=64, null=False, blank=True)
     size = models.CharField(verbose_name="Size", max_length=8, null=False, blank=False)
+    price = models.FloatField(verbose_name="Price", default=0, null=False, blank=False)
+    description = models.TextField(verbose_name="Description", null=True, blank=True)
     picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)
+
 
 
 

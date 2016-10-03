@@ -7,4 +7,3 @@ urlpatterns = [
     url(r'^(?P<product_id>[0-9]+)/$', product_details, name="product_details")
 ]
 
-\
