@@ -4,53 +4,70 @@
     <section>
         <div class="container">
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
+            <div class="table">
+                <div class="row">
 
-                            <li><a href="#">S</a></li>
-                            <li><a href="#">M</a></li>
-                            <li><a href="#">L</a></li>
-                            <li><a href="#">XL</a></li>
-                            <li><a href="#">XXL</a></li>
+                    <div class="col-md-2">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
 
-                        </ul>
+                                <li><a href="#">S</a></li>
+                                <li><a href="#">M</a></li>
+                                <li><a href="#">L</a></li>
+                                <li><a href="#">XL</a></li>
+                                <li><a href="#">XXL</a></li>
+
+                            </ul>
+                        </div>
+
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Max
+                                Price
+                            </button>
+                            <ul class="dropdown-menu"><input
+                                    data-addui='slider'
+                                    {#                                data-formatter='usd'#}
+                                    data-fontsize='14'
+                                    data-step='0.01'
+                                    data-min='0'
+                                    data-max='20'
+                                    value='10'
+                            />
+                            </ul>
+
+                        </div>
+
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Brand
+                            </button>
+                            <ul class="dropdown-menu">
+                                <input type="text">
+                            </ul>
+                        </div>
+
+                        <div>
+
+                        </div>
+
                     </div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Max Price</button>
-                        <ul class="dropdown-menu"> <input
-                                data-addui='slider'
-{#                                data-formatter='usd'#}
-                                data-fontsize='14'
-                                data-step='0.01'
-                                data-min='0'
-                                data-max='20'
-                                value='10'
-                        />
-                        </ul>
-
-                    </div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Brand</button>
-                        <ul class="dropdown-menu">
-                            <input type="text">
-                        </ul>
-                    </div>
-
-                    <div>
-
-                    </div>
-
                 </div>
-                {% for product in product_list %}
-                    <img src="{{ product.picture }}">
-                {% endfor %}
+
             </div>
+            <div class="table">
+                <div class="row">
+                    {% for product in product_list %}
+                        <div class="col-md-2 text-center">
+                            <img src="{{ product.picture }}"><br>
+                            <b>Product Name :</b> {{ product.name }}<br>
+                            <b>Product Size :</b> {{ product.size }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
         </div>
     </section>
 
