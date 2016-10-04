@@ -5,31 +5,41 @@
     <section>
         <div class="container">
             <div class="row">
-                <h1>{{ product.name }}</h1>
+                  <ol class="breadcrumb">
+                      <li><a href="#">Home</a></li>
+                      <li><a href="#">{{ sex }}</a></li>
+                      <li class="active">{{ type }}</li>
+                  </ol>
             </div>
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-5 col-sm-12">
                     <img class="product_img img-responsive" src="{{ product.picture }}">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 col-sm-12">
                     {% load humanize %}
-                    <div class="row"><h2><b>{{ product.price|floatformat:2|intcomma}}฿</b></h2></div>
-                    <div class="row"><h2>Details</h2></div>
+                     <div class="row">
+                         <h2><b>{{ product.brand }}</b></h2>
+                         <h3>{{ product.name }}</h3>
+                    </div>
+                    <div class="row"><h3><b>{{ product.price|floatformat:2|intcomma}} THB</b></h3></div>
+{#                    <div class="row"><h2>Details</h2></div>#}
                     <div class="row"><p>{{ product.description|linebreaksbr }}</p></div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-4"><h3>Size</h3></div>
-                        <div class="col-md-4 col-sm-4"><h3>Type</h3></div>
-                        <div class="col-md-4 col-sm-4"><h3>Gender</h3></div>
+                        <div class="col-md-4 col-sm-4"><h4>Size</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4>Type</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4>Gender</h4></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-4"><h4>{{ product.size }}</h4></div>
-                        <div class="col-md-4 col-sm-4"><h4>{{ type }}</h4></div>
-                        <div class="col-md-4 col-sm-4"><h4>{{ sex }}</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4><small>{{ product.size }}</small></h4></div>
+                        <div class="col-md-4 col-sm-4"><h4><small>{{ type }}</small></h4></div>
+                        <div class="col-md-4 col-sm-4"><h4><small>{{ sex }}</small></h4></div>
                     </div>
                     <div class="row">
-                        <button class="btn btn-success btn-lg">
+                        <div class="col-md-6 col-sm-12">
+                        <button class="btn btn-success btn-lg btn-block">
                             <i class="fa fa-cart-plus" aria-hidden="true"></i>  Put in cart
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>
