@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'base',
     'product',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'member'
 )
 
 MIDDLEWARE_CLASSES = (
