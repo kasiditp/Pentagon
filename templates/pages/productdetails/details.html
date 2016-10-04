@@ -8,22 +8,23 @@
                 <h1>{{ product.name }}</h1>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <img src="{{ product.picture }}" width="300" height="300">
+                <div class="col-md-5">
+                    <img class="product_img img-responsive" src="{{ product.picture }}">
                 </div>
-                <div class="col-md-4">
-                    <div class="row"><h2><b>{{ product.price|floatformat:2}}฿</b></h2></div>
+                <div class="col-md-5">
+                    {% load humanize %}
+                    <div class="row"><h2><b>{{ product.price|floatformat:2|intcomma}}฿</b></h2></div>
                     <div class="row"><h2>Details</h2></div>
                     <div class="row"><p>{{ product.description|linebreaksbr }}</p></div>
                     <div class="row">
-                        <div class="col-md-4"><h3>Size</h3></div>
-                        <div class="col-md-4"><h3>Type</h3></div>
-                        <div class="col-md-4"><h3>Gender</h3></div>
+                        <div class="col-md-4 col-sm-4"><h3>Size</h3></div>
+                        <div class="col-md-4 col-sm-4"><h3>Type</h3></div>
+                        <div class="col-md-4 col-sm-4"><h3>Gender</h3></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4"><h4>{{ product.size }}</h4></div>
-                        <div class="col-md-4"><h4>{{ type }}</h4></div>
-                        <div class="col-md-4"><h4>{{ sex }}</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4>{{ product.size }}</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4>{{ type }}</h4></div>
+                        <div class="col-md-4 col-sm-4"><h4>{{ sex }}</h4></div>
                     </div>
                     <div class="row">
                         <button class="btn btn-success btn-lg">
@@ -35,5 +36,11 @@
         </div>
 
     </section>
-<link href="{% static 'product/js/jquery.loupe.min.js' %}">
+    {% block script %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+        <script src="{% static 'product/js/jquery.loupe.min.js' %}"></script>
+        <script type="text/javascript">
+            $('.product_img').loupe();
+        </script>
+    {% endblock %}
 {% endblock %}
