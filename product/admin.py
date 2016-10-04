@@ -10,4 +10,3 @@ class ProductAdmin(admin.ModelAdmin) :
 
 
 admin.site.register(Product, ProductAdmin)
-
