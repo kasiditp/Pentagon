@@ -1,0 +1,8 @@
+@font-face {
+    font-family: Marvenpro;
+    src: url("../fonts/OpenSans-Regular.ttf");
+}
+
+.navbar .nav > li > a, .navbar-header > a{
+    font-family: Marvenpro;
+}
