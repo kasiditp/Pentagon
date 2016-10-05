@@ -4,17 +4,22 @@
     <section>
         <div class="container">
 
-            <div class="col-md-2">
+            <div class="col-md-2 filter">
+                <div class="row">
+                    <h3>Filter</h3>
+                    <button class="btn btn-danger">Clear</button>
+                </div>
+                <br><br>
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
 
-                        <li><a href="#">S</a></li>
-                        <li><a href="#">M</a></li>
-                        <li><a href="#">L</a></li>
-                        <li><a href="#">XL</a></li>
-                        <li><a href="#">XXL</a></li>
+                        <button><a href="#">S</a></button>
+                        <button><a href="#">M</a></button>
+                        <button><a href="#">L</a></button>
+                        <button><a href="#">XL</a></button>
+                        <button><a href="#">XXL</a></button>
 
                     </ul>
                 </div>
@@ -27,10 +32,11 @@
                             data-addui='slider'
                             {#                                data-formatter='usd'#}
                             data-fontsize='14'
-                            data-step='0.01'
+                            data-step='1'
                             data-min='0'
-                            data-max='20'
-                            value='10'
+                            data-max={{ max_price.price__max }}
+                            value='0'
+
                     />
                     </ul>
 
@@ -50,15 +56,25 @@
 
             </div>
 
-            <div class="col-md-10 text-center">
+            <div class="col-md-10 text-center product">
+                <div class ="row">
+                    Some Description here
+                </div>
+                <div class = "row">
+
                 {% for product in product_list %}
                     <div class="col-md-3">
-                        <img src="{{ product.picture }}"><br>
-                        <b>Product Name :</b> {{ product.name }}<br>
-                        <b>Product Size :</b> {{ product.size }}
+                        <img class="img-responsive" src="{{ product.picture }}"><br>
+                        <b>{{product.name}}</b><br>
+                        <a class="divider"></a><br>
+                        {{ product.description }} <b>{{ product.price }}</b>
                     </div>
-
+                    {% if forloop.counter|divisibleby:4 %}
+                        </div>
+                        <div class="row">
+                    {% endif %}
                 {% endfor %}
+                </div>
             </div>
 
 
