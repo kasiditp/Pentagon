@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block script %}
 
-        <script src = "{% static 'product/addslider/addSlider.js' %}" type="text/javascript"></script>
+<script src = "{% static 'product/addslider/addSlider.js' %}" type="text/javascript"></script>
 
-        <script src = "{% static 'product/addslider/Obj.min.js'%} " type="text/javascript"></script>
+<script src = "{% static 'product/addslider/Obj.min.js'%} " type="text/javascript"></script>
 
-{% endblock %}
+
 
 {% block content %}
     <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
@@ -77,7 +76,7 @@
 
                 {% for product in product_list %}
                     <div class="col-md-3">
-                        <img class="img-responsive" src="{{ product.picture }}"><br>
+                        <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
                         <b>{{product.name}}</b><br>
                         <a class="divider"></a><br>
                         {{ product.description }} <b>{{ product.price }}</b>
