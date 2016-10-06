@@ -41,12 +41,20 @@ div {
     margin-bottom: 10px;
 }
 .gallery-items {
-    object-fit: fill;
-    margin: 0;
+    /*object-fit: fill;*/
+    margin-bottom: 8%;
+    margin-top: 8%;
 }
 #gallery {
     padding: 0;
 }
 .img-thumbnail {
     border-radius: 0;
+}
+
+.breadcrumb {
+    border-radius: 0;
+}
+.gallery-items {
+    align-self: center;
 }
