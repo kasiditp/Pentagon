@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block script %}
 
-<script src = "{% static 'product/addslider/addSlider.js' %}" type="text/javascript"></script>
+<script src ="{% static 'product/addslider/addSlider.js' %}"></script>
 
-<script src = "{% static 'product/addslider/Obj.min.js'%} " type="text/javascript"></script>
+<script src ="{% static 'product/addslider/Obj.min.js' %}"></script>
 
+{% endblock %}
 
 
 {% block content %}
     <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
-    <link href="{% static 'product/addslider/addSlider.css' %}" rel="stylesheet">
+    <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
 
 
     <section>
