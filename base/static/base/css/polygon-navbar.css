@@ -1,11 +1,11 @@
 .navbar-polygon {
-    background-color: #171717;
-    color: white;
+    background-color: #FFFFFF;
+    color: #171717;
 }
 
 .navbar {
     margin: 0;
-    border-color: #171717;
+    border-color: #FFFFFF;
 }
 
 .container-fluid {
