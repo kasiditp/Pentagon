@@ -1,15 +1,101 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block script %}
+
+<script src ="{% static 'product/addslider/addSlider.js' %}"></script>
+
+<script src ="{% static 'product/addslider/Obj.min.js' %}"></script>
+
+{% endblock %}
+
+
 {% block content %}
+    <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
+    <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
+
+
     <section>
         <div class="container">
 
-            <div class="row">
-                {% for product in product_list %}
-                    <img src="{{ product.picture }}">
-                {% endfor %}
+            <div class="col-md-2 filter">
+                <div class="row">
+                    <h3>Filter</h3>
+                    <button class="btn btn-danger">Clear</button>
+                </div>
+                <br><br>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+
+                        <button><a href="#">S</a></button>
+                        <button><a href="#">M</a></button>
+                        <button><a href="#">L</a></button>
+                        <button><a href="#">XL</a></button>
+                        <button><a href="#">XXL</a></button>
+
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Max
+                        Price
+                    </button>
+                    <ul class="dropdown-menu"><input
+                            data-addui='slider'
+                            {#                                data-formatter='usd'#}
+                            data-fontsize='14'
+                            data-step='1'
+                            data-min='0'
+                            data-max={{ max_price.price__max }}
+                            value='0'
+
+                    />
+                    </ul>
+
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Brand
+                    </button>
+                    <ul class="dropdown-menu">
+                        <input type="text">
+                    </ul>
+                </div>
+
+                <div>
+
+                </div>
+
             </div>
+
+            <div class="col-md-10 text-center product">
+                <div class ="row">
+                    Some Description here
+                </div>
+                <div class = "row">
+
+                {% for product in product_list %}
+                    <div class="col-md-3">
+                        <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
+                        <b>{{product.name}}</b><br>
+                        <a class="divider"></a><br>
+                        {{ product.description }} <b>{{ product.price }}</b>
+                    </div>
+                    {% if forloop.counter|divisibleby:4 %}
+                        </div>
+                        <div class="row">
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+
+
         </div>
+
     </section>
+
+
 
 {% endblock %}
