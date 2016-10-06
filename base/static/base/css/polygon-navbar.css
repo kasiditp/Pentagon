@@ -1,11 +1,16 @@
 .navbar-polygon {
-    background-color: black;
+    background-color: #171717;
     color: white;
+}
+
+.navbar {
+    margin: 0;
+    border-color: #171717;
 }
 
 .container-fluid {
     font-family: 'Open Sans', sans-serif;
-    height: 55px;
+    height: 35px;
     margin-top: 2px;
 }
 
@@ -14,16 +19,16 @@
 }
 
 .header-polygon a {
-    font-size: 36px;
+    font-size: 18px;
 }
 
 .navbar-nav li {
-    font-size: 32px;
+    font-size: 14px;
 }
 
 .member-button {
     margin-left: 70px;
-    height: 60px;
+    height: 30px;
     width: 80px;
     text-align: center;
 }
