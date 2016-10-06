@@ -6,7 +6,7 @@ PRODUCT_TYPE = [
     (1, "Top"),
     (2, "Bottom"),
     (3, "Overall"),
-    (4, "Shoe"),
+    (4, "Footwear"),
     (5, "Accessory")
 ]
 
