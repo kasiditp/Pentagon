@@ -27,6 +27,9 @@ class Product(models.Model):
     price = models.FloatField(verbose_name="Price", default=0, null=False, blank=False)
     description = models.TextField(verbose_name="Description", null=True, blank=True)
 
+    def __str__(self):
+        return u"%s" % self.name
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
