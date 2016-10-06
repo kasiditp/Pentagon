@@ -1,15 +1,64 @@
 {% load static %}
+<link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
+<link href="{% static 'base/css/polygon-navbar.css' %}" rel="stylesheet">
+<link href="{% static 'base/css/navbar-search.css' %}" rel="stylesheet">
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-polygon">
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">WebSiteName</a>
+        <div class="navbar-header header-polygon" style="margin-left: 40px;margin-right: 100px;">
+            <a class="navbar-brand" href="#" style="color: white">Polygon</a>
+            <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px;">
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Page 1</a></li>
-            <li><a href="#">Page 2</a></li>
-            <li><a href="#">Page 3</a></li>
+            <li><a href="#" style="color: white">Men</a></li>
+            <li><a href="#" style="color: white">Women</a></li>
+            <li>
+                <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control input-lg" placeholder="Search for name, brand ..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            </li>
+            <li>
+                <div class="member-button" id="member-button">
+                    <a href="#"><img src="{% static 'icons/Member.png' %}" id="member-img"></a>
+                    <div class="member-div" id="member-div">
+                        <span class="js-arrow js-arrow-dark"></span>
+                        <div class="member-top">
+                            Welcome
+                        </div>
+                        <div class="member-bottom">
+                            <ul role="menu" aria-labelledby="dLabel">
+                                <li><a>Login</a></li>
+                                <li><a>Register</a></li>
+                                <li><a>Tracking</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="shopping-button">
+                    <a><img src="{% static 'icons/Shopping.png' %}"></a>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
+<script>
+    $('#member-button').hover(function () {
+        $('#member-div').fadeIn('fast');
+    }, function () {
+        $('#member-div').fadeOut('fast');
+    });
+    $('#member-div').hover(function () {
+        $('#member-div').show();
+    }, function () {
+        $('#member-div').fadeOut('fast');
+    });
+</script>
