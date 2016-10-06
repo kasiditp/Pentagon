@@ -1,132 +1,40 @@
-
-/* Prevent the slideshow from flashing on load */
-#slides {
-    display: none
-}
-
-/* Center the slideshow */
 .container {
-    margin: 0 auto
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
-/* Show active item in the pagination */
-.slidesjs-pagination .active {
-    color: red;
+.photo {
+    animation: round 15s infinite;
+    opacity: 0;
+    position: absolute;
+    height: 400px;
+    /*width: 150%;*/
 }
 
-/* Media quires for a responsive layout */
+#photo1 {
+    animation-delay: 0s;
+}
 
-/* For tablets & smart phones */
-@media (max-width: 767px) {
-    body {
-        padding-left: 10px;
-        padding-right: 10px;
+#photo2 {
+    animation-delay: 5s;
+}
+
+#photo3 {
+    animation-delay: 10s;
+}
+
+#photo4 {
+
+}
+
+@keyframes round {
+    25% {
+        opacity: 1;
     }
-
-    .container {
-        width: auto
-    }
-}
-
-/* For smartphones */
-@media (max-width: 480px) {
-    .container {
-        width: auto
-    }
-}
-
-/* For smaller displays like laptops */
-@media (min-width: 768px) and (max-width: 979px) {
-    .container {
-        width: 724px
-    }
-}
-
-/* For larger displays */
-@media (min-width: 1200px) {
-    .container {
-        width: 1170px
+    80% {
+        opacity: 0;
     }
 }
-.slide{
-           width:100px;
-           height:100px;
-       }
-/*body{*/
-  /*font-family: "futura", arial;*/
-/*}*/
 
-/*.fader{*/
-    /*position: relative;*/
-    /*padding-top: 60%;*/
-    /*overflow: hidden;*/
-/*}*/
 
-/*.fader .slide{*/
-    /*position: absolute;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*top: 0;*/
-    /*z-index: 1;*/
-    /*opacity: 0;*/
-/*}*/
-
-/*.fader img.slide{*/
-    /*height: auto;*/
-/*}*/
-
-/*.fader .prev,*/
-/*.fader .next{*/
-  /*position: absolute;*/
-  /*height: 80px;*/
-  /*line-height: 55px;*/
-  /*width: 50px;*/
-  /*font-size: 100px;*/
-  /*text-align: center;*/
-  /*color: #fff;*/
-  /*top: 50%;*/
-  /*left: 0;*/
-  /*z-index: 4;*/
-  /*margin-top: -25px;*/
-  /*cursor: pointer;*/
-  /*opacity: .7;*/
-  /*transition: all 150ms;*/
-/*}*/
-
-/*.fader .prev:hover,*/
-/*.fader .next:hover{*/
-  /*opacity: 1;*/
-/*}*/
-
-/*.fader .next{*/
-  /*left: auto;*/
-  /*right: 0;*/
-/*}*/
-
-/*.fader .pager_list{*/
-  /*position: absolute;*/
-  /*width: 100%;*/
-  /*height: 40px;*/
-  /*line-height: 40px;*/
-  /*bottom: 0;*/
-  /*text-align: center;*/
-  /*z-index: 4;*/
-/*}*/
-
-/*.fader .pager_list li{*/
-  /*display: inline-block;*/
-  /*width: 15px;*/
-  /*height: 15px;*/
-  /*margin: 0 7px;*/
-  /*background: #fff;*/
-  /*opacity: .7;*/
-  /*text-indent: -999px;*/
-  /*border-radius: 999px;*/
-  /*cursor: pointer;*/
-  /*transition: all 150ms;*/
-/*}*/
-
-/*.fader .pager_list li:hover,*/
-/*.fader .pager_list li.active{*/
-  /*opacity: 1;*/
 
