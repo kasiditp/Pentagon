@@ -1,15 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block script %}
-
-<script src ="{% static 'product/addslider/addSlider.js' %}"></script>
-
-<script src ="{% static 'product/addslider/Obj.min.js' %}"></script>
-
-{% endblock %}
-
-
 {% block content %}
     <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
     <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
@@ -17,42 +8,33 @@
 
     <section>
         <div class="container">
-
             <div class="col-md-2 filter">
                 <div class="row">
                     <h3>Filter</h3>
                     <button class="btn btn-danger">Clear</button>
                 </div>
                 <br><br>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
+                <button id="size_s" data-id="S"><a href="#">S</a></button>
+                <button id="size_m" data-id="M"><a href="#">M</a></button>
+                <button id="size_l" data-id="L"><a href="#">L</a></button>
+                <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
+                <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
 
-                        <button><a href="#">S</a></button>
-                        <button><a href="#">M</a></button>
-                        <button><a href="#">L</a></button>
-                        <button><a href="#">XL</a></button>
-                        <button><a href="#">XXL</a></button>
 
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Max
-                        Price
-                    </button>
-                    <ul class="dropdown-menu"><input
+                <div>
+                    <h3>Max Price</h3>
+                    <input
                             data-addui='slider'
+                            value='0'
                             {#                                data-formatter='usd'#}
                             data-fontsize='14'
                             data-step='1'
                             data-min='0'
                             data-max={{ max_price.price__max }}
-                            value='0'
+
 
                     />
-                    </ul>
+
 
                 </div>
 
@@ -71,24 +53,24 @@
             </div>
 
             <div class="col-md-10 text-center product">
-                <div class ="row">
+                <div class="row">
                     Some Description here
                 </div>
-                <div class = "row">
+                <div class="row" id="product-content">
 
-                {% for product in product_list %}
-                    <div class="col-md-3">
-                        <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
-                        <b>{{product.name}}</b><br>
-                        <a class="divider"></a><br>
-                        {{ product.description }} <b>{{ product.price }}</b>
-                    </div>
-                    {% if forloop.counter|divisibleby:4 %}
+                    {% for product in product_list %}
+                        <div class="col-md-3">
+                            <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
+                            <b>{{ product.name }}</b><br>
+                            <a class="divider"></a><br>
+                            {{ product.description }} <b>{{ product.price }}</b>
                         </div>
-                        <div class="row">
-                    {% endif %}
-                {% endfor %}
-                </div>
+                        {% if forloop.counter|divisibleby:4 %}
+                            </div>
+                            <div class="row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
             </div>
 
 
@@ -96,6 +78,57 @@
 
     </section>
 
+    <script src="{% static 'product/addslider/addSlider.js' %}"></script>
 
+    <script src="{% static 'product/addslider/Obj.min.js' %}"></script>
+
+    <script>
+        $('button').on('click', function (event) {
+
+            event.preventDefault();
+            var element = $(this);
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                data: {button_id: element.attr("data-id")},
+
+                success: function (response) {
+                    {#                    console.log(response.content);#}
+                    {#                    $('#product-content').html(response.content);#}
+                    refreshProductContent(response.content);
+                }
+            });
+
+        });
+
+        function refreshProductContent(content) {
+            console.log(content['max_price']);
+
+            console.log(content['product_list'][0]);
+
+            var msg = "";
+
+
+            msg+= "\{\% for product in product_list \%\}" +
+                            "\{\{ product.description \}\}" +
+                            "\{\% endfor \%\}"
+
+{#            {% for product in product_list %}#}
+{#                <div class= "col-md-3" >#}
+{#                    < img class= "img-responsive" src = "{{ product.get_all_image.first }}" > < br >#}
+{#                    < b >{{ product.name }} < / b > < br >#}
+{#                    < a class= "divider" > < / a > < br >#}
+{#                    {{ product.description }} < b >{{ product.price }} < / b >#}
+{#                    < / div >#}
+{#                    {% if forloop.counter|divisibleby:4 %}#}
+{#                        </ div>#}
+{#                        <div class= "row" >#}
+{#                    {% endif %}#}
+{#            {% endfor %}#}
+
+            $('#product-content').html(msg);
+        }
+
+    </script>
 
 {% endblock %}
