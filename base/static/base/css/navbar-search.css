@@ -12,6 +12,7 @@
     border: 0;
     box-shadow: none;
     height: 20px;
+    margin-top: 2px;
 }
 
 #custom-search-input button{
