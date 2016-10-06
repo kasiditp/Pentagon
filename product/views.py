@@ -22,7 +22,7 @@ def product_view(request):
 
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    images = get_object_or_404(ProductImage, fk=product_id)
+    images = product.get_all_image()
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]

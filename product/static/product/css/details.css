@@ -40,3 +40,13 @@ div {
 #add_to_cart_btn {
     margin-bottom: 10px;
 }
+.gallery-items {
+    object-fit: fill;
+    margin: 0;
+}
+#gallery {
+    padding: 0;
+}
+.img-thumbnail {
+    border-radius: 0;
+}

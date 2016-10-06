@@ -13,11 +13,18 @@
                   </ol>
             </div>
             <div class="row">
-                <div class="col-md-1 col-sm-12">
+                <div class="col-md-1 col-sm-12" id="gallery">
 
+                    {% for image in images %}
+
+                            <div class="col-md-12 col-sm-2 gallery-items">
+                                <img src="{{ image }}" class="img-thumbnail img-responsive">
+                            </div>
+
+                    {% endfor %}
                 </div>
                 <div class="col-md-4 col-sm-12 border">
-                    <img class="product_img img-responsive" src="{{ images.picture }}">
+                    <img class="product_img img-responsive" src="{{ images.first }}">
                 </div>
                 <div class="col-md-4 col-sm-12" id="product_info">
                     {% load humanize %}
