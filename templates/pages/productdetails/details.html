@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-<link href="{% static 'product/css/details.css' %}" rel="stylesheet">
+{#<link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">#}
 {% block content %}
+    <link href="{% static 'product/css/details.css' %}" rel="stylesheet">
     <section>
-        <div class="container">
+        <div class="container" id="product_info">
             <div class="row">
                   <ol class="breadcrumb">
                       <li><a href="#">Home</a></li>
@@ -12,32 +13,44 @@
                   </ol>
             </div>
             <div class="row">
-                <div class="col-md-5 col-sm-12">
+                <div class="col-md-5 col-sm-12 border">
                     <img class="product_img img-responsive" src="{{ product.picture }}">
                 </div>
-                <div class="col-md-5 col-sm-12">
+                <div class="col-md-4 col-sm-12" id="product_info">
                     {% load humanize %}
                      <div class="row">
-                         <h2><b>{{ product.brand }}</b></h2>
-                         <h3>{{ product.name }}</h3>
+                         <h2><b> {{ product.brand |upper }} </b></h2>
+                         <h4>{{ product.name }}</h4>
                     </div>
                     <div class="row"><h3><b>{{ product.price|floatformat:2|intcomma}} THB</b></h3></div>
 {#                    <div class="row"><h2>Details</h2></div>#}
                     <div class="row"><p>{{ product.description|linebreaksbr }}</p></div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-4"><h4>Size</h4></div>
-                        <div class="col-md-4 col-sm-4"><h4>Type</h4></div>
-                        <div class="col-md-4 col-sm-4"><h4>Gender</h4></div>
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexheaderrow">SIZE</p></div>
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexheaderrow">TYPE</p></div>
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexheaderrow">GENDER</p></div>
+                    </div>
+                    <div class="row" id="sizetypesexrow">
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexrow">{{ product.size }}</p></div>
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexrow">{{ type }}</p></div>
+                        <div class="col-md-4 col-sm-4"><p class="sizetypesexrow">{{ sex }}</p></div>
+                    </div>
+                </div>
+                <div class="col-md-3 border" id="cart_interact">
+                    <div class="row" id="remaining_stock">
+                        <p>Remaining :</p>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-4"><h4><small>{{ product.size }}</small></h4></div>
-                        <div class="col-md-4 col-sm-4"><h4><small>{{ type }}</small></h4></div>
-                        <div class="col-md-4 col-sm-4"><h4><small>{{ sex }}</small></h4></div>
+                        <div class="col-md-12 col-sm-12">
+                        <button class="btn btn-success btn-lg btn-block" id="add_to_cart_btn">
+                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>  Put in cart
+                        </button>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                        <button class="btn btn-success btn-lg btn-block">
-                            <i class="fa fa-cart-plus" aria-hidden="true"></i>  Put in cart
+                        <div class="col-md-12 col-sm-12">
+                        <button class="btn btn-primary btn-lg btn-block" id="add_to_wishlist_btn">
+                            <i class="fa fa-plus" aria-hidden="true"></i>  Add to wishlist
                         </button>
                         </div>
                     </div>
@@ -47,7 +60,8 @@
 
     </section>
     {% block script %}
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+{#        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>#}
+        <!--- Magnifier JS --->
         <script src="{% static 'product/js/jquery.loupe.min.js' %}"></script>
         <script type="text/javascript">
             $('.product_img').loupe();
