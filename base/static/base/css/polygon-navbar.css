@@ -20,3 +20,36 @@
 .navbar-nav li {
     font-size: 32px;
 }
+
+.member-button {
+    margin-left: 70px;
+    height: 60px;
+    width: 80px;
+    text-align: center;
+}
+
+.shopping-button {
+    margin-top: 1px;
+}
+
+.js-arrow-dark {
+    border-color: transparent transparent #6d6e6e;
+}
+
+.js-arrow {
+    position: absolute;
+    border-style: solid;
+    border-width: 10px;
+    margin-top: -20px;
+    margin-left: -10px;
+}
+
+.member-div {
+    width: 200px;
+    /*height: 100px;*/
+    margin-top: 10px;
+    position: absolute;
+    background-color: blue;
+    left: 10px;
+    display: none;
+}

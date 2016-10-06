@@ -24,6 +24,34 @@
                 </div>
             </div>
             </li>
+            <li>
+                <div class="member-button" id="member-button">
+                    <a href="#"><img src="{% static 'icons/Member.png' %}" id="member-img"></a>
+                    <div class="member-div" id="member-div">
+                        <span class="js-arrow js-arrow-dark"></span>
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="shopping-button">
+                    <a><img src="{% static 'icons/Shopping.png' %}"></a>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
+<script>
+    $('#member-button').hover(function () {
+        $('#member-div').fadeIn('fast');
+    }, function () {
+        $('#member-div').fadeOut('fast');
+    });
+    $('#member-div').hover(function () {
+        $('#member-div').show();
+    }, function () {
+        $('#member-div').fadeOut('fast');
+    });
+</script>
