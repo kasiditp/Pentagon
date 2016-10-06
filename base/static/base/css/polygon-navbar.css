@@ -1,0 +1,22 @@
+.navbar-polygon {
+    background-color: black;
+    color: white;
+}
+
+.container-fluid {
+    font-family: 'Open Sans', sans-serif;
+    height: 55px;
+    margin-top: 2px;
+}
+
+.header-polygon {
+
+}
+
+.header-polygon a {
+    font-size: 36px;
+}
+
+.navbar-nav li {
+    font-size: 32px;
+}

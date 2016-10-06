@@ -1,7 +1,53 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    {#    <link href="{% static 'base/css/home.css' %}" rel="stylesheet">#}
     <section>
-        <h1>Test</h1>
+
+        <!-- SlidesJS Required: Link to jQuery -->
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <!-- End SlidesJS Required -->
+
+        <!-- SlidesJS Required: Link to jquery.slides.js -->
+        <script src="http://www.slidesjs.com/examples/basic-fade/js/jquery.slides.min.js"></script>
+        <!-- End SlidesJS Required -->
+
+
+        <!-- SlidesJS Required: Start Slides -->
+        <!-- The container is used to define the width of the slideshow -->
+        <div class="container">
+            <div id="slides">
+                <img src="https://photogrist.com/wp-content/uploads/2016/03/Bjorn-Iooss.jpg">
+                <img src="http://www.slidesjs.com/img/example-slide-2.jpg";>
+                <img src="http://www.slidesjs.com/img/example-slide-3.jpg">
+                <img src="http://www.slidesjs.com/img/example-slide-4.jpg">
+            </div>
+        </div>
+        <!-- End SlidesJS Required: Start Slides -->
+
     </section>
+
+    <script>
+        $(function () {
+            $('#slides').slidesjs({
+                width: 940,
+                height: 528,
+                navigation: {
+                    effect: "fade"
+                },
+                pagination: {
+                    effect: "fade"
+                },
+                effect: {
+                    fade: {
+                        speed: 1800
+                    }
+                },
+                play: {
+                    effect: "fade",
+                    auto: true
+                }
+            });
+        });
+    </script>
 {% endblock %}
