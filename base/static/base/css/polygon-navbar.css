@@ -20,3 +20,56 @@
 .navbar-nav li {
     font-size: 32px;
 }
+
+.member-button {
+    margin-left: 70px;
+    height: 60px;
+    width: 80px;
+    text-align: center;
+}
+
+.shopping-button {
+    margin-top: 1px;
+}
+
+.js-arrow-dark {
+    border-color: transparent transparent #6d6e6e;
+}
+
+.js-arrow {
+    position: absolute;
+    border-style: solid;
+    border-width: 10px;
+    margin-top: -20px;
+    margin-left: -10px;
+}
+
+.member-div {
+    width: 180px;
+    /*height: 100px;*/
+    margin-top: 10px;
+    position: absolute;
+    left: 20px;
+    display: none;
+}
+.member-top {
+    height: 30px;
+    background-color: #6d6e6e;
+    font-size: 20px;
+}
+
+.member-bottom {
+    background-color: #f2f2f2;
+    color: black;
+    text-align: left;
+    padding: 10px;
+}
+
+.member-bottom ul {
+  list-style-type: none;
+}
+
+.member-bottom ul li {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
