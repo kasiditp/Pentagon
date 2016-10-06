@@ -4,10 +4,11 @@ from django.shortcuts import render, get_object_or_404
 
 
 # Create your views here.
-from product.models import Product, PRODUCT_TYPE, SEX
+from product.models import Product, PRODUCT_TYPE, SEX, ProductImage
 
 
 def product_view(request):
+    product_picture = ProductImage.objects.all()
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
 
