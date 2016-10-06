@@ -1,7 +1,39 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <link href="{% static 'base/css/home.css' %}" rel="stylesheet">
     <section>
-        <h1>Test</h1>
+
+        <!-- SlidesJS Required: Link to jQuery -->
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <!-- End SlidesJS Required -->
+
+        <!-- SlidesJS Required: Link to jquery.slides.js -->
+        <script src="http://www.slidesjs.com/examples/basic-fade/js/jquery.slides.min.js"></script>
+        <!-- End SlidesJS Required -->
+
     </section>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" id="bg">
+                        <img class="bg" id="bg" src="{% static 'base/image/homeBG.png' %}">
+                </div>
+{#                <div class="col-md-7">#}
+{#                    <div id="slider">#}
+{#                        <img class="photo img-responsive" id="photo1" src="{% static 'base/image/pic1.png' %}">#}
+{#                        <img class="photo img-responsive" id="photo2" src="{% static 'base/image/pic2.png' %}">#}
+{#                        <img class="photo img-responsive" id="photo3" src="{% static 'base/image/pic3.png' %}">#}
+{#                        <img class="photo img-responsive" id="photo4" src="{% static 'base/image/pic4.png' %}">#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+            <div class="row">
+                Hello eiei
+            </div>
+        </div>
+    </section>
+    <script>
+
+    </script>
 {% endblock %}

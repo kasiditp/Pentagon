@@ -3,8 +3,8 @@
     border: solid 1px #E4E4E4;
     border-radius: 6px;
     background-color: #fff;
-    width: 400px;
-    margin-top: 10px;
+    width: 250px;
+    margin-top: 6px;
     margin-left: 30px;
 }
 
@@ -20,7 +20,7 @@
     background: none;
     box-shadow: none;
     border: 0;
-    color: #666666;
+    color: #d83c3c;
     padding: 0 8px 0 10px;
     border-left: solid 1px #ccc;
 }
@@ -32,5 +32,13 @@
 }
 
 #custom-search-input .glyphicon-search{
-    font-size: 23px;
+    font-size: 14px;
+}
+
+.input-lg {
+    height: 36px;
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    border-radius: 6px;
 }
