@@ -26,13 +26,10 @@
                     <input
                             data-addui='slider'
                             value='0'
-                            {#                                data-formatter='usd'#}
                             data-fontsize='14'
                             data-step='1'
                             data-min='0'
                             data-max={{ max_price.price__max }}
-
-
                     />
 
 
@@ -53,24 +50,10 @@
             </div>
 
             <div class="col-md-10 text-center product">
-                <div class="row">
-                    Some Description here
-                </div>
                 <div class="row" id="product-content">
-
-                    {% for product in product_list %}
-                        <div class="col-md-3">
-                            <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
-                            <b>{{ product.name }}</b><br>
-                            <a class="divider"></a><br>
-                            {{ product.description }} <b>{{ product.price }}</b>
-                        </div>
-                        {% if forloop.counter|divisibleby:4 %}
-                            </div>
-                            <div class="row">
-                        {% endif %}
-                    {% endfor %}
-                    </div>
+                    Some Description here
+                    {% include 'pages/product/item/product_item.html' %}
+                </div>
             </div>
 
 
@@ -83,51 +66,27 @@
     <script src="{% static 'product/addslider/Obj.min.js' %}"></script>
 
     <script>
-        $('button').on('click', function (event) {
-
-            event.preventDefault();
+        $('button').on('click', function () {
+            $('#product-content').html("");
             var element = $(this);
+
             $.ajax({
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 data: {button_id: element.attr("data-id")},
 
-                success: function (response) {
-                    {#                    console.log(response.content);#}
-                    {#                    $('#product-content').html(response.content);#}
-                    refreshProductContent(response.content);
+                success: function (json) {
+                    if(json.content['result']) {
+                        console.log('refresd content');
+                        $('#product-content').append(json.content['rendered']);
+                    } else {
+                        console.log('Fail to filter');
+                    }
                 }
             });
-
         });
 
-        function refreshProductContent(content) {
-            console.log(content['max_price']);
 
-            console.log(content['product_list'][0]);
-
-            var msg = "";
-
-
-            msg+= "\{\% for product in product_list \%\}" +
-                            "\{\{ product.description \}\}" +
-                            "\{\% endfor \%\}"
-
-{#            {% for product in product_list %}#}
-{#                <div class= "col-md-3" >#}
-{#                    < img class= "img-responsive" src = "{{ product.get_all_image.first }}" > < br >#}
-{#                    < b >{{ product.name }} < / b > < br >#}
-{#                    < a class= "divider" > < / a > < br >#}
-{#                    {{ product.description }} < b >{{ product.price }} < / b >#}
-{#                    < / div >#}
-{#                    {% if forloop.counter|divisibleby:4 %}#}
-{#                        </ div>#}
-{#                        <div class= "row" >#}
-{#                    {% endif %}#}
-{#            {% endfor %}#}
-
-            $('#product-content').html(msg);
-        }
 
     </script>
 

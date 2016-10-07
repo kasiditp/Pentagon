@@ -1,11 +1,8 @@
 from django.db.models import Max
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django_ajax.decorators import ajax
-
-# Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-
+from django.template import loader, Context
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
@@ -48,15 +45,8 @@ def filtered(request):
         if filter_button in SIZE_LIST:
             filter_product = Product.objects.filter(size=filter_button)
 
-        max_price = filter_product.aggregate(Max('price'))
-        print filter_product
+        template = loader.get_template('pages/product/item/product_item.html')
+        context = Context({'product_list': filter_product})
+        rendered = template.render(context)
 
-        if filter_product is None :
-            filter_product = {}
-
-        context = {
-            'product_list': filter_product,
-            'max_price': max_price,
-        }
-
-        return context
+        return {'result': True, 'rendered': rendered}

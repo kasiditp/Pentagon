@@ -1,9 +1,10 @@
 #custom-search-input{
+    /*font-family: 'Open Sans', sans-serif;*/
     padding: 3px;
     border: solid 1px #E4E4E4;
     border-radius: 6px;
     background-color: #fff;
-    width: 250px;
+    width: 300px;
     margin-top: 6px;
     margin-left: 30px;
 }
