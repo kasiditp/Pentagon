@@ -58,3 +58,8 @@ div {
 .gallery-items {
     align-self: center;
 }
+.gallery-selected {
+    margin: +1px;
+    border-color: royalblue;
+    border-width: 2px;
+}

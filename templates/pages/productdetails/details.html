@@ -20,7 +20,7 @@
                         <div class="col-md-12 col-sm-2 col-xs-2">
                             <img src="{{ image }}" class="img-thumbnail img-responsive gallery-items
                                 {% if forloop.counter == 0 %}
-                                    active
+                                    gallery-selected
                                    {% endif %}
                                 ">
                         </div>
@@ -91,6 +91,8 @@
         });
             function changeImage() {
                 $('#product_img').attr('src', this.src);
+                $('.gallery-items').removeClass('gallery-selected');
+                $(this).addClass('gallery-selected');
             }
             $('.gallery-items').click(changeImage);
         </script>
