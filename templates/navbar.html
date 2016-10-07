@@ -5,60 +5,49 @@
 
 <nav class="navbar navbar-default navbar-polygon">
     <div class="container-fluid">
-        <div class="navbar-header header-polygon" style="margin-left: 40px;margin-right: 100px;">
-            <a class="navbar-brand" href="#" style="color: #171717">Polygon</a>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'home:index' %}">Polygon</a>
             <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
         </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#" style="color: #171717">Men</a></li>
-            <li><a href="#" style="color: #171717">Women</a></li>
+        <ul class="nav navbar-nav topnav" id="myTopnav">
+            <li><a href="{% url 'product:product_view' %}" >Men</a></li>
+            <li><a href="{% url 'product:product_view' %}">Women</a></li>
             <li>
                 <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-lg" placeholder="Search for name, brand ..."/>
+                    <div class="input-group col-md-12">
+                        <input type="text" class="form-control input-lg" placeholder="Need to be fix"/>
                     <span class="input-group-btn">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </span>
-                </div>
-            </div>
-            </li>
-            <li>
-                <div class="member-button" id="member-button">
-                    <a href="#"><img src="{% static 'icons/Member.png' %}" id="member-img"></a>
-                    <div class="member-div" id="member-div">
-                        <span class="js-arrow js-arrow-dark"></span>
-                        <div class="member-top">
-                            Welcome
-                        </div>
-                        <div class="member-bottom">
-                            <ul role="menu" aria-labelledby="dLabel">
-                                <li><a>Login</a></li>
-                                <li><a>Register</a></li>
-                                <li><a>Tracking</a></li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right topnav" id="myTopnav">
             <li>
-                <div class="shopping-button">
-                    <a><img src="{% static 'icons/Shopping.png' %}"></a>
-                </div>
+                <a>Login</a>
+            </li>
+            <li><a>|</a></li>
+            <li>
+                <a>Register</a>
+            </li>
+            <li><a>|</a></li>
+            <li><a><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" onclick="myFunction()">&#9776;</a>
             </li>
         </ul>
     </div>
 </nav>
 <script>
-    $('#member-button').hover(function () {
-        $('#member-div').fadeIn('fast');
-    }, function () {
-        $('#member-div').fadeOut('fast');
-    });
-    $('#member-div').hover(function () {
-        $('#member-div').show();
-    }, function () {
-        $('#member-div').fadeOut('fast');
-    });
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
 </script>
