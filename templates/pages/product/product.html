@@ -4,7 +4,18 @@
 {% block content %}
     <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
     <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+    <style>
+        #custom-handle {
+            width: 3em;
+            height: 1.6em;
+            top: 50%;
+            margin-top: -.8em;
+            text-align: center;
+            line-height: 1.6em;
+        }
+    </style>
 
     <section>
         <div class="container">
@@ -23,29 +34,31 @@
 
                 <div>
                     <h3>Max Price</h3>
-                    <input
-                            data-addui='slider'
-                            value='0'
-                            data-fontsize='14'
-                            data-step='1'
-                            data-min='0'
-                            data-max={{ max_price.price__max }}
-                    />
+                    {#                    <input#}
+                    {#                            id="max_price"#}
+                    {#                            data-addui='slider'#}
+                    {#                            data-value='2000'#}
+                    {#                            data-fontsize='14'#}
+                    {#                            data-step='1'#}
+                    {#                            data-min='0'#}
+                    {#                            data-id="MAX"#}
+                    {#                            data-max={{ max_price.price__max }}#}
+                    {##}
+                    {##}
+                    {#                    >#}
+                    <div id="slider">
+                        <div id="custom-handle" class="ui-slider-handle"></div>
+                    </div>
 
 
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Brand
-                    </button>
-                    <ul class="dropdown-menu">
-                        <input type="text">
-                    </ul>
-                </div>
 
                 <div>
+                    <input type="text">
 
                 </div>
+
 
             </div>
 
@@ -65,7 +78,47 @@
 
     <script src="{% static 'product/addslider/Obj.min.js' %}"></script>
 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script>
+        $(function () {
+            var handle = $("#custom-handle");
+            $("#slider").slider({
+                max: {{ max_price.price__max }},
+                min: 0,
+
+                create: function () {
+
+                    handle.text($(this).slider("value"));
+                },
+                slide: function (event, ui) {
+                    handle.text(ui.value);
+
+
+                },
+                stop: function (event, ui) {
+                    console.log(ui.value);
+                    $('#product-content').html("");
+                    $.ajax({
+                        url: "{% url 'product:filtered' %}",
+                        type: 'POST',
+                        data: {button_id: ui.value},
+
+                        success: function (json) {
+                            if (json.content['result']) {
+                                console.log('refresd content');
+                                $('#product-content').append(json.content['rendered']);
+                            } else {
+                                console.log('Fail to filter');
+                            }
+                        }
+                    });
+                }
+
+            });
+        });
+
+
         $('button').on('click', function () {
             $('#product-content').html("");
             var element = $(this);
@@ -76,7 +129,7 @@
                 data: {button_id: element.attr("data-id")},
 
                 success: function (json) {
-                    if(json.content['result']) {
+                    if (json.content['result']) {
                         console.log('refresd content');
                         $('#product-content').append(json.content['rendered']);
                     } else {
@@ -85,7 +138,29 @@
                 }
             });
         });
-
+        {#        $('input').on('change',function () {#}
+        {#            console.log('Changing');#}
+        {#            $('#product-content').html("");#}
+        {#            var element = $(this);#}
+        {##}
+        {#            $.ajax({#}
+        {#                url: "{% url 'product:filtered' %}",#}
+        {#                type: 'POST',#}
+        {#                data: {button_id: element.val()},#}
+        {##}
+        {#                success: function (json) {#}
+        {#                    if (json.content['result']) {#}
+        {#                        console.log('refresd content');#}
+        {#                        $('#product-content').append(json.content['rendered']);#}
+        {#                    } else {#}
+        {#                        console.log('Fail to filter');#}
+        {#                    }#}
+        {#                }#}
+        {#            });#}
+        {#        });#}
+        {#        $("input").focus(function () {#}
+        {#           console.log("Focusing");#}
+        {#        });#}
 
 
     </script>

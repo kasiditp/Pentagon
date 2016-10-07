@@ -44,9 +44,19 @@ def filtered(request):
         filter_button = request.POST.get('button_id')
         if filter_button in SIZE_LIST:
             filter_product = Product.objects.filter(size=filter_button)
+        print "is number? %s" % is_number(filter_button)
+        if is_number(filter_button):
+            filter_product = Product.objects.filter(price__lte=float(filter_button))
 
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product})
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
