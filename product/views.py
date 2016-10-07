@@ -23,6 +23,7 @@ def product_view(request):
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     images = product.get_all_image()
+    stocks = product.get_stocks()
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
@@ -31,7 +32,8 @@ def product_details(request, product_id):
         'product': product,
         'sex': sex,
         'type': product_type,
-        'images': images
+        'images': images,
+        'stocks': stocks
     }
     return render(request, 'pages/productdetails/details.html', context)
 
