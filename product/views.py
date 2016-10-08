@@ -1,4 +1,6 @@
 from django.db.models import Max
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
@@ -35,7 +37,22 @@ def product_details(request, product_id):
         'images': images,
         'stocks': stocks
     }
+
     return render(request, 'pages/productdetails/details.html', context)
+
+
+def put_in_cart(request):
+    stock_id = -1
+    product_id = request.POST['product_id']
+    size = request.POST['size_select']
+    product = get_object_or_404(Product, pk=product_id)
+    stocks = product.get_stocks()
+    for stock in stocks:
+        if stock.size == size:
+            stock_id = stock.id
+    if stock_id == -1:
+        request.session['error'] = True
+    return HttpResponse(" " + str(product) + " " + str(stock_id))
 
 
 @ajax

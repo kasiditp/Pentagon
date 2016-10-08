@@ -63,3 +63,14 @@ div {
     border-color: royalblue;
     border-width: 2px;
 }
+
+#select_size_label {
+    font-size: small;
+    font-weight: bold;
+}
+
+#size_select {
+    margin-left: -15px;
+    margin-right: 0;
+    padding-left: 5px;
+}
