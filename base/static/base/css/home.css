@@ -18,9 +18,8 @@
 
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
-    text-align: center;
     width: 100%;
-    /*margin: auto;*/
+    height: 20%;
 }
 
 /* Animation may used*/
