@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'base',
     'product',
-    'member'
+    'member',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,7 +93,7 @@ try:
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'Pentagon',
                 'HOST': '127.0.0.1',
-                'PORT': '3306',
+                'PORT': '3307',
                 'USER': 'root',
                 'PASSWD': '',
             }
