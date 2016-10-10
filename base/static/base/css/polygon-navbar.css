@@ -1,22 +1,140 @@
 .navbar-polygon {
-    background-color: black;
-    color: white;
+    background-color: #FFFFFF;
+    color: #171717;
+}
+
+.navbar {
+    margin: 0;
+    border-color: #FFFFFF;
+    box-shadow: 0 4px 4px -3px #232323;
+    z-index: 99;
 }
 
 .container-fluid {
     font-family: 'Open Sans', sans-serif;
-    height: 55px;
+    height: 35px;
     margin-top: 2px;
 }
 
-.header-polygon {
-
-}
-
 .header-polygon a {
-    font-size: 36px;
+    font-size: 18px;
+    color: #171717
 }
 
 .navbar-nav li {
-    font-size: 32px;
+    font-size: 14px;
+    color: #171717
+}
+.navbar-nav li a:hover {
+    border-top: 1px solid #d83c3c;
+}
+.menu-right {
+    float: right;
+}
+@media (min-width: 768px) {
+    .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+        margin-right: 100px;
+        margin-left: 50px;
+    }
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #333;*/
+}
+
+/* Float the list items side by side */
+ul.topnav li {float: left;}
+
+/* Style the links inside the list items */
+ul.topnav li a {
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 15px;
+}
+
+/* Change background color of links on hover */
+ul.topnav li a:hover {background-color: #555;}
+
+/* Hide the list item that contains the link that should open and close the topnav on small screens */
+ul.topnav li.icon {display: none;}
+
+/* When the screen is less than 680 pixels wide, hide all list items, except for the first one ("Home"). Show the list item that contains the link to open and close the topnav (li.icon) */
+@media screen and (max-width:680px) {
+  ul.topnav li:not(:first-child) {display: none;}
+  ul.topnav li.icon {
+    float: right;
+    display: inline;
+  }
+  .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+      float: left;
+  }
+  ul.topnav li {
+    float: none;
+    display: none;
+  }
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens */
+/*@media screen and (max-width:680px) {*/
+  /*ul.topnav.responsive {position: relative;}*/
+  /*ul.topnav.responsive li.icon {*/
+    /*position: absolute;*/
+    /*right: 0;*/
+    /*top: 0;*/
+  /*}*/
+  /*ul.topnav.responsive li {*/
+    /*float: none;*/
+    /*display: inline;*/
+  /*}*/
+/*}*/
+
+
+.js-arrow-dark {
+    border-color: transparent transparent #6d6e6e;
+}
+
+.js-arrow {
+    position: absolute;
+    border-style: solid;
+    border-width: 10px;
+    margin-top: -20px;
+    margin-left: -10px;
+}
+
+.member-div {
+    width: 180px;
+    /*height: 100px;*/
+    margin-top: 10px;
+    position: absolute;
+    left: 20px;
+    display: none;
+}
+.member-top {
+    height: 30px;
+    background-color: #6d6e6e;
+    font-size: 20px;
+}
+
+.member-bottom {
+    background-color: #f2f2f2;
+    color: black;
+    text-align: left;
+    padding: 10px;
+}
+
+.member-bottom ul {
+  list-style-type: none;
+}
+
+.member-bottom ul li {
+    font-size: 14px;
+    margin-bottom: 10px;
 }

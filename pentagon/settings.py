@@ -42,6 +42,9 @@ INSTALLED_APPS = (
     'base',
     'product',
     'member',
+    'django.contrib.humanize',
+
+
 )
 
 MIDDLEWARE_CLASSES = (

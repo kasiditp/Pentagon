@@ -1,15 +1,93 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
+    <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
+    <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
+
+
     <section>
         <div class="container">
+            <div class="col-md-2 filter">
+                <div class="row">
+                    <h3>Filter</h3>
+                    <button class="btn btn-danger">Clear</button>
+                </div>
+                <br><br>
+                <button id="size_s" data-id="S"><a href="#">S</a></button>
+                <button id="size_m" data-id="M"><a href="#">M</a></button>
+                <button id="size_l" data-id="L"><a href="#">L</a></button>
+                <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
+                <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
 
-            <div class="row">
-                {% for product in product_list %}
-                    <img src="{{ product.picture }}">
-                {% endfor %}
+
+                <div>
+                    <h3>Max Price</h3>
+                    <input
+                            data-addui='slider'
+                            value='0'
+                            data-fontsize='14'
+                            data-step='1'
+                            data-min='0'
+                            data-max={{ max_price.price__max }}
+                    />
+
+
+                </div>
+
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Brand
+                    </button>
+                    <ul class="dropdown-menu">
+                        <input type="text">
+                    </ul>
+                </div>
+
+                <div>
+
+                </div>
+
             </div>
+
+            <div class="col-md-10 text-center product">
+                <div class="row" id="product-content">
+                    Some Description here
+                    {% include 'pages/product/item/product_item.html' %}
+                </div>
+            </div>
+
+
         </div>
+
     </section>
+
+    <script src="{% static 'product/addslider/addSlider.js' %}"></script>
+
+    <script src="{% static 'product/addslider/Obj.min.js' %}"></script>
+
+    <script>
+        $('button').on('click', function () {
+            $('#product-content').html("");
+            var element = $(this);
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                data: {button_id: element.attr("data-id")},
+
+                success: function (json) {
+                    if(json.content['result']) {
+                        console.log('refresd content');
+                        $('#product-content').append(json.content['rendered']);
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
+        });
+
+
+
+    </script>
 
 {% endblock %}

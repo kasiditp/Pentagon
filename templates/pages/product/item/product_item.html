@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="row" id="product-content">
+
+    {% for product in product_list %}
+        <div class="col-md-3">
+            <div class="row">
+                <div class="">
+                    <img class="img-responsive" src="{{ product.get_all_image.first }}"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <b>{{ product.name }}</b><br>
+                </div>
+                <div>
+                    <a class="divider"></a><br/>
+                </div>
+                <div>
+                    {{ product.description }}
+                </div>
+                <b>{{ product.price }}</b>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+            </div>
+            <div class="row">
+        {% endif %}
+    {% endfor %}
+    </div>
+</div>
