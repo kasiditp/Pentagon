@@ -12,6 +12,13 @@
                     <li class="active">{{ type }}</li>
                 </ol>
             </div>
+{#            {% if error %}#}
+                <div class="row">
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                </div>
+{#            {% endif %}#}
             <div class="row">
                 <div class="col-md-1 col-sm-12 col-xs-12" id="gallery">
 
@@ -19,12 +26,11 @@
 
                         <div class="col-md-12 col-sm-2 col-xs-2">
                             <img src="{{ image }}" class="img-thumbnail img-responsive gallery-items
-                                {% if forloop.first %}
-                                    gallery-selected
-                                   {% endif %}
-                                ">
+								{% if forloop.first %}
+									gallery-selected
+								   {% endif %}
+								">
                         </div>
-
                     {% endfor %}
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12 border">
@@ -49,7 +55,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-xs-12 border" id="cart_interact">
-                    <form method="post" action="{% url 'product:put_in_cart' %}">
+                    <form method="post" action="{% url 'product:put_in_cart' %}" id="cart_form">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -61,7 +67,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" id="size_select" name="size_select">
                                     {% for stock in stocks %}
-                                        <option>
+                                        <option value="{{ stock.id }}">
                                             {{ stock.size }}
                                         </option>
                                     {% endfor %}
@@ -71,7 +77,7 @@
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 col-xs-12">
                                         {% for stock in stocks %}
-                                            <input type="hidden" value="{{ stock.amount }}" id="amount{{ stock.size }}">
+                                            <input type="hidden" value="{{ stock.amount }}" id="amount{{ stock.id }}">
                                         {% endfor %}
                                         <p class="sizetypesexheaderrow">REMAINING</p>
                                     </div>
@@ -124,6 +130,16 @@
                 var sel = $('#size_select')
                 var size = sel.val();
                 $('#remaining').text($('#amount' + size).val());
+
+                if(parseInt($('#remaining').text()) <= 0) {
+                    $('#add_to_cart_btn').addClass('disabled');
+{#                    $('#add_to_cart_btn').prop("disabled", true);#}
+                }
+                else {
+                    $('#add_to_cart_btn').removeClass('disabled');
+                    $('#add_to_cart_btn').prop("disabled", false);
+                }
+
             }
             $('#size_select').change(change_size);
             function changeImage() {
