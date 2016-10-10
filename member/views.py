@@ -10,6 +10,9 @@ from django.db import connection
 def register_view(request):
     return render(request, 'pages/member/register.html')
 
+def profile_view(request):
+    return render(request, 'pages/member/profile.html')
+
 def add_new_user(request):
     print "enter add user function"
     if request.method == 'POST' :

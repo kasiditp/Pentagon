@@ -2,16 +2,19 @@
     padding-top: 10px;
 }
 
-.row {
+.row_main {
     padding-top: 40px;
+    /*border: solid 1px #f7f7f7;*/
+}
+.row{
+    padding-top: 10px;
 
-    border: solid 1px #f7f7f7;
 }
 
 .well {
     background-color: #f7f7f7;
 }
 .img_joinus{
-    padding-top: 40px;
+    padding-top: 20px;
     text-align: center;
 }

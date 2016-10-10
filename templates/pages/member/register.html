@@ -7,13 +7,14 @@
 
         <div class="container">
 
-            <div class="row">
-                <div class="col-md-1">
+            <div class="row_main">
+                <div class="col-md-2">
 
                 </div>
                 <div class="img_joinus col-md-5" id="join_us_img">
                     <img class = "img-responsive" src="{% static 'member/image/join_us.png' %}"/>
                 </div>
+
 
                 <form action="{% url 'member:add_new_user' %}" id="registration_form" method="POST">
                     <div class="col-md-4 well" id="form_register">
@@ -84,7 +85,7 @@
                     </div>
                 </form>
 
-                <div class="col-md-2">
+                <div class="col-md-1">
 
                 </div>
 
