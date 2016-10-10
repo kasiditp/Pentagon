@@ -12,13 +12,13 @@
                     <li class="active">{{ type }}</li>
                 </ol>
             </div>
-{#            {% if error %}#}
+            {% if error %}
                 <div class="row">
                     <div class="alert alert-danger" role="alert">
-                        {{ error }}
+                        {{ error_message }}
                     </div>
                 </div>
-{#            {% endif %}#}
+            {% endif %}
             <div class="row">
                 <div class="col-md-1 col-sm-12 col-xs-12" id="gallery">
 
@@ -133,7 +133,7 @@
 
                 if(parseInt($('#remaining').text()) <= 0) {
                     $('#add_to_cart_btn').addClass('disabled');
-{#                    $('#add_to_cart_btn').prop("disabled", true);#}
+                    $('#add_to_cart_btn').prop("disabled", true);
                 }
                 else {
                     $('#add_to_cart_btn').removeClass('disabled');

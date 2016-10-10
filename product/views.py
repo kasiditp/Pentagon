@@ -58,9 +58,9 @@ def put_in_cart(request):
     stock = get_object_or_404(Stock, pk=stock_id)
     if stock.amount <= 0:
         request.session['error'] = True
+        request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-
         return HttpResponse(" " + str(product) + " " + str(stock_id))
 
 
