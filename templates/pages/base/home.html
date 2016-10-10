@@ -30,7 +30,7 @@
 
                 <div class="carousel-inner" role="listbox" style="height: 650px;">
                     <div class="item active">
-                        <img src="{% static 'base/image/pic3.png' %}">
+                        <img src="{% static 'base/image/pic2.png' %}">
                         <a href="{% url 'product:product_view' %}">
                             <button class="btn btn-5" id="buttonMen1" style="text-align: center">Men</button>
                         </a>
@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="item">
-                        <img src="{% static 'base/image/pic2.png' %}">
+                        <img src="{% static 'base/image/pic3.png' %}">
                         <a href="{% url 'product:product_view' %}">
                             <button class="btn btn-5" id="buttonMen3" style="text-align: center">Men</button>
                         </a>
@@ -82,42 +82,39 @@
 
         {# Second Row #}
         <div class="row">
-                {# Shirts #}
-                <figure class="snip1104 red">
-                    <img src="{% static 'base/image/shirt.png' %}" alt="shirt"/>
-                    <figcaption>
-                        <h2><span>Shirts</span></h2>
-                    </figcaption>
-                    <a href="#"></a>
-                </figure>
-
-                {# Pants #}
-                <figure class="snip1104 blue">
-                    <img src="{% static 'base/image/pants.png' %}" alt="shirt"/>
-                    <figcaption>
-                        <h2><span>Pants</span></h2>
-                    </figcaption>
-                    <a href="#"></a>
-                </figure>
-
-                {# Shoes #}
-                <figure class="snip1104 yellow">
-                    <img src="{% static 'base/image/shoes.png' %}" alt="shirt"/>
-                    <figcaption>
-                        <h2><span>Shoes</span></h2>
-                    </figcaption>
-                    <a href="#"></a>
-                </figure>
-
-                {# Accesories #}
-                <figure class="snip1104">
-                    <img src="{% static 'base/image/accessories.png' %}" alt="shirt"/>
-                    <figcaption>
-                        <h2><span>Accessories</span></h2>
-                    </figcaption>
-                    <a href="#"></a>
-                </figure>
-            </div>
+            {# Shirts #}
+            <figure class="snip1104 red" style="left: 30px">
+                <img src="{% static 'base/image/shirt.png' %}"/>
+                <figcaption>
+                    <h4><span>Shirts</span></h4>
+                </figcaption>
+                <a href="#"></a>
+            </figure>
+            {# Pants #}
+            <figure class="snip1104 blue">
+                <img src="{% static 'base/image/pants.png' %}"/>
+                <figcaption>
+                    <h4><span>Pants</span></h4>
+                </figcaption>
+                <a href="#"></a>
+            </figure>
+            {# Shoes #}
+            <figure class="snip1104 yellow">
+                <img src="{% static 'base/image/shoes.png' %}"/>
+                <figcaption>
+                    <h4><span>Shoes</span></h4>
+                </figcaption>
+                <a href="#"></a>
+            </figure>
+            {# Accesories #}
+            <figure class="snip1104">
+                <img src="{% static 'base/image/accessories.png' %}"/>
+                <figcaption>
+                    <h4><span>Accessories</span></h4>
+                </figcaption>
+                <a href="#"></a>
+            </figure>
+        </div>
     </section>
     <script>
 
