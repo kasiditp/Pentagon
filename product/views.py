@@ -7,7 +7,7 @@ from django.urls import reverse
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
-from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock
+from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
 
@@ -63,6 +63,19 @@ def put_in_cart(request):
     else:
         return HttpResponse(" " + str(product) + " " + str(stock_id))
 
+
+def manage_cart(request):
+    user_id = 1
+    cart_items = []
+    cart = Cart.objects.filter(user_id=user_id)
+    # for item in cart:
+    #     stock = get_object_or_404(Stock, pk=item.stock_id)
+    #     cart_items.append(stock)
+    context = {
+        'cart': cart,
+    }
+
+    return render(request, 'pages/cart/manage_cart.html', context)
 
 @ajax
 @csrf_exempt

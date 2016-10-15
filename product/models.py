@@ -57,7 +57,11 @@ class Stock(models.Model):
     size = models.CharField(verbose_name="Size", max_length=8)
     amount = models.IntegerField(verbose_name="Amount", default=0)
 
+    def __str__(self):
+        return "%s %s" % (self.product, self.size)
+
 
 class Cart(models.Model):
     stock_id = models.ForeignKey('Stock', null=False, blank=False)
     user_id = models.ForeignKey('member.User', null=False, blank=False)
+

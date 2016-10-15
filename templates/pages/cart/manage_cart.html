@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'product/css/manage_cart.css' %}" rel="stylesheet">
+    <section>
+    <div class="container" id="cart_manage">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <ul class="list-group">
+                    {% for item in cart %}
+                        <li class="list-group-item">{{ item.stock_id.product.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    </section>
+    <script>
+
+    </script>
+{% endblock %}

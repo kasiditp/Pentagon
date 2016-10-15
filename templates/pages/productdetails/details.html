@@ -125,7 +125,7 @@
                     border: "0px solid black"
                 });
             });
-
+            change_size();
             function change_size() {
                 var sel = $('#size_select')
                 var size = sel.val();
@@ -139,7 +139,6 @@
                     $('#add_to_cart_btn').removeClass('disabled');
                     $('#add_to_cart_btn').prop("disabled", false);
                 }
-
             }
             $('#size_select').change(change_size);
             function changeImage() {
