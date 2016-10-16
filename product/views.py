@@ -73,9 +73,18 @@ def manage_cart(request):
     #     cart_items.append(stock)
     context = {
         'cart': cart,
+        'sex': SEX,
+        'type': PRODUCT_TYPE,
     }
 
     return render(request, 'pages/cart/manage_cart.html', context)
+
+def remove_from_cart(request):
+    cart_item_id = request.POST['cart_id']
+    cart_to_delete = get_object_or_404(Cart, pk=cart_item_id)
+    Cart.delete(cart_to_delete)
+
+    return HttpResponseRedirect(reverse('manage_cart'))
 
 @ajax
 @csrf_exempt

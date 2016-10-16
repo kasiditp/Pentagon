@@ -41,6 +41,11 @@ class Product(models.Model):
     def get_stocks(self):
         return Stock.objects.filter(product=self)
 
+    def get_type_name(self):
+        return PRODUCT_TYPE[self.type - 1][1]
+
+    def get_sex_name(self):
+        return SEX[self.sex - 1][1]
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)

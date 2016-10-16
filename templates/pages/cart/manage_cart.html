@@ -7,8 +7,49 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <ul class="list-group">
+                    {% load humanize %}
                     {% for item in cart %}
-                        <li class="list-group-item">{{ item.stock_id.product.name }}</li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3><b>{{ item.stock_id.product.brand | upper }}</b></h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h4>{{ item.stock_id.product.name }}</h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>{{ item.stock_id.product.price | intcomma:2}} THB</h4>
+                                </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexheaderrow">SIZE</p></div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexheaderrow">TYPE</p></div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexheaderrow">GENDER</p></div>
+                                    </div>
+                                    <div class="row" id="sizetypesexrow">
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexrow">
+                                            {{ item.stock_id.size }}</p></div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexrow">
+                                            {{ item.stock_id.product.get_type_name }}</p></div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3"><p class="sizetypesexrow">
+                                            {{ item.stock_id.product.get_sex_name }}</p></div>
+                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                            <form method="post" action="{% url 'remove_from_cart'  %}">
+                                                {%  csrf_token %}
+                                                <input type="hidden" value="{{ item.id }}" name="cart_id">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
