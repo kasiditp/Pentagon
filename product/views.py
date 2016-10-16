@@ -7,6 +7,8 @@ from django.urls import reverse
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
+
+from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
@@ -30,10 +32,17 @@ def product_details(request, product_id):
     stocks = product.get_stocks()
     error = False
     error_message = ""
+    success = False
+    success_message = ""
     if request.session.get('error'):
         error = True
         error_message = request.session.get('error_message')
         request.session['error'] = False
+
+    if request.session.get('success'):
+        success = True
+        success_message = request.session.get('success_message')
+        request.session['success'] = False
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
@@ -45,7 +54,9 @@ def product_details(request, product_id):
         'images': images,
         'stocks': stocks,
         'error': error,
-        'error_message': error_message
+        'error_message': error_message,
+        'success': success,
+        'success_message': success_message,
     }
 
     return render(request, 'pages/productdetails/details.html', context)
@@ -54,14 +65,22 @@ def product_details(request, product_id):
 def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
+    user_id = 1 #request.session.get('user')
     product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
+    user = get_object_or_404(User, pk=user_id)
     if stock.amount <= 0:
         request.session['error'] = True
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        return HttpResponse(" " + str(product) + " " + str(stock_id))
+        new_cart_item = Cart(user_id=user, stock_id=stock)
+        new_cart_item.save()
+        stock.amount -= 1
+        stock.save()
+        request.session['success'] = True
+        request.session['success_message'] = "Done! Successfully added this item into your cart."
+        return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
 
 
 def manage_cart(request):
@@ -79,9 +98,12 @@ def manage_cart(request):
 
     return render(request, 'pages/cart/manage_cart.html', context)
 
+
 def remove_from_cart(request):
     cart_item_id = request.POST['cart_id']
     cart_to_delete = get_object_or_404(Cart, pk=cart_item_id)
+    cart_to_delete.stock_id.amount += 1
+    cart_to_delete.stock_id.save()
     Cart.delete(cart_to_delete)
 
     return HttpResponseRedirect(reverse('manage_cart'))

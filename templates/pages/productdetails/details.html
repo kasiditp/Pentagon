@@ -19,6 +19,13 @@
                     </div>
                 </div>
             {% endif %}
+            {% if success %}
+                <div class="row">
+                    <div class="alert alert-success" role="alert">
+                        {{ success_message }}
+                    </div>
+                </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-1 col-sm-12 col-xs-12" id="gallery">
 
@@ -96,13 +103,13 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary btn-lg btn-block" id="add_to_wishlist_btn">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Add to wishlist
-                                </button>
-                            </div>
-                        </div>
+{#                        <div class="row">#}
+{#                            <div class="col-md-12 col-sm-12 col-xs-12">#}
+{#                                <button class="btn btn-primary btn-lg btn-block" id="add_to_wishlist_btn">#}
+{#                                    <i class="fa fa-plus" aria-hidden="true"></i> Add to wishlist#}
+{#                                </button>#}
+{#                            </div>#}
+{#                        </div>#}
                     </form>
                 </div>
             </div>
