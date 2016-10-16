@@ -2,8 +2,10 @@
 {% load static %}
 {% block content %}
     <link href="{% static 'base/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
     <section>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
         <!-- SlidesJS Required: Link to jQuery -->
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <!-- End SlidesJS Required -->
@@ -80,40 +82,54 @@
             </div>
         </div>
 
-        {# Second Row #}
         <div class="row">
+            <h2><span>THIS IS A TEST</span></h2>
+                <h4>Product</h4>
+            </div>
+        </div>
+
+        {# Second Row #}
+        <div class="row row-centered" style="margin-top: 50px">
             {# Shirts #}
-            <figure class="snip1104 red" style="left: 30px">
-                <img src="{% static 'base/image/shirt.png' %}"/>
-                <figcaption>
-                    <h4><span>Shirts</span></h4>
-                </figcaption>
-                <a href="#"></a>
-            </figure>
+            <div class="col-md-3 col-centered">
+                <figure class="snip1104 red">
+                    <img src="{% static 'base/image/shirt.png' %}"/>
+                    <figcaption>
+                        <h4><span>Shirts</span></h4>
+                    </figcaption>
+                    <a href="#"></a>
+                </figure>
+            </div>
             {# Pants #}
-            <figure class="snip1104 blue">
-                <img src="{% static 'base/image/pants.png' %}"/>
-                <figcaption>
-                    <h4><span>Pants</span></h4>
-                </figcaption>
-                <a href="#"></a>
-            </figure>
+            <div class="col-md-3 col-centered">
+                <figure class="snip1104 blue">
+                    <img src="{% static 'base/image/pants.png' %}"/>
+                    <figcaption>
+                        <h4><span>Pants</span></h4>
+                    </figcaption>
+                    <a href="#"></a>
+                </figure>
+            </div>
             {# Shoes #}
-            <figure class="snip1104 yellow">
-                <img src="{% static 'base/image/shoes.png' %}"/>
-                <figcaption>
-                    <h4><span>Shoes</span></h4>
-                </figcaption>
-                <a href="#"></a>
-            </figure>
+            <div class="col-md-3 col-centered">
+                <figure class="snip1104 yellow">
+                    <img src="{% static 'base/image/shoes.png' %}"/>
+                    <figcaption>
+                        <h4><span>Shoes</span></h4>
+                    </figcaption>
+                    <a href="#"></a>
+                </figure>
+            </div>
             {# Accesories #}
-            <figure class="snip1104">
-                <img src="{% static 'base/image/accessories.png' %}"/>
-                <figcaption>
-                    <h4><span>Accessories</span></h4>
-                </figcaption>
-                <a href="#"></a>
-            </figure>
+            <div class="col-md-3 col-centered">
+                <figure class="snip1104">
+                    <img src="{% static 'base/image/accessories.png' %}"/>
+                    <figcaption>
+                        <h4><span>Accessories</span></h4>
+                    </figcaption>
+                    <a href="#"></a>
+                </figure>
+            </div>
         </div>
     </section>
     <script>
