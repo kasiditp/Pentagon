@@ -6,7 +6,12 @@
 }
 
 #container {
-    background-color: #e7e7e7;
+    background-color: #191919;
+}
+
+#hr{
+    border-top: 1px solid white;
+    margin-bottom: 20px;
 }
 
 #product {
@@ -14,6 +19,14 @@
     margin:0px;
 }
 
+#text {
+    color: white;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
 /* CAROUSEL */
 
 .item {
@@ -98,7 +111,7 @@ figure.snip1104 {
     min-width: 200px;
     max-width: 313px;
     max-height: 220px;
-    width: 100%;
+    width: 80%;
     background: #000000;
     color: #ffffff;
     text-align: center;
