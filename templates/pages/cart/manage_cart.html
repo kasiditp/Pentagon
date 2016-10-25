@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'product/css/manage_cart.css' %}" rel="stylesheet">
+    <section>
+    <div class="container" id="cart_manage">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                <ul class="list-group">
+                    {% load humanize %}
+                    {% for item in cart %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <img class="img-responsive" src="{{ item.stock_id.product.get_image }}">
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <h3><b>{{ item.stock_id.product.brand | upper }}</b></h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8 col-sm-8 col-xs-8">
+                                            <h4>{{ item.stock_id.product.name }}</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 col-xs-4">
+                                            <h4>{{ item.stock_id.product.price | floatformat:2 | intcomma}} THB</h4>
+                                        </div>
+                                        </div>
+                                    <div class="row">
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexheaderrow">SIZE</p></div>
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexheaderrow">TYPE</p></div>
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexheaderrow">GENDER</p></div>
+                                        </div>
+                                        <div class="row" id="sizetypesexrow">
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
+                                                {{ item.stock_id.size }}</p></div>
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
+                                                {{ item.stock_id.product.get_type_name }}</p></div>
+                                            <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
+                                                {{ item.stock_id.product.get_sex_name }}</p></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <form method="post" action="{% url 'remove_from_cart'  %}">
+                                                    {%  csrf_token %}
+                                                    <input type="hidden" value="{{ item.id }}" name="cart_id">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    </section>
+    <script>
+
+    </script>
+{% endblock %}

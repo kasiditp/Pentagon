@@ -23,9 +23,9 @@ class Product(models.Model):
     type = models.IntegerField(verbose_name="Product Type", choices=PRODUCT_TYPE, null=True)
     sex = models.IntegerField(verbose_name="Sex", choices=SEX, null=False)
     brand = models.CharField(verbose_name="Brand", max_length=64, null=False, blank=True)
-    size = models.CharField(verbose_name="Size", max_length=64, null=False, blank=False)
     price = models.FloatField(verbose_name="Price", default=0, null=False, blank=False)
     description = models.TextField(verbose_name="Description", null=True, blank=True)
+
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)
 
@@ -38,7 +38,14 @@ class Product(models.Model):
     def get_image(self):
         return ProductImage.objects.filter(product=self)[0]
 
+    def get_stocks(self):
+        return Stock.objects.filter(product=self)
 
+    def get_type_name(self):
+        return PRODUCT_TYPE[self.type - 1][1]
+
+    def get_sex_name(self):
+        return SEX[self.sex - 1][1]
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
@@ -46,10 +53,20 @@ class ProductImage(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)
 
-
     def __str__(self):
         return u"%s" % self.picture
 
 
+class Stock(models.Model):
+    product = models.ForeignKey('Product', null=False, blank=False)
+    size = models.CharField(verbose_name="Size", max_length=8)
+    amount = models.IntegerField(verbose_name="Amount", default=0)
 
+    def __str__(self):
+        return "%s %s" % (self.product, self.size)
+
+
+class Cart(models.Model):
+    stock_id = models.ForeignKey('Stock', null=False, blank=False)
+    user_id = models.ForeignKey('member.User', null=False, blank=False)
 

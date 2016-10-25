@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'member/css/register.css' %}" rel="stylesheet">
+    <section>
+
+
+        <div class="container">
+
+            <div class="row_main">
+                <div class="col-md-2">
+
+                </div>
+                <div class="img_joinus col-md-5" id="join_us_img">
+                    <img class = "img-responsive" src="{% static 'member/image/join_us.png' %}"/>
+                </div>
+
+
+                <form action="{% url 'member:add_new_user' %}" id="registration_form" method="POST">
+                    <div class="col-md-4 well" id="form_register">
+                        {% csrf_token %}
+
+                        <div>
+                            <h2>Member Registration</h2>
+                        </div>
+
+                        <div>
+                            <h5>Username <font color="red">*</font></h5>
+                            <input type="text" class="form-control" name="username" placeholder="Enter username">
+                        </div>
+
+                        <div>
+                            <h5>Password <font color="red">*</font></h5>
+                            <input type="password" class="form-control" name="password" placeholder="Enter password">
+                            <font color="red"><h6>Minimum 6 characters contain both number and alphabet</h6></font>
+                        </div>
+
+                        <div>
+                            <h5>Confirm Password <font color="red">*</font></h5>
+                            <input type="password" class="form-control" name="re_password"
+                                   placeholder="Confirm password">
+                        </div>
+
+                        <div>
+                            <h5>Sex <font color="red">*</font></h5>
+                            <form>
+                                <input type="radio" name="gender" value="male" checked> Male
+                                <input type="radio" name="gender" value="female"> Female
+                            </form>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>First name <font color="red">*</font></h5>
+                                <input type="text" class="form-control" name="first_name" placeholder="First name">
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Last name <font color="red">*</font></h5>
+                                <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5>Birthdate <font color="red">*</font></h5>
+                            <input type="date" class="form-control" name="birthdate">
+                        </div>
+
+                        <div>
+                            <h5>Email <font color="red">*</font></h5>
+                            <input type="text" class="form-control" name="email" placeholder="Enter email">
+                        </div>
+
+
+                        <div>
+                            <h5>Address <font color="red">*</font></h5>
+                            <textarea class="form-control" rows="2" name="address"></textarea>
+
+                        </div>
+
+                        <div class="row_submit">
+                            <input type="submit" class="btn btn-success btn-block" value="Register">
+                        </div>
+
+
+                    </div>
+                </form>
+
+                <div class="col-md-1">
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </section>
+
+    {% block script %}
+
+    {% endblock %}
+{% endblock %}
