@@ -71,16 +71,31 @@ def filtered(request):
         filter_product = None
         filter_button = request.POST.get('button_id')
         if filter_button in SIZE_LIST:
-            filter_product = Product.objects.filter(size=filter_button)
+            print "Size"
+            stock = Stock.objects.filter(size=filter_button)
+            for item in stock :
+                filter_product = []
+                filter_product.append(item.product)
+            print filter_product
         print "is number? %s" % is_number(filter_button)
         if is_number(filter_button):
             filter_product = Product.objects.filter(price__lte=float(filter_button))
+
+        if filter_button == 'clear':
+            filter_product = Product.objects.all()
+
+        if filter_button == 'search':
+            brand = request.POST.get('brand')
+            filter_product = Product.objects.filter(brand=brand)
+
 
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product})
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
+
+
 
 def is_number(s):
     try:
