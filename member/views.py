@@ -1,9 +1,10 @@
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
+
+from base.auth import Auth
 from models import User
 import hashlib
-from django.db import connection
 
 
 # Create your views here.
@@ -12,17 +13,28 @@ def login_view(request):
 
 
 def login(request):
-    return None
+    username = request.POST['username']
+    password = request.POST['password']
+    password_md5 = hashlib.md5(password).hexdigest()
+    user = User.objects.filter(username=username, password=password_md5)
+    if user is not None:
+        Auth.login(request, user[0])
+        return HttpResponseRedirect(reverse('home:index'))
+    else:
+        return render(request, 'pages/member/login.html', {"error": "Please check your information!!"})
+
 
 def register_view(request):
     return render(request, 'pages/member/register.html')
 
+
 def profile_view(request):
     return render(request, 'pages/member/profile.html')
 
+
 def add_new_user(request):
     print "enter add user function"
-    if request.method == 'POST' :
+    if request.method == 'POST':
         unique_id = '00001'
         username = request.POST['username']
         password = request.POST['password']
@@ -36,13 +48,13 @@ def add_new_user(request):
         email = request.POST['email']
         address = request.POST['address']
 
-        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),email=email,sex=sex,birth_date=birthdate,first_name=first_name,last_name=last_name,address=address)
+        new_user = User.objects.create(unique_id=unique_id, username=username, password=hashlib.md5(password).hexdigest(), email=email, sex=sex, birth_date=birthdate, first_name=first_name, last_name=last_name, address=address)
         new_user.save()
 
     return render(request, 'pages/member/register.html')
 
 
-
-
 def success(request):
     return render(request, 'pages/member/success.html')
+
+

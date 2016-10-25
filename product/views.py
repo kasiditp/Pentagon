@@ -8,6 +8,7 @@ from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
 
+from base.views import get_nav_context
 from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
@@ -22,7 +23,7 @@ def product_view(request):
         'product_list': product_list,
         'max_price': max_price,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
 
 
@@ -58,17 +59,17 @@ def product_details(request, product_id):
         'success': success,
         'success_message': success_message,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
 
 
 def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
-    user_id = 1 #request.session.get('user')
+    user_unique_id = request.session['user_unique_id']
     product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
-    user = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(User, unique_id=user_unique_id)
     if stock.amount <= 0:
         request.session['error'] = True
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
@@ -95,7 +96,7 @@ def manage_cart(request):
         'sex': SEX,
         'type': PRODUCT_TYPE,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/cart/manage_cart.html', context)
 
 

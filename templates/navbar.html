@@ -27,16 +27,24 @@
         </ul>
         <ul class="nav navbar-nav navbar-right topnav" id="myTopnav">
             <li>
-                <a>Login</a>
+                {% if is_login %}
+                    <a>{{ user.username }}</a>
+                {% else %}
+                    <a href="{% url 'login_view' %}">Login</a>
+                {% endif %}
+
             </li>
             <li><a>|</a></li>
             <li>
-                <a>Register</a>
+                <a href="{% url 'member:register_view' %}">Register</a>
             </li>
             <li><a>|</a></li>
-            <li><a><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
-            <li class="icon">
-                <a href="javascript:void(0);" onclick="myFunction()">&#9776;</a>
+            <li>
+                <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    {% if product_amount %}
+                        ({{ product_amount }})
+                    {% endif %}
+                </a>
             </li>
         </ul>
     </div>
