@@ -42,6 +42,7 @@ class Product(models.Model):
         return Stock.objects.filter(product=self)
 
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
     picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)

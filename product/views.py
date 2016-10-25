@@ -15,13 +15,31 @@ SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
-
+    brands = brand()
     context = {
         'product_list': product_list,
         'max_price': max_price,
+        'brands' : brands
     }
 
     return render(request, 'pages/product/product.html', context)
+
+@ajax
+@csrf_exempt
+def get_brand(request):
+    brand = set()
+    for product in Product.objects.all():
+        brand.add(product.brand)
+
+    return {'brand' : brand}
+
+def brand():
+    brand = set()
+    for product in Product.objects.all():
+        brand.add(product.brand)
+
+    return brand
+
 
 
 def product_details(request, product_id):
