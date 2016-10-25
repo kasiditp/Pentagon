@@ -41,6 +41,11 @@ class Product(models.Model):
     def get_stocks(self):
         return Stock.objects.filter(product=self)
 
+    def get_type_name(self):
+        return PRODUCT_TYPE[self.type - 1][1]
+
+    def get_sex_name(self):
+        return SEX[self.sex - 1][1]
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
@@ -57,7 +62,11 @@ class Stock(models.Model):
     size = models.CharField(verbose_name="Size", max_length=8)
     amount = models.IntegerField(verbose_name="Amount", default=0)
 
+    def __str__(self):
+        return "%s %s" % (self.product, self.size)
+
 
 class Cart(models.Model):
     stock_id = models.ForeignKey('Stock', null=False, blank=False)
     user_id = models.ForeignKey('member.User', null=False, blank=False)
+
