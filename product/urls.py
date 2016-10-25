@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^filtered/$', filtered, name="filtered"),
     url(r'^get_brand/$', get_brand, name="get_brand"),
     url(r'^put_in_cart/$', put_in_cart, name="put_in_cart")
+
 ]
 
