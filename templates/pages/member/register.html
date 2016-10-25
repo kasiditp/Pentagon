@@ -4,7 +4,11 @@
     <link href="{% static 'member/css/register.css' %}" rel="stylesheet">
     <section>
 
-
+      {% if error %}
+          <div class="alert alert-success  ">
+              <center><strong>{{ error }}</strong></center>
+          </div>
+        {% endif %}
         <div class="container">
 
             <div class="row_main">

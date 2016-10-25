@@ -32,6 +32,8 @@ def add_new_user(request):
         new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),email=email,sex=sex,birth_date=birthdate,first_name=first_name,last_name=last_name,address=address)
         new_user.save()
 
+        #if error occur return render(request, 'pages/member/register.html' , {"error":"some message!!!"})
+
     return render(request, 'pages/member/register.html')
 
 
