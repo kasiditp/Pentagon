@@ -4,6 +4,16 @@
     margin: 0px;
     /*background-image: url("../image/homeBG.png");*/
 }
+
+#container {
+    background-color: #e7e7e7;
+}
+
+#product {
+    color:black;
+    margin:0px;
+}
+
 /* CAROUSEL */
 
 .item {
@@ -86,7 +96,7 @@ figure.snip1104 {
     overflow: hidden;
     margin: 10px 1%;
     min-width: 200px;
-    max-width: 250px;
+    max-width: 313px;
     max-height: 220px;
     width: 100%;
     background: #000000;
