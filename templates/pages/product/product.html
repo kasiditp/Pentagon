@@ -69,6 +69,12 @@
                 </form>
                 </div>
 
+
+
+                <div id = "checklist">
+
+                </div>
+
                 <div><hr></div>
 
 
@@ -79,6 +85,7 @@
                     {% include 'pages/product/item/product_item.html' %}
                 </div>
             </div>
+
 
 
         </div>
@@ -178,14 +185,22 @@
 
 
         var brandList = [];
+        var checklist = "";
 
 
         {% for brand in brands %}
             brandList.push('{{ brand }}');
-            console.log('{{ brand }}');
         {% endfor %}
 
-        console.log(brandList);
+        for(var i = 0;i<brandList.length;i++){
+            checklist+= "<div class = \"checkbox\"> <label> <input type = \"checkbox\">";
+            checklist+= brandList[i]+"";
+            checklist+= "</label> </div>";
+            checklist+= "<br>";
+            console.log(checklist);
+        }
+
+        $('#checklist').html(checklist);
 
         $.typeahead({
             input: '.brand-typeahead',
