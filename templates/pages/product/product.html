@@ -99,6 +99,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
+        var filtered_list = [];
+
         $(function () {
             var handle = $("#custom-handle");
             $("#slider").slider({
@@ -136,6 +138,93 @@
             });
         });
 
+        $('#size_s').on('click',function () {
+            var element = $(this);
+
+            if(jQuery.inArray(element.attr("data-id"),filtered_list)!=-1){
+
+                 filtered_list.splice(jQuery.inArray(element.attr("data-id"),filtered_list),1);
+                 element.removeClass("btn-success")
+            }
+
+            else{
+                filtered_list.push(element.attr("data-id"));
+                element.addClass("btn-success")
+
+            }
+
+            console.log(filtered_list);
+        });
+
+        $('#size_m').on('click',function () {
+            var element = $(this);
+
+            if(jQuery.inArray(element.attr("data-id"),filtered_list)!=-1){
+                 filtered_list.splice(jQuery.inArray(element.attr("data-id"),filtered_list),1);
+                 element.removeClass("btn-success")
+            }
+
+            else{
+                filtered_list.push(element.attr("data-id"));
+                element.addClass("btn-success")
+
+            }
+
+            console.log(filtered_list);
+        });
+
+        $('#size_l').on('click',function () {
+            var element = $(this);
+
+            if(jQuery.inArray(element.attr("data-id"),filtered_list)!=-1){
+                filtered_list.splice(jQuery.inArray(element.attr("data-id"),filtered_list),1);
+                 element.removeClass("btn-success")
+             }
+
+            else{
+                filtered_list.push(element.attr("data-id"));
+                element.addClass("btn-success")
+
+            }
+
+            console.log(filtered_list);
+        });
+
+        $('#size_xl').on('click',function () {
+            var element = $(this);
+
+            if(jQuery.inArray(element.attr("data-id"),filtered_list)!=-1){
+                 filtered_list.splice(jQuery.inArray(element.attr("data-id"),filtered_list),1);
+                 element.removeClass("btn-success")
+            }
+
+            else{
+                filtered_list.push(element.attr("data-id"));
+                element.addClass("btn-success")
+
+            }
+                
+
+            console.log(filtered_list);
+        });
+
+        $('#size_xxl').on('click',function () {
+              var element = $(this);
+
+            if(jQuery.inArray(element.attr("data-id"),filtered_list)!=-1){
+                filtered_list.splice(jQuery.inArray(element.attr("data-id"),filtered_list),1);
+                element.removeClass("btn-success")
+            }
+
+            else{
+                filtered_list.push(element.attr("data-id"));
+                element.addClass("btn-success")
+
+            }
+
+            console.log(filtered_list);
+        });
+
 
         $('button').on('click', function () {
             $('#product-content').html("");
@@ -144,7 +233,8 @@
             $.ajax({
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
-                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+{#                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},#}
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -157,6 +247,8 @@
             });
 
         });
+
+
 
 
         $('#brand_form').submit(function (event) {
