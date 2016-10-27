@@ -130,24 +130,62 @@ def remove_from_cart(request):
 @csrf_exempt
 def filtered(request):
     if request.POST:
+
         # filter_product = None
         filter_product_list = []
         # filter_button = request.POST.get('button_id')
-        filter_data = request.POST.get('data_id')
+        raw_filter_data = request.POST.get('data_id')
+        remove_quote_filter_data = raw_filter_data.replace("\"","")
+        remove_front_bracket_data = remove_quote_filter_data.replace("{","")
+        remove_back_bracket_data = remove_front_bracket_data.replace("}","")
+        remove_colon_bracket_data = remove_back_bracket_data.replace(":","")
+        remove_size_bracket_data = remove_colon_bracket_data.replace("size","")
+        remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
+        remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
+
+        filter_data = remove_clear_bracket_data.split(',')
+
+        print filter_data
+
         for data in filter_data:
+            # print data
+            if data == 'null':
+                continue
+
             if data in SIZE_LIST:
                 stock = Stock.objects.filter(size=data)
+                negate_stock = Stock.objects.all().exclude(size=data)
+                # print "negate stock is %s" % negate_stock
                 for item in stock:
-                    filter_product_list.append(item.product)
+                    if not filter_product_list:
+                        filter_product_list.append(item.product)
+                    else:
+                        for not_item in negate_stock:
+                            filter_product_list.remove(not_item.product)
+
+            # print filter_product_list
+            # print "is number? %s" % is_number(data)
             if is_number(data):
-                filter_product_list.append(Product.objects.filter(price__lte=float(data)))
-            if data == 'clear':
+                product = Product.objects.filter(price__lte=float(data))
+                negate_product = Product.objects.filter(price__gte=float(data))
+                for item in product:
+                    if not filter_product_list:
+                        filter_product_list.append(item)
+                    else:
+                        for not_item in negate_product:
+                            filter_product_list.remove(not_item)
+
+            if data == 'true':
                 filter_product_list = Product.objects.all()
+                break;
             if data == 'search':
                 brand = request.POST.get('brand')
-                filter_product_list.append(Product.objects.filter(brand=brand))
+                product = Product.objects.filter(brand=brand)
+                for item in product:
+                    filter_product_list.append(item)
 
         filter_product_set = set(filter_product_list)
+        # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
