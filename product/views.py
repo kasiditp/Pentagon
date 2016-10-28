@@ -1,3 +1,5 @@
+from sets import Set
+
 from django.db.models import Max
 from django.http import HttpRequest
 from django.http import HttpResponse
@@ -132,7 +134,7 @@ def filtered(request):
     if request.POST:
 
         # filter_product = None
-        filter_product_list = []
+        filter_product_set = Set()
         # filter_button = request.POST.get('button_id')
         raw_filter_data = request.POST.get('data_id')
         remove_quote_filter_data = raw_filter_data.replace("\"","")
@@ -153,38 +155,37 @@ def filtered(request):
                 continue
 
             if data in SIZE_LIST:
-                stock = Stock.objects.filter(size=data)
-                negate_stock = Stock.objects.all().exclude(size=data)
-                # print "negate stock is %s" % negate_stock
+                stock = Stock.objects.filter(size=data) # get array of filter
+                stock_set = Set()
                 for item in stock:
-                    if not filter_product_list:
-                        filter_product_list.append(item.product)
-                    else:
-                        for not_item in negate_stock:
-                            filter_product_list.remove(not_item.product)
+                    stock_set.add(item.product)
+
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(stock_set)
+                else:
+                    filter_product_set.intersection_update(stock_set)
+
 
             # print filter_product_list
             # print "is number? %s" % is_number(data)
             if is_number(data):
                 product = Product.objects.filter(price__lte=float(data))
-                negate_product = Product.objects.filter(price__gte=float(data))
-                for item in product:
-                    if not filter_product_list:
-                        filter_product_list.append(item)
-                    else:
-                        for not_item in negate_product:
-                            filter_product_list.remove(not_item)
+                product_set = Set(product)
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(product_set)
+                else:
+                    filter_product_set.intersection_update(product_set)
 
             if data == 'true':
-                filter_product_list = Product.objects.all()
+                filter_product_set = Product.objects.all()
                 break;
             if data == 'search':
                 brand = request.POST.get('brand')
                 product = Product.objects.filter(brand=brand)
-                for item in product:
-                    filter_product_list.append(item)
+                # for item in product:
+                #     filter_product_list.append(item)
 
-        filter_product_set = set(filter_product_list)
+
         # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
