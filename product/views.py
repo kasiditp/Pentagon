@@ -18,13 +18,31 @@ SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
-
+    brands = brand()
     context = {
         'product_list': product_list,
         'max_price': max_price,
+        'brands' : brands
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
+
+@ajax
+@csrf_exempt
+def get_brand(request):
+    brand = set()
+    for product in Product.objects.all():
+        brand.add(product.brand)
+
+    return {'brand' : brand}
+
+def brand():
+    brand = set()
+    for product in Product.objects.all():
+        brand.add(product.brand)
+
+    return brand
+
 
 
 def product_details(request, product_id):
@@ -113,13 +131,99 @@ def remove_from_cart(request):
 @csrf_exempt
 def filtered(request):
     if request.POST:
-        filter_product = None
-        filter_button = request.POST.get('button_id')
-        if filter_button in SIZE_LIST:
-            filter_product = Product.objects.filter(size=filter_button)
 
+        # filter_product = None
+        filter_product_list = []
+        # filter_button = request.POST.get('button_id')
+        raw_filter_data = request.POST.get('data_id')
+        remove_quote_filter_data = raw_filter_data.replace("\"","")
+        remove_front_bracket_data = remove_quote_filter_data.replace("{","")
+        remove_back_bracket_data = remove_front_bracket_data.replace("}","")
+        remove_colon_bracket_data = remove_back_bracket_data.replace(":","")
+        remove_size_bracket_data = remove_colon_bracket_data.replace("size","")
+        remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
+        remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
+
+        filter_data = remove_clear_bracket_data.split(',')
+
+        print filter_data
+
+        for data in filter_data:
+            # print data
+            if data == 'null':
+                continue
+
+            if data in SIZE_LIST:
+                stock = Stock.objects.filter(size=data)
+                negate_stock = Stock.objects.all().exclude(size=data)
+                # print "negate stock is %s" % negate_stock
+                for item in stock:
+                    if not filter_product_list:
+                        filter_product_list.append(item.product)
+                    else:
+                        for not_item in negate_stock:
+                            filter_product_list.remove(not_item.product)
+
+            # print filter_product_list
+            # print "is number? %s" % is_number(data)
+            if is_number(data):
+                product = Product.objects.filter(price__lte=float(data))
+                negate_product = Product.objects.filter(price__gte=float(data))
+                for item in product:
+                    if not filter_product_list:
+                        filter_product_list.append(item)
+                    else:
+                        for not_item in negate_product:
+                            filter_product_list.remove(not_item)
+
+            if data == 'true':
+                filter_product_list = Product.objects.all()
+                break;
+            if data == 'search':
+                brand = request.POST.get('brand')
+                product = Product.objects.filter(brand=brand)
+                for item in product:
+                    filter_product_list.append(item)
+
+        filter_product_set = set(filter_product_list)
+        # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
-        context = Context({'product_list': filter_product})
+        context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
+
+        # --------------------------
+
+        # if filter_button in SIZE_LIST:
+        #     print "Size"
+        #     stock = Stock.objects.filter(size=filter_button)
+        #     for item in stock :
+        #         filter_product = []
+        #         filter_product.append(item.product)
+        #     print filter_product
+        # print "is number? %s" % is_number(filter_button)
+        # if is_number(filter_button):
+        #     filter_product = Product.objects.filter(price__lte=float(filter_button))
+        #
+        # if filter_button == 'clear':
+        #     filter_product = Product.objects.all()
+        #
+        # if filter_button == 'search':
+        #     brand = request.POST.get('brand')
+        #     filter_product = Product.objects.filter(brand=brand)
+        #
+        #
+        # template = loader.get_template('pages/product/item/product_item.html')
+        # context = Context({'product_list': filter_product})
+        # rendered = template.render(context)
+        #
+        # return {'result': True, 'rendered': rendered}
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
