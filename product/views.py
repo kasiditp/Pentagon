@@ -66,7 +66,7 @@ def product_details(request, product_id):
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
-    # print sex
+    suggest = product.suggest_product()
     context = {
         'product': product,
         'sex': sex,
@@ -77,6 +77,7 @@ def product_details(request, product_id):
         'error_message': error_message,
         'success': success,
         'success_message': success_message,
+        'suggest': suggest,
     }
 
     return render(request, 'pages/productdetails/details.html', context)
