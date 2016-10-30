@@ -47,6 +47,7 @@ class Product(models.Model):
     def get_sex_name(self):
         return SEX[self.sex - 1][1]
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
     picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)
