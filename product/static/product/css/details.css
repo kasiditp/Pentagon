@@ -74,3 +74,20 @@ div {
     margin-right: 0;
     padding-left: 5px;
 }
+#suggest_box {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.suggest_img {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (min-width : 768px) {
+    .suggest_img {
+        max-height: 200px;
+    }
+}

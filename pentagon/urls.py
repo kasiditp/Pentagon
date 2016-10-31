@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^member/', include('member.urls', namespace='member')),
     url(r'^cart/$', manage_cart, name='manage_cart'),
     url(r'^remove_cart/$', remove_from_cart, name='remove_from_cart')
+
+
 ]
