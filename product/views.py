@@ -14,6 +14,7 @@ from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
+SEX_LIST = ['Men','Women','Unisex']
 
 
 def product_view(request):
@@ -133,7 +134,6 @@ def remove_from_cart(request):
 @csrf_exempt
 def filtered(request):
     if request.POST:
-
         # filter_product = None
         filter_product_set = Set()
         # filter_button = request.POST.get('button_id')
@@ -146,10 +146,12 @@ def filtered(request):
         remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
         remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
         remove_search_bracket_data = remove_clear_bracket_data.replace("search","")
+        remove_front = remove_search_bracket_data.replace("[",",")
+        remove_back = remove_front.replace("]",",end")
 
-        filter_data = remove_search_bracket_data.split(',')
+        filter_data = remove_back.split(',')
 
-        print filter_data
+        # print filter_data
 
         for data in filter_data:
             # print data
@@ -180,10 +182,9 @@ def filtered(request):
 
             if data == 'c1':
                 filter_product_set = Product.objects.all()
-                break;
+                break
 
             if data == 's1':
-                print 's1'
                 brand = request.POST.get('brand')
 
                 product = Product.objects.filter(brand=brand)
@@ -192,6 +193,31 @@ def filtered(request):
                     filter_product_set.union_update(product_set)
                 else:
                     filter_product_set.intersection_update(product_set)
+
+            if data == 'sex':
+                temp_set = set()
+                for num in range(5,8):
+                    if filter_data[num] in SEX_LIST:
+                        sex = what_sex(filter_data[num])
+                        temp_set.update(Set(Product.objects.filter(sex=sex)))
+                    elif filter_data[num] == 'end':
+                        print "temp_set is %s"%temp_set
+                        if len(filter_product_set) == 0:
+                            filter_product_set.union_update(temp_set)
+                        else:
+                            filter_product_set.intersection_update(temp_set)
+                        break
+                    else:
+                        break
+            
+
+
+
+
+
+
+
+
 
 
         # print filter_product_set
@@ -235,3 +261,10 @@ def is_number(s):
     except ValueError:
         return False
 
+def what_sex(sex):
+    if sex == 'Men':
+        return 1
+    elif sex == 'Women':
+        return 2
+    elif sex == 'Unisex':
+        return 3
