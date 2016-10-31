@@ -19,73 +19,74 @@
 
     <section>
         <div class="container">
-            <div class="col-md-2 filter">
-                <div class="row">
-                    <h3>Filter</h3>
-                    <button class="btn btn-danger" id ="clear_button" data-id="clear">Clear</button>
-                </div>
-
-                <div><hr></div>
 
 
-                <h3>Size</h3>
-                <button id="size_s" data-id="S"><a href="#">S</a></button>
-                <button id="size_m" data-id="M"><a href="#">M</a></button>
-                <button id="size_l" data-id="L"><a href="#">L</a></button>
-                <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
-                <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
-
-                <div><hr></div>
-
-
-                <div>
-                    <h3>Max Price</h3>
-                    <br>
-
-                    <div id="slider">
-                        <div id="custom-handle" class="ui-slider-handle"></div>
+                <div class="col-md-2 filter">
+                    <div class="row">
+                        <h3>Filter</h3>
+                        <button class="btn btn-danger" id ="clear_button" data-id="clear">Clear</button>
                     </div>
 
-                </div>
+                    <div><hr></div>
 
-                <br><br>
-                <div><hr></div>
 
-                <div>
-                   <form id="brand_form" name="form-country_v1">
-                    <div class="typeahead__container">
-                        <div class="typeahead__field">
+                    <h3>Size</h3>
+                    <button id="size_s" data-id="S"><a href="#">S</a></button>
+                    <button id="size_m" data-id="M"><a href="#">M</a></button>
+                    <button id="size_l" data-id="L"><a href="#">L</a></button>
+                    <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
+                    <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
 
-                            <span class="typeahead__query">
-                                <input class="brand-typeahead" id="brand_name" name="country_v1[query]" type="search" placeholder="Brand search" autocomplete="off">
-                            </span>
-                            <span class="typeahead__button">
-                                <button class ="typeahead__search-icon" type="submit" data-id ="search">
-                                </button>
-                            </span>
+                    <div><hr></div>
 
+
+                    <div>
+                        <h3>Max Price</h3>
+                        <br>
+
+                        <div id="slider">
+                            <div id="custom-handle" class="ui-slider-handle"></div>
                         </div>
+
                     </div>
-                </form>
-                </div>
+
+                    <br><br>
+                    <div><hr></div>
+
+                    <div>
+                       <form id="brand_form" name="form-country_v1">
+                        <div class="typeahead__container">
+                            <div class="typeahead__field">
+
+                                <span class="typeahead__query">
+                                    <input class="brand-typeahead" id="brand_name" name="country_v1[query]" type="search" placeholder="Brand search" autocomplete="off">
+                                </span>
+                                <span class="typeahead__button">
+                                    <button class ="typeahead__search-icon" type="submit" data-id ="search">
+                                    </button>
+                                </span>
+
+                            </div>
+                        </div>
+                    </form>
+                    </div>
 
 
 
-                <div id = "checklist">
+                    <div id = "checklist">
 
-                </div>
+                    </div>
 
-                <div><hr></div>
-
+                    <div><hr></div>
 
             </div>
 
-            <div class="col-md-10 text-center product">
-                <div class="row" id="product-content">
-                    {% include 'pages/product/item/product_item.html' %}
-                </div>
-            </div>
 
+                <div class="col-md-10 text-center" id = "product-content">
+
+                        {% include 'pages/product/item/product_item.html' %}
+
+                </div>
 
 
         </div>
