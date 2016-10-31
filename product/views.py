@@ -145,8 +145,9 @@ def filtered(request):
         remove_size_bracket_data = remove_colon_bracket_data.replace("size","")
         remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
         remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
+        remove_search_bracket_data = remove_clear_bracket_data.replace("search","")
 
-        filter_data = remove_clear_bracket_data.split(',')
+        filter_data = remove_search_bracket_data.split(',')
 
         print filter_data
 
@@ -177,14 +178,20 @@ def filtered(request):
                 else:
                     filter_product_set.intersection_update(product_set)
 
-            if data == 'true':
+            if data == 'c1':
                 filter_product_set = Product.objects.all()
                 break;
-            if data == 'search':
+
+            if data == 's1':
+                print 's1'
                 brand = request.POST.get('brand')
+
                 product = Product.objects.filter(brand=brand)
-                # for item in product:
-                #     filter_product_list.append(item)
+                product_set = Set(product)
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(product_set)
+                else:
+                    filter_product_set.intersection_update(product_set)
 
 
         # print filter_product_set
