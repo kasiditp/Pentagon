@@ -122,6 +122,7 @@
         filtered_list['clear'] = 'c0';
         filtered_list['search'] = 's0';
         filtered_list['sex'] = [];
+        filtered_list['brand'] = [];
 
         $(function () {
             var handle = $("#custom-handle");
@@ -401,10 +402,39 @@
         {% endfor %}
 
         for(var i = 0;i<brandList.length;i++){
-            checklist+= "<div class = \"checkbox\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";
+            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";
             checklist+= brandList[i]+"";
             checklist+= "</label> </div>";
             console.log(checklist);
+        }
+
+        function brandCheck(id) {
+            var element = $('#'+id);
+
+            if(filtered_list['brand'].indexOf(element.attr("data-id"))!=-1)
+                filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")),1);
+            else
+                filtered_list['brand'].push(element.attr("data-id"));
+
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
         }
 
         $('#checklist').html(checklist);
