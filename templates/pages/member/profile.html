@@ -1,5 +1,107 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        <h1>Profile test</h1>
+        <link href="{% static 'member/css/profile.css' %}" rel="stylesheet">
+        <section>
+            {% if error %}
+              <div class="alert alert-warning  ">
+                  <center><strong>{{ error }}</strong></center>
+              </div>
+            {% endif %}
+            {% if success %}
+                <div class="alert alert-success  ">
+                  <center><strong>{{ success }}</strong></center>
+              </div>
+            {% endif %}
+
+        <div class = "container">
+            <div class =  "row_main">
+                <div class = "col-md-2">
+
+                </div>
+                <div class="col-md-4">
+
+                </div>
+
+                <div class = "col-md-4 ">
+                    <h2>Settings</h2>
+                      <ul class="nav nav-tabs">
+                        <li><a data-toggle="tab" href="#change_password">Password</a></li>
+                        <li><a data-toggle="tab" href="#general">Personal</a></li>
+                      </ul>
+
+                      <div class="tab-content">
+
+                            <div id="change_password" class="tab-pane fade in active">
+                                <form action="{% url 'member:change_password' %}" id="change_password_form" method="POST">
+                                {% csrf_token %}
+                                    <div>
+                                        <h5>New password <font color="red">*</font></h5>
+                                        <input type="password" class="form-control" name="new_password" placeholder="Enter new password">
+                                        <font color="red"><h6>Minimum 6 characters contain both number and alphabet</h6></font>
+                                    </div>
+
+                                    <div>
+                                        <h5>Confirm new password <font color="red">*</font></h5>
+                                        <input type="password" class="form-control" name="confirm_new_password" placeholder="Confirm new password">
+                                    </div>
+                                    <div class="row_confirm">
+                                        <input type="submit" class="btn btn-success btn-block" value="Confirm">
+                                    </div>
+                                    </form>
+                            </div>
+
+
+                        <div id="general" class="tab-pane fade">
+                            <form action="{% url 'member:change_general' %}" id="change_password_form" method="POST">
+                                {% csrf_token %}
+                                <div>
+                                    <font color ="red">
+                                        <h5>Input a fields you want to change only.</h5>
+                                    </font>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>First name </h5>
+                                        <input type="text" class="form-control" name="first_name" placeholder="First name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Last name  </h5>
+                                        <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h5>Birthdate</h5>
+                                    <input type="date" class="form-control" name="birthdate">
+                                </div>
+
+                                <div>
+                                    <h5>Email </h5>
+                                    <input type="text" class="form-control" name="email" placeholder="Enter email">
+                                </div>
+
+
+                                <div>
+                                    <h5>Address</h5>
+                                    <textarea class="form-control" rows="2" name="address"></textarea>
+
+                                </div>
+
+                                <div class="row_confirm">
+                                    <input type="submit" class="btn btn-success btn-block" value="Confirm">
+                                </div>
+                            </form>
+                        </div>
+
+                      </div>
+                </div>
+
+                 <div class = "col-md-2">
+
+                </div>
+
+            </div>
+        </div>
+        </section>
 {% endblock %}
