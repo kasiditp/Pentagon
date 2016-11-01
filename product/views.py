@@ -68,7 +68,7 @@ def product_details(request, product_id):
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
-    # suggest = product.suggest_product()
+    suggest = product.suggest_product()
     context = {
         'product': product,
         'sex': sex,
@@ -79,7 +79,7 @@ def product_details(request, product_id):
         'error_message': error_message,
         'success': success,
         'success_message': success_message,
-        # 'suggest': suggest,
+        'suggest': suggest,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
@@ -107,9 +107,9 @@ def put_in_cart(request):
 
 
 def manage_cart(request):
-    user_id = 1
+    user_id = request.session['user_unique_id']
     cart_items = []
-    cart = Cart.objects.filter(user_id=user_id)
+    cart = Cart.objects.filter(user_id__unique_id=user_id)
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock_id)
     #     cart_items.append(stock)
