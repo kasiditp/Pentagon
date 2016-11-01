@@ -1,0 +1,76 @@
+div {
+    font-family: Marvenpro;
+}
+.sizetypesexheaderrow {
+
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-size: x-small;
+}
+.sizetypesexrow {
+    padding-top: 0;
+    margin-top: 0;
+    font-size: medium;
+}
+
+.border {
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgrey;
+    margin-bottom: 20px;
+}
+
+#product_info {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+#cart_interact {
+    padding: 20px;
+}
+
+#remaining_stock {
+    padding-left: 20px;
+    font-size: 16pt;
+}
+#add_to_cart_btn {
+    margin-bottom: 10px;
+}
+.gallery-items {
+    /*object-fit: fill;*/
+    margin-bottom: 8%;
+    margin-top: 8%;
+}
+#gallery {
+    padding: 0;
+}
+.img-thumbnail {
+    border-radius: 0;
+}
+
+.breadcrumb {
+    border-radius: 0;
+}
+.gallery-items {
+    align-self: center;
+}
+.gallery-selected {
+    margin: +1px;
+    border-color: royalblue;
+    border-width: 2px;
+}
+
+#select_size_label {
+    font-size: small;
+    font-weight: bold;
+}
+
+#size_select {
+    margin-left: -15px;
+    margin-right: 0;
+    padding-left: 5px;
+}

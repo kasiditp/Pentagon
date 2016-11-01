@@ -43,8 +43,9 @@ INSTALLED_APPS = (
     'product',
     'member',
     'django.contrib.humanize',
-
-
+    # app config amazon s3
+    'django_s3_storage',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -143,4 +144,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# S3 settings.
+
+S3_URL = "https://s3-ap-southeast-1.amazonaws.com/polygon-mediafile/"
+
+AWS_STORAGE_BUCKET_NAME = 'polygon-mediafile'
+AWS_ACCESS_KEY_ID = 'AKIAJLKL5OJUIE3YTF2Q'
+AWS_SECRET_ACCESS_KEY = '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'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

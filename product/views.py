@@ -44,7 +44,6 @@ def brand():
     return brand
 
 
-
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     images = product.get_all_image()
@@ -146,10 +145,10 @@ def filtered(request):
 
         filter_data = remove_clear_bracket_data.split(',')
 
-        print filter_data
+        # print filter_data
 
         for data in filter_data:
-            # print data
+            print data
             if data == 'null':
                 continue
 
@@ -158,12 +157,12 @@ def filtered(request):
                 negate_stock = Stock.objects.all().exclude(size=data)
                 # print "negate stock is %s" % negate_stock
                 for item in stock:
-                    if not filter_product_list:
-                        filter_product_list.append(item.product)
-                    else:
-                        for not_item in negate_stock:
-                            filter_product_list.remove(not_item.product)
-
+                    # if not filter_product_list:
+                    filter_product_list.append(item.product)
+                    # else:
+                        # for not_item in negate_stock:
+                        #     filter_product_list.remove(not_item.product)
+                print filter_product_list
             # print filter_product_list
             # print "is number? %s" % is_number(data)
             if is_number(data):
@@ -186,7 +185,7 @@ def filtered(request):
                     filter_product_list.append(item)
 
         filter_product_set = set(filter_product_list)
-        # print filter_product_set
+        print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
