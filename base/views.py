@@ -11,7 +11,7 @@ def index(request):
 
 
 def get_nav_context(request):
-    if request.session['is_login']:
+    if 'is_login' in request.session['is_login'] and request.session['is_login']:
         member_user = User.objects.filter(unique_id=request.session['user_unique_id'])[0]
         context = {
             'is_login': request.session['is_login'],
