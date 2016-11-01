@@ -156,6 +156,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 S3_URL = "https://s3-ap-southeast-1.amazonaws.com/polygon-mediafile/"
 
 AWS_STORAGE_BUCKET_NAME = 'polygon-mediafile'
-AWS_ACCESS_KEY_ID = 'AKIAJLKL5OJUIE3YTF2Q'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAIVCOFH35ZMSF2QAA'
+AWS_SECRET_ACCESS_KEY = '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'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
