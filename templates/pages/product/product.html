@@ -19,73 +19,90 @@
 
     <section>
         <div class="container">
-            <div class="col-md-2 filter">
-                <div class="row">
+            <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                </ol>
+            </div>
+
+                <div class="col-md-2 filter">
                     <h3>Filter</h3>
                     <button class="btn btn-danger" id ="clear_button" data-id="clear">Clear</button>
-                </div>
 
-                <div><hr></div>
+                    <div><hr></div>
 
+                    <h3>Sex</h3>
 
-                <h3>Size</h3>
-                <button id="size_s" data-id="S"><a href="#">S</a></button>
-                <button id="size_m" data-id="M"><a href="#">M</a></button>
-                <button id="size_l" data-id="L"><a href="#">L</a></button>
-                <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
-                <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
-
-                <div><hr></div>
-
-
-                <div>
-                    <h3>Max Price</h3>
-                    <br>
-
-                    <div id="slider">
-                        <div id="custom-handle" class="ui-slider-handle"></div>
+                    <div class="checkbox" id = "male_sex" data-id="Men"> <label><input type="checkbox">
+                    Men</label>
+                    </div>
+                    <div class="checkbox" id = "female_sex" data-id="Women"> <label><input type="checkbox">
+                    Women</label>
+                    </div>
+                    <div class="checkbox" id = "uni_sex" data-id="Unisex"> <label><input type="checkbox">
+                    Unisex</label>
                     </div>
 
-                </div>
 
-                <br><br>
-                <div><hr></div>
+                    <div><hr></div>
 
-                <div>
-                   <form id="brand_form" name="form-country_v1">
-                    <div class="typeahead__container">
-                        <div class="typeahead__field">
+                    <h3>Size</h3>
+                    <button id="size_s" data-id="S"><a href="#">S</a></button>
+                    <button id="size_m" data-id="M"><a href="#">M</a></button>
+                    <button id="size_l" data-id="L"><a href="#">L</a></button>
+                    <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
+                    <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
 
-                            <span class="typeahead__query">
-                                <input class="brand-typeahead" id="brand_name" name="country_v1[query]" type="search" placeholder="Brand search" autocomplete="off">
-                            </span>
-                            <span class="typeahead__button">
-                                <button class ="typeahead__search-icon" type="submit" data-id ="search">
-                                </button>
-                            </span>
+                    <div><hr></div>
 
+
+                    <div>
+                        <h3>Max Price</h3>
+                        <br>
+
+                        <div id="slider">
+                            <div id="custom-handle" class="ui-slider-handle"></div>
                         </div>
+
                     </div>
-                </form>
-                </div>
+
+                    <br><br>
+                    <div><hr></div>
+
+                    <div>
+                       <form id="brand_form" name="form-country_v1">
+                        <div class="typeahead__container">
+                            <div class="typeahead__field">
+
+                                <span class="typeahead__query">
+                                    <input class="brand-typeahead" id="brand_name" name="country_v1[query]" type="search" placeholder="Brand search" autocomplete="off">
+                                </span>
+                                <span class="typeahead__button">
+                                    <button class ="typeahead__search-icon" type="submit" data-id ="search">
+                                    </button>
+                                </span>
+
+                            </div>
+                        </div>
+                    </form>
+                    </div>
 
 
 
-                <div id = "checklist">
+                    <div id = "checklist">
 
-                </div>
+                    </div>
 
-                <div><hr></div>
-
+                    <div><hr></div>
 
             </div>
 
-            <div class="col-md-10 text-center product">
-                <div class="row" id="product-content">
-                    {% include 'pages/product/item/product_item.html' %}
-                </div>
-            </div>
 
+                <div class="col-md-10 text-center" id = "product-content">
+
+                        {% include 'pages/product/item/product_item.html' %}
+
+                </div>
 
 
         </div>
@@ -104,6 +121,8 @@
         filtered_list['maxprice'] = null;
         filtered_list['clear'] = 'c0';
         filtered_list['search'] = 's0';
+        filtered_list['sex'] = [];
+        filtered_list['brand'] = [];
 
         $(function () {
             var handle = $("#custom-handle");
@@ -124,6 +143,7 @@
                 stop: function (event, ui) {
                     console.log(ui.value);
                     filtered_list['maxprice'] = ui.value;
+                    console.log(filtered_list);
                     $('#product-content').html("");
                     $.ajax({
                         url: "{% url 'product:filtered' %}",
@@ -142,6 +162,7 @@
                             }
                         }
                     });
+
 
                 }
 
@@ -219,9 +240,101 @@
             filtered_list['clear'] = 'c1';
             filtered_list['maxprice'] = null;
             filtered_list['size'] = null;
-
+            filtered_list['sex'] = [];
 
         });
+
+        $('#male_sex').on('click',function(){
+            var element = $(this);
+            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            else
+                filtered_list['sex'].push(element.attr("data-id"));
+
+            console.log(filtered_list);
+
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
+        });
+
+        $('#female_sex').on('click',function(){
+            var element = $(this);
+            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            else
+                filtered_list['sex'].push(element.attr("data-id"));
+
+             console.log(filtered_list);
+
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
+        });
+
+        $('#uni_sex').on('click',function(){
+            var element = $(this);
+            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            else
+                filtered_list['sex'].push(element.attr("data-id"));
+
+             console.log(filtered_list);
+
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
+
+        });
+
 
 
         $('button').on('click', function () {
@@ -289,10 +402,39 @@
         {% endfor %}
 
         for(var i = 0;i<brandList.length;i++){
-            checklist+= "<div class = \"checkbox\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";
+            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";
             checklist+= brandList[i]+"";
             checklist+= "</label> </div>";
             console.log(checklist);
+        }
+
+        function brandCheck(id) {
+            var element = $('#'+id);
+
+            if(filtered_list['brand'].indexOf(element.attr("data-id"))!=-1)
+                filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")),1);
+            else
+                filtered_list['brand'].push(element.attr("data-id"));
+
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
+                    }
+                }
+            });
         }
 
         $('#checklist').html(checklist);

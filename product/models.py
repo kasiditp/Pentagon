@@ -19,6 +19,10 @@ SEX = [
 ]
 
 
+def product_image_path_name(self, filename):
+    return '/'.join(['product/images', filename])
+
+
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(verbose_name="Name", max_length=64, null=False, blank=False)
@@ -57,6 +61,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
+    image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True,null=True)
     picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)

@@ -1,9 +1,9 @@
 {% load static %}
 
 <div class="row" id="product-content">
-
+    {% load humanize %}
     {% for product in product_list %}
-        <div class="col-md-3">
+        <div class="col-md-3 product-detail">
             <div class="row">
                 <div class="">
                     <img class="img-responsive" src="{{ product.get_image }}"><br>
@@ -11,15 +11,18 @@
             </div>
             <div class="row">
                 <div>
+                    <b>{{ product.brand|upper }}</b><br>
+                </div>
+                <div>
                     <b>{{ product.name }}</b><br>
                 </div>
                 <div>
                     <a class="divider"></a><br/>
                 </div>
                 <div>
-                    {{ product.description }}
+                    {{ product.description|slice:":11" }}...
                 </div>
-                <b>{{ product.price }}</b>
+                <b>{{ product.price|floatformat:2|intcomma }}</b>
             </div>
         </div>
         {% if forloop.counter|divisibleby:4 %}

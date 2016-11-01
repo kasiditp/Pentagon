@@ -10,23 +10,26 @@ from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
 
+from base.views import get_nav_context
 from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
-
+SEX_LIST = ['Men','Women','Unisex']
+num = 0
 
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
-    brands = brand()
+    brands = get_all_brand()
     context = {
         'product_list': product_list,
         'max_price': max_price,
         'brands' : brands
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
+
 
 @ajax
 @csrf_exempt
@@ -37,13 +40,12 @@ def get_brand(request):
 
     return {'brand' : brand}
 
-def brand():
+def get_all_brand():
     brand = set()
     for product in Product.objects.all():
         brand.add(product.brand)
 
     return brand
-
 
 
 def product_details(request, product_id):
@@ -66,7 +68,7 @@ def product_details(request, product_id):
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
-    suggest = product.suggest_product()
+    # suggest = product.suggest_product()
     context = {
         'product': product,
         'sex': sex,
@@ -77,19 +79,19 @@ def product_details(request, product_id):
         'error_message': error_message,
         'success': success,
         'success_message': success_message,
-        'suggest': suggest,
+        # 'suggest': suggest,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
 
 
 def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
-    user_id = 1 #request.session.get('user')
+    user_unique_id = request.session['user_unique_id']
     product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
-    user = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(User, unique_id=user_unique_id)
     if stock.amount <= 0:
         request.session['error'] = True
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
@@ -116,7 +118,7 @@ def manage_cart(request):
         'sex': SEX,
         'type': PRODUCT_TYPE,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/cart/manage_cart.html', context)
 
 
@@ -129,11 +131,11 @@ def remove_from_cart(request):
 
     return HttpResponseRedirect(reverse('manage_cart'))
 
+
 @ajax
 @csrf_exempt
 def filtered(request):
     if request.POST:
-
         # filter_product = None
         filter_product_set = Set()
         # filter_button = request.POST.get('button_id')
@@ -146,17 +148,19 @@ def filtered(request):
         remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
         remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
         remove_search_bracket_data = remove_clear_bracket_data.replace("search","")
+        remove_front = remove_search_bracket_data.replace("[",",")
+        remove_back = remove_front.replace("]",",end")
 
-        filter_data = remove_search_bracket_data.split(',')
+        filter_data = remove_back.split(',')
 
-        print filter_data
+        # print filter_data
 
         for data in filter_data:
-            # print data
+            print data
             if data == 'null':
                 continue
 
-            if data in SIZE_LIST:
+            elif data in SIZE_LIST:
                 stock = Stock.objects.filter(size=data) # get array of filter
                 stock_set = Set()
                 for item in stock:
@@ -170,7 +174,7 @@ def filtered(request):
 
             # print filter_product_list
             # print "is number? %s" % is_number(data)
-            if is_number(data):
+            elif is_number(data):
                 product = Product.objects.filter(price__lte=float(data))
                 product_set = Set(product)
                 if len(filter_product_set) == 0:
@@ -178,12 +182,11 @@ def filtered(request):
                 else:
                     filter_product_set.intersection_update(product_set)
 
-            if data == 'c1':
+            elif data == 'c1':
                 filter_product_set = Product.objects.all()
-                break;
+                break
 
-            if data == 's1':
-                print 's1'
+            elif data == 's1':
                 brand = request.POST.get('brand')
 
                 product = Product.objects.filter(brand=brand)
@@ -193,6 +196,41 @@ def filtered(request):
                 else:
                     filter_product_set.intersection_update(product_set)
 
+
+            elif data == 'sex':
+                temp_set = set()
+                num = 5
+                while True:
+                    if filter_data[num] in SEX_LIST:
+                        sex = what_sex(filter_data[num])
+                        temp_set.update(Set(Product.objects.filter(sex=sex)))
+                        num+=1
+                    elif filter_data[num] == 'end':
+                        if len(filter_product_set) == 0:
+                            filter_product_set.union_update(temp_set)
+                        else:
+                            filter_product_set.intersection_update(temp_set)
+                        break
+                    else:
+                        num+=1
+                        break
+
+            elif data == 'brand':
+                temp_set = set()
+                num+=2
+                while True:
+                    if filter_data[num] in get_all_brand():
+                        temp_set.update(Set(Product.objects.filter(brand=filter_data[num])))
+                        num+=1
+                    elif filter_data[num] == 'end':
+                        if len(filter_product_set) == 0:
+                            filter_product_set.union_update(temp_set)
+                        else:
+                            filter_product_set.intersection_update(temp_set)
+                        break
+                    else:
+                        num+=1
+                        break
 
         # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
@@ -228,6 +266,7 @@ def filtered(request):
         #
         # return {'result': True, 'rendered': rendered}
 
+
 def is_number(s):
     try:
         float(s)
@@ -235,3 +274,10 @@ def is_number(s):
     except ValueError:
         return False
 
+def what_sex(sex):
+    if sex == 'Men':
+        return 1
+    elif sex == 'Women':
+        return 2
+    elif sex == 'Unisex':
+        return 3
