@@ -11,10 +11,11 @@ def index(request):
 
 
 def get_nav_context(request):
-    member_user = User.objects.filter(unique_id=request.session['user_unique_id'])[0]
-    context = {
-        'is_login': request.session['is_login'],
-        'user': User.objects.filter(unique_id=request.session['user_unique_id'])[0],
-        'product_amount': Cart.objects.filter(user_id=member_user).count
-    }
-    return context
+    if request.session['is_login']:
+        member_user = User.objects.filter(unique_id=request.session['user_unique_id'])[0]
+        context = {
+            'is_login': request.session['is_login'],
+            'user': member_user,
+            'product_amount': Cart.objects.filter(user_id=member_user).count
+        }
+        return context
