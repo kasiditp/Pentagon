@@ -21,7 +21,7 @@
 
                 </div>
                 <div class="img_joinus col-md-5" id="join_us_img">
-                    <img class = "img-responsive" src="{% static 'member/image/join_us.png' %}"/>
+                    <img class = "img-responsive" src="{% static 'member/images/join_us.png' %}"/>
                 </div>
 
 
@@ -35,19 +35,19 @@
 
                         <div>
                             <h5>Username <font color="red">*</font></h5>
-                            <input type="text" class="form-control" name="username" placeholder="Enter username">
+                            <input type="text" class="form-control" name="username" placeholder="Enter username" value={{ username }}>
                         </div>
 
                         <div>
                             <h5>Password <font color="red">*</font></h5>
-                            <input type="password" class="form-control" name="password" placeholder="Enter password">
+                            <input type="password" class="form-control" name="password" placeholder="Enter password" value={{ password }}>
                             <font color="red"><h6>Minimum 6 characters contain both number and alphabet</h6></font>
                         </div>
 
                         <div>
                             <h5>Confirm Password <font color="red">*</font></h5>
                             <input type="password" class="form-control" name="re_password"
-                                   placeholder="Confirm password">
+                                   placeholder="Confirm password" value={{ confirm_password }}>
                         </div>
 
                         <div>
@@ -61,28 +61,28 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>First name <font color="red">*</font></h5>
-                                <input type="text" class="form-control" name="first_name" placeholder="First name">
+                                <input type="text" class="form-control" name="first_name" placeholder="First name" value={{ first_name }}>
                             </div>
                             <div class="col-md-6">
                                 <h5>Last name <font color="red">*</font></h5>
-                                <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                                <input type="text" class="form-control" name="last_name" placeholder="Last name" value={{ last_name }}>
                             </div>
                         </div>
 
                         <div>
                             <h5>Birthdate <font color="red">*</font></h5>
-                            <input type="date" class="form-control" name="birthdate">
+                            <input type="date" class="form-control" name="birthdate" value={{ birthdate }}>
                         </div>
 
                         <div>
                             <h5>Email <font color="red">*</font></h5>
-                            <input type="text" class="form-control" name="email" placeholder="Enter email">
+                            <input type="text" class="form-control" name="email" placeholder="Enter email" value={{ email }}>
                         </div>
 
 
                         <div>
                             <h5>Address <font color="red">*</font></h5>
-                            <textarea class="form-control" rows="2" name="address"></textarea>
+                            <textarea class="form-control" rows="2" name="address" >{{ address }}</textarea>
 
                         </div>
 

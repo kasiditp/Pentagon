@@ -36,9 +36,8 @@ def login(request):
 
 
 def add_new_user(request):
-    print "enter add user function"
     if request.method == 'POST':
-        unique_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        unique_id = 'PT-'.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
         username = request.POST['username']
         password = request.POST['password']
         re_password = request.POST['re_password']
@@ -51,17 +50,44 @@ def add_new_user(request):
         birthdate = request.POST['birthdate']
         email = request.POST['email']
         address = request.POST['address']
-        user = User.objects.filter(username=username)
-        if user is not None:
-            return render(request, 'pages/member/register.html', {"error": "This username is already exist!"})
+
+        if User.objects.filter(username=request.POST['username']).exists():
+            return render(request, 'pages/member/register.html',
+                          {"error": "This username is already exist!",
+                            "password" : password,
+                            "confirm_password" : re_password,
+                            "birthdate": birthdate,
+                            "first_name" : first_name,
+                            "last_name" : last_name,
+                            "email" : email,
+                            "address" : address
+                          })
         if  username == '' or password == '' or re_password == '' or first_name == '' or last_name == '' or birthdate == '' or email == '' or address == '':
-            return render(request, 'pages/member/register.html' , {"error":"Please input your information to all fields!"})
+            return render(request, 'pages/member/register.html' ,
+                          {"error":"Please input your information to all fields!",
+                               "username" : username,
+                               "password": password,
+                               "confirm_password": re_password,
+                               "birthdate" : birthdate,
+                               "first_name": first_name,
+                               "last_name": last_name,
+                               "email": email,
+                               "address": address
+                           })
         if password != re_password:
-            return render(request, 'pages/member/register.html', {"error": "Password and confirm password field must be the same!"})
+            return render(request, 'pages/member/register.html',
+                          {"error": "Password and confirm password field must be the same!",
+                               "username" : username,
+                               "first_name": first_name,
+                               "birthdate": birthdate,
+                               "last_name": last_name,
+                               "email": email,
+                               "address": address
+                           })
 
         new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),email=email,sex=sex,birth_date=birthdate,first_name=first_name,last_name=last_name,address=address)
 
-    return render(request, 'pages/member/register.html')
+    return render(request, 'pages/member/register.html' , {"success" : "Registration successful!"})
 
 
 def change_password(request):
@@ -69,15 +95,16 @@ def change_password(request):
         unique_id = request.session['user_unique_id']
         new_password = request.POST['new_password']
         confirm_new_password = request.POST['confirm_new_password']
+        user = User.objects.get(unique_id=unique_id)
 
         if new_password != confirm_new_password:
-            return render(request, 'pages/member/profile.html', {"error": "New password and confirm new password field must be the same!"})
-        else:
+            return render(request, 'pages/member/profile.html', {"error": "New password and confirm new password field must be the same!" , "user" : user})
+        elif new_password != '' and confirm_new_password != '':
             user = User.objects.get(unique_id=unique_id)
             user.password = hashlib.md5(new_password).hexdigest()
             user.save()
-
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change password!"})
+            return render(request, 'pages/member/profile.html', {"success": "Successfully change password!" , "user" : user})
+    return render(request, 'pages/member/profile.html', {"success": "Password not changed" , "user" : user})
 
 
 def change_general(request):
@@ -102,7 +129,7 @@ def change_general(request):
             user.address = address
         user.save()
 
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change information!"})
+    return render(request, 'pages/member/profile.html', {"success": "Successfully change information!" , "user" : user})
 
 
 def success(request):

@@ -8,6 +8,8 @@ SEX = [
     (3, "Unisex")
 ]
 
+def user_image_path_name(self, filename):
+    return '/'.join(['member/images', filename])
 
 class User(models.Model):
     unique_id = models.CharField(verbose_name='Unique id', max_length=10, null=False, blank=False)
@@ -19,4 +21,6 @@ class User(models.Model):
     first_name = models.CharField(verbose_name='Firstname', max_length=64, null=False, blank=False)
     last_name = models.CharField(verbose_name='Lastname', max_length=64, null=False, blank=False)
     address = models.TextField(verbose_name='Address', null=True, blank=False)
+    # image = models.ImageField(verbose_name='User Image', upload_to=user_image_path_name, blank=True, null=True)
+
 

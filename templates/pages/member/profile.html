@@ -23,16 +23,11 @@
 
                 </div>
 
-                <div class = "col-md-4 ">
+                <div class = "col-md-4 well">
                     <h2>Settings</h2>
-                      <ul class="nav nav-tabs">
-                        <li><a data-toggle="tab" href="#change_password">Password</a></li>
-                        <li><a data-toggle="tab" href="#general">Personal</a></li>
-                      </ul>
 
-                      <div class="tab-content">
 
-                            <div id="change_password" class="tab-pane fade in active">
+                            <div id="change_password" >
                                 <form action="{% url 'member:change_password' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
                                     <div>
@@ -52,14 +47,14 @@
                             </div>
 
 
-                        <div id="general" class="tab-pane fade">
+                        <div id="general" >
                             <form action="{% url 'member:change_general' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
-                                <div>
-                                    <font color ="red">
-                                        <h5>Input a fields you want to change only.</h5>
-                                    </font>
-                                </div>
+{#                                <div>#}
+{#                                    <font color ="red">#}
+{#                                        <h5>Input a fields you want to change only.</h5>#}
+{#                                    </font>#}
+{#                                </div>#}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h5>First name </h5>
@@ -73,7 +68,7 @@
 
                                 <div>
                                     <h5>Birthdate</h5>
-                                    <input type="date" class="form-control" name="birthdate">
+                                    <input type="date" class="form-control" name="birthdate" value={{ user.birth_date }}>
                                 </div>
 
                                 <div>
@@ -84,7 +79,7 @@
 
                                 <div>
                                     <h5>Address</h5>
-                                    <textarea class="form-control" rows="2" name="address" value={{ user.address }}></textarea>
+                                    <textarea class="form-control" rows="2" name="address" >{{ user.address }}</textarea>
 
                                 </div>
 
