@@ -55,7 +55,11 @@ class Product(models.Model):
 
     def suggest_product(self):
         suggest_pool = Product.objects.filter(type=self.type).exclude(id=self.id)
-        suggest = random.sample(suggest_pool, 3)
+        sample_size = 3
+        suggest_size = suggest_pool.count()
+        if suggest_size < 3:
+            sample_size = suggest_size
+        suggest = random.sample(suggest_pool, sample_size)
         return suggest
 
 
