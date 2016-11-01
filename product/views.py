@@ -40,12 +40,7 @@ def get_brand(request):
 
     return {'brand' : brand}
 
-<<<<<<< HEAD
 def get_all_brand():
-=======
-
-def brand():
->>>>>>> master
     brand = set()
     for product in Product.objects.all():
         brand.add(product.brand)
