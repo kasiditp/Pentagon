@@ -10,6 +10,7 @@ from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
 
+from base.views import get_nav_context
 from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
@@ -26,8 +27,9 @@ def product_view(request):
         'max_price': max_price,
         'brands' : brands
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
+
 
 @ajax
 @csrf_exempt
@@ -38,13 +40,17 @@ def get_brand(request):
 
     return {'brand' : brand}
 
+<<<<<<< HEAD
 def get_all_brand():
+=======
+
+def brand():
+>>>>>>> master
     brand = set()
     for product in Product.objects.all():
         brand.add(product.brand)
 
     return brand
-
 
 
 def product_details(request, product_id):
@@ -67,7 +73,7 @@ def product_details(request, product_id):
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
-    suggest = product.suggest_product()
+    # suggest = product.suggest_product()
     context = {
         'product': product,
         'sex': sex,
@@ -78,19 +84,19 @@ def product_details(request, product_id):
         'error_message': error_message,
         'success': success,
         'success_message': success_message,
-        'suggest': suggest,
+        # 'suggest': suggest,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
 
 
 def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
-    user_id = 1 #request.session.get('user')
+    user_unique_id = request.session['user_unique_id']
     product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
-    user = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(User, unique_id=user_unique_id)
     if stock.amount <= 0:
         request.session['error'] = True
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
@@ -117,7 +123,7 @@ def manage_cart(request):
         'sex': SEX,
         'type': PRODUCT_TYPE,
     }
-
+    context.update(get_nav_context(request))
     return render(request, 'pages/cart/manage_cart.html', context)
 
 
@@ -129,6 +135,7 @@ def remove_from_cart(request):
     Cart.delete(cart_to_delete)
 
     return HttpResponseRedirect(reverse('manage_cart'))
+
 
 @ajax
 @csrf_exempt
@@ -151,10 +158,10 @@ def filtered(request):
 
         filter_data = remove_back.split(',')
 
-        print filter_data
+        # print filter_data
 
         for data in filter_data:
-            # print data
+            print data
             if data == 'null':
                 continue
 
@@ -194,6 +201,7 @@ def filtered(request):
                 else:
                     filter_product_set.intersection_update(product_set)
 
+
             elif data == 'sex':
                 temp_set = set()
                 num = 5
@@ -229,7 +237,6 @@ def filtered(request):
                         num+=1
                         break
 
-
         # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
@@ -263,6 +270,7 @@ def filtered(request):
         # rendered = template.render(context)
         #
         # return {'result': True, 'rendered': rendered}
+
 
 def is_number(s):
     try:
