@@ -16,10 +16,24 @@
 
         <div class = "container">
             <div class =  "row_main">
-                <div class = "col-md-2">
+                <div class = "col-md-1">
 
                 </div>
-                <div class="col-md-4">
+
+                <div class="col-md-4" class = "image_profile_part">
+                    <center><img id="blah" src = "http://bit.ly/2ekiI3P" alt="your image"  /></center>
+
+                    <div class = "button_choose_file">
+                        <center><input type='file'  onchange="readURL(this);" /></center>
+                    </div>
+
+                    <div class = "button_upload">
+                        <center><input type="submit" class="btn btn-primary custom_upload_button" value="Upload"></center>
+                    </div>
+
+                </div>
+
+                <div class = "col-md-2">
 
                 </div>
 
@@ -92,11 +106,28 @@
                       </div>
                 </div>
 
-                 <div class = "col-md-2">
+                 <div class = "col-md-1">
 
                 </div>
 
             </div>
         </div>
+
+        <script >
+            function readURL(input) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(300)
+                    .height(400);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+            }
+        </script>
         </section>
 {% endblock %}
