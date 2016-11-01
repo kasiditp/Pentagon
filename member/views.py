@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect,HttpResponse
-
 from django.urls import reverse
-
+import string
+import random
 from base.auth import Auth
 from models import User
 import hashlib
@@ -18,7 +18,9 @@ def register_view(request):
 
 
 def profile_view(request):
-    return render(request, 'pages/member/profile.html')
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+    return render(request, 'pages/member/profile.html',{"user" : user})
 
 
 def login(request):
@@ -36,7 +38,7 @@ def login(request):
 def add_new_user(request):
     print "enter add user function"
     if request.method == 'POST':
-        unique_id = '00001'
+        unique_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
         username = request.POST['username']
         password = request.POST['password']
         re_password = request.POST['re_password']
@@ -49,7 +51,9 @@ def add_new_user(request):
         birthdate = request.POST['birthdate']
         email = request.POST['email']
         address = request.POST['address']
-
+        user = User.objects.filter(username=username)
+        if user is not None:
+            return render(request, 'pages/member/register.html', {"error": "This username is already exist!"})
         if  username == '' or password == '' or re_password == '' or first_name == '' or last_name == '' or birthdate == '' or email == '' or address == '':
             return render(request, 'pages/member/register.html' , {"error":"Please input your information to all fields!"})
         if password != re_password:
