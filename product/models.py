@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import random
+
 from django.db import models
 
 PRODUCT_TYPE = [
@@ -50,6 +52,11 @@ class Product(models.Model):
 
     def get_sex_name(self):
         return SEX[self.sex - 1][1]
+
+    def suggest_product(self):
+        suggest_pool = Product.objects.filter(type=self.type).exclude(id=self.id)
+        suggest = random.sample(suggest_pool, 3)
+        return suggest
 
 
 class ProductImage(models.Model):

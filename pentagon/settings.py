@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'base',
     'product',
     'member',
+    # App for displaying numbers and others
     'django.contrib.humanize',
     # app config amazon s3
     'django_s3_storage',

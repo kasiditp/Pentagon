@@ -1,3 +1,5 @@
+from sets import Set
+
 from django.db.models import Max
 from django.http import HttpRequest
 from django.http import HttpResponse
@@ -27,6 +29,7 @@ def product_view(request):
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
 
+
 @ajax
 @csrf_exempt
 def get_brand(request):
@@ -35,6 +38,7 @@ def get_brand(request):
         brand.add(product.brand)
 
     return {'brand' : brand}
+
 
 def brand():
     brand = set()
@@ -64,7 +68,7 @@ def product_details(request, product_id):
 
     sex = SEX[(product.sex - 1)][1]
     product_type = PRODUCT_TYPE[(product.type - 1)][1]
-    # print sex
+    # suggest = product.suggest_product()
     context = {
         'product': product,
         'sex': sex,
@@ -75,6 +79,7 @@ def product_details(request, product_id):
         'error_message': error_message,
         'success': success,
         'success_message': success_message,
+        # 'suggest': suggest,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
@@ -126,13 +131,14 @@ def remove_from_cart(request):
 
     return HttpResponseRedirect(reverse('manage_cart'))
 
+
 @ajax
 @csrf_exempt
 def filtered(request):
     if request.POST:
 
         # filter_product = None
-        filter_product_list = []
+        filter_product_set = Set()
         # filter_button = request.POST.get('button_id')
         raw_filter_data = request.POST.get('data_id')
         remove_quote_filter_data = raw_filter_data.replace("\"","")
@@ -142,8 +148,9 @@ def filtered(request):
         remove_size_bracket_data = remove_colon_bracket_data.replace("size","")
         remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
         remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
+        remove_search_bracket_data = remove_clear_bracket_data.replace("search","")
 
-        filter_data = remove_clear_bracket_data.split(',')
+        filter_data = remove_search_bracket_data.split(',')
 
         # print filter_data
 
@@ -153,39 +160,43 @@ def filtered(request):
                 continue
 
             if data in SIZE_LIST:
-                stock = Stock.objects.filter(size=data)
-                negate_stock = Stock.objects.all().exclude(size=data)
-                # print "negate stock is %s" % negate_stock
+                stock = Stock.objects.filter(size=data) # get array of filter
+                stock_set = Set()
                 for item in stock:
-                    # if not filter_product_list:
-                    filter_product_list.append(item.product)
-                    # else:
-                        # for not_item in negate_stock:
-                        #     filter_product_list.remove(not_item.product)
-                print filter_product_list
+                    stock_set.add(item.product)
+
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(stock_set)
+                else:
+                    filter_product_set.intersection_update(stock_set)
+
+
             # print filter_product_list
             # print "is number? %s" % is_number(data)
             if is_number(data):
                 product = Product.objects.filter(price__lte=float(data))
-                negate_product = Product.objects.filter(price__gte=float(data))
-                for item in product:
-                    if not filter_product_list:
-                        filter_product_list.append(item)
-                    else:
-                        for not_item in negate_product:
-                            filter_product_list.remove(not_item)
+                product_set = Set(product)
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(product_set)
+                else:
+                    filter_product_set.intersection_update(product_set)
 
-            if data == 'true':
-                filter_product_list = Product.objects.all()
+            if data == 'c1':
+                filter_product_set = Product.objects.all()
                 break;
-            if data == 'search':
-                brand = request.POST.get('brand')
-                product = Product.objects.filter(brand=brand)
-                for item in product:
-                    filter_product_list.append(item)
 
-        filter_product_set = set(filter_product_list)
-        print filter_product_set
+            if data == 's1':
+                print 's1'
+                brand = request.POST.get('brand')
+
+                product = Product.objects.filter(brand=brand)
+                product_set = Set(product)
+                if len(filter_product_set) == 0:
+                    filter_product_set.union_update(product_set)
+                else:
+                    filter_product_set.intersection_update(product_set)
+
+        # print filter_product_set
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
@@ -218,6 +229,7 @@ def filtered(request):
         # rendered = template.render(context)
         #
         # return {'result': True, 'rendered': rendered}
+
 
 def is_number(s):
     try:
