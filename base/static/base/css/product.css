@@ -19,20 +19,36 @@
 .product-detail {
     border-right: solid 1px;
     border-bottom: solid 1px;
-    height: 300px;
+    height: 285px;
 }
 
 #block-image {
-    background-color: darkgrey;
+    background-color: white;
 }
 
 #product-image {
     height: 200px;
 }
 
+#detail-image {
+    background-color: #d9534f;
+}
+
 .product-detail:hover {
     box-shadow: 0 0 15px #191919;
     opacity: 0.7;
+}
+
+#brand {
+    color: white;
+}
+
+#name {
+    color:white;
+}
+
+#price {
+    color:yellow;
 }
 
 /*#product-image .img-responsive {*/

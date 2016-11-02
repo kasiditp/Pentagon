@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect,HttpResponse
-
 from django.urls import reverse
-
+import string
+import random
 from base.auth import Auth
 from base.views import get_nav_context
 from models import User
@@ -19,7 +19,11 @@ def register_view(request):
 
 
 def profile_view(request):
-    return render(request, 'pages/member/profile.html', get_nav_context(request))
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+    return render(request, 'pages/member/profile.html',{"user" : user})
+
+
 
 
 def login(request):
@@ -41,9 +45,9 @@ def logout(request):
 
 
 def add_new_user(request):
-    print "enter add user function"
     if request.method == 'POST':
-        unique_id = '00001'
+        generate_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        unique_id = "PT-" + generate_id
         username = request.POST['username']
         password = request.POST['password']
         re_password = request.POST['re_password']
@@ -57,14 +61,45 @@ def add_new_user(request):
         email = request.POST['email']
         address = request.POST['address']
 
+        if User.objects.filter(username=request.POST['username']).exists():
+            return render(request, 'pages/member/register.html',
+                          {"error": "This username is already exist!",
+                            "password" : password,
+                            "confirm_password" : re_password,
+                            "birthdate": birthdate,
+                            "first_name" : first_name,
+                            "last_name" : last_name,
+                            "email" : email,
+                            "address" : address
+                          })
         if  username == '' or password == '' or re_password == '' or first_name == '' or last_name == '' or birthdate == '' or email == '' or address == '':
-            return render(request, 'pages/member/register.html' , {"error":"Please input your information to all fields!"})
+            return render(request, 'pages/member/register.html' ,
+                          {"error":"Please input your information to all fields!",
+                               "username" : username,
+                               "password": password,
+                               "confirm_password": re_password,
+                               "birthdate" : birthdate,
+                               "first_name": first_name,
+                               "last_name": last_name,
+                               "email": email,
+                               "address": address
+                           })
         if password != re_password:
-            return render(request, 'pages/member/register.html', {"error": "Password and confirm password field must be the same!"})
+            return render(request, 'pages/member/register.html',
+                          {"error": "Password and confirm password field must be the same!",
+                               "username" : username,
+                               "first_name": first_name,
+                               "birthdate": birthdate,
+                               "last_name": last_name,
+                               "email": email,
+                               "address": address
+                           })
 
-        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),email=email,sex=sex,birth_date=birthdate,first_name=first_name,last_name=last_name,address=address)
+        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),
+                                       email=email,sex=sex,birth_date=birthdate,first_name=first_name,
+                                       last_name=last_name,address=address,image='http://bit.ly/2ekiI3P')
 
-    return render(request, 'pages/member/register.html')
+    return render(request, 'pages/member/register.html' , {"success" : "Registration successful!"})
 
 
 def change_password(request):
@@ -72,15 +107,16 @@ def change_password(request):
         unique_id = request.session['user_unique_id']
         new_password = request.POST['new_password']
         confirm_new_password = request.POST['confirm_new_password']
+        user = User.objects.get(unique_id=unique_id)
 
         if new_password != confirm_new_password:
-            return render(request, 'pages/member/profile.html', {"error": "New password and confirm new password field must be the same!"})
-        else:
+            return render(request, 'pages/member/profile.html', {"error": "New password and confirm new password field must be the same!" , "user" : user})
+        elif new_password != '' and confirm_new_password != '':
             user = User.objects.get(unique_id=unique_id)
             user.password = hashlib.md5(new_password).hexdigest()
             user.save()
-
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change password!"})
+            return render(request, 'pages/member/profile.html', {"success": "Successfully change password!" , "user" : user})
+    return render(request, 'pages/member/profile.html', {"success": "Password not changed" , "user" : user})
 
 
 def change_general(request):
@@ -105,7 +141,17 @@ def change_general(request):
             user.address = address
         user.save()
 
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change information!"})
+    return render(request, 'pages/member/profile.html', {"success": "Successfully change information!" , "user" : user})
+
+def change_profile_image(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id = unique_id)
+    if request.method == 'POST':
+        image = request.FILES.get('img-file')
+        user.image = image
+        user.save()
+    return render(request, 'pages/member/profile.html', {"success": "Successfully change profile image!", "user": user})
+
 
 
 def success(request):

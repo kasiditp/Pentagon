@@ -9,20 +9,23 @@
                 <div class="row" id="block-image">
                     <div class="">
                         {#image-center#}
-                        <img class="img-responsive center-block" id="product-image" src="{{ product.get_image }}"><br>
+                        <img class="img-responsive center-block" id="product-image"
+                             src="{{ product.get_image.image.url }}"><br>
                     </div>
                 </div>
-                <div class="row">
-                    <div>
+                <div class="row" id="detail-image">
+                    <div id="brand">
                         <b>{{ product.brand|upper }}</b><br>
                     </div>
-                    <div>
+                    <div id="name">
                         <b>{{ product.name }}</b><br>
                     </div>
                     <div>
                         <a class="divider"></a>
                     </div>
-                    <b>{{ product.price|floatformat:2|intcomma }} THB</b>
+                    <div id="price">
+                        <b>{{ product.price|floatformat:2|intcomma }} THB</b>
+                    </div>
                 </div>
             </div>
         </a>
