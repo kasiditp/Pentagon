@@ -19,3 +19,10 @@ def get_nav_context(request):
             'product_amount': Cart.objects.filter(user_id=member_user).count
         }
         return context
+    else:
+        context = {
+            'is_login': False,
+            'user': 000000,
+            'product_amount': None,
+        }
+        return context
