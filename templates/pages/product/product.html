@@ -33,13 +33,13 @@
 
                     <h3>Sex</h3>
 
-                    <div class="checkbox" id = "male_sex" data-id="Men"> <label><input type="checkbox">
+                    <div class="checkbox"> <label><input type="checkbox" id = "male_sex" data-id="Men" checked="">
                     Men</label>
                     </div>
-                    <div class="checkbox" id = "female_sex" data-id="Women"> <label><input type="checkbox">
+                    <div class="checkbox"> <label><input type="checkbox" id = "female_sex" data-id="Women" checked="">
                     Women</label>
                     </div>
-                    <div class="checkbox" id = "uni_sex" data-id="Unisex"> <label><input type="checkbox">
+                    <div class="checkbox"> <label><input type="checkbox" id = "uni_sex" data-id="Unisex" checked="">
                     Unisex</label>
                     </div>
 
@@ -123,6 +123,13 @@
         filtered_list['search'] = 's0';
         filtered_list['sex'] = [];
         filtered_list['brand'] = [];
+        var brandList = [];
+        var checklist = "";
+
+
+        {% for brand in brands %}
+            brandList.push('{{ brand }}');
+        {% endfor %}
 
         $(function () {
             var handle = $("#custom-handle");
@@ -241,6 +248,13 @@
             filtered_list['maxprice'] = null;
             filtered_list['size'] = null;
             filtered_list['sex'] = [];
+            filtered_list['brand'] = [];
+            $('#male_sex').prop('checked', false);
+            $('#female_sex').prop('checked', false);
+            $('#uni_sex').prop('checked', false);
+            for(var i = 0; i< brandList.length; i++) {
+                $('#'+i).prop('checked', false);
+            }
 
         });
 
@@ -393,16 +407,9 @@
         });
 
 
-        var brandList = [];
-        var checklist = "";
-
-
-        {% for brand in brands %}
-            brandList.push('{{ brand }}');
-        {% endfor %}
-
         for(var i = 0;i<brandList.length;i++){
-            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";
+            checklist+= " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \""+ brandList[i] + "\" checked = \"checked\">";
+{#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
             checklist+= brandList[i]+"";
             checklist+= "</label> </div>";
             console.log(checklist);
@@ -455,8 +462,11 @@
 
             },
 
-});
+    });
 
+    window.onload = function() {
+        $('#clear_button').click();
+    };
 
 
     </script>

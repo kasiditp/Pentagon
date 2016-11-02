@@ -156,10 +156,10 @@ def filtered(request):
 
         filter_data = remove_back.split(',')
 
-        # print filter_data
+        print filter_data
 
         for data in filter_data:
-            print data
+            # print data
             if data == 'null':
                 continue
 
@@ -235,7 +235,9 @@ def filtered(request):
                         num+=1
                         break
 
-        # print filter_product_set
+        if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '':
+            filter_product_set = Product.objects.all()
+
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
