@@ -39,7 +39,8 @@ def get_brand(request):
     for product in Product.objects.all():
         brand.add(product.brand)
 
-    return {'brand' : brand}
+    return {'brand': brand}
+
 
 
 def get_all_brand():
@@ -115,10 +116,12 @@ def manage_cart(request):
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock_id)
     #     cart_items.append(stock)
+    total_price = Cart.get_total_price(user_id)
     context = {
         'cart': cart,
         'sex': SEX,
         'type': PRODUCT_TYPE,
+        'total_price': total_price,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/cart/manage_cart.html', context)
@@ -155,10 +158,10 @@ def filtered(request):
 
         filter_data = remove_back.split(',')
 
-        # print filter_data
+        print filter_data
 
         for data in filter_data:
-            print data
+            # print data
             if data == 'null':
                 continue
 
@@ -234,7 +237,9 @@ def filtered(request):
                         num+=1
                         break
 
-        # print filter_product_set
+        if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '':
+            filter_product_set = Product.objects.all()
+
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
