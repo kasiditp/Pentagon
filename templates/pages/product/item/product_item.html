@@ -3,6 +3,7 @@
 <div class="row" id="product-content">
     {% load humanize %}
     {% for product in product_list %}
+        <a href="{% url 'product:product_details' product.pk %}">
         <div class="col-md-3 product-detail">
             <div class="row">
                 <div class="">
@@ -19,12 +20,10 @@
                 <div>
                     <a class="divider"></a><br/>
                 </div>
-                <div>
-                    {{ product.description|slice:":11" }}...
-                </div>
-                <b>{{ product.price|floatformat:2|intcomma }}</b>
+                <b>{{ product.price|floatformat:2|intcomma }} Baht</b>
             </div>
         </div>
+        </a>
         {% if forloop.counter|divisibleby:4 %}
             </div>
             <div class="row">
