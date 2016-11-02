@@ -7,6 +7,10 @@ SEX = [
     (2, "Women"),
     (3, "Unisex")
 ]
+TYPE = [
+    (1, "member"),
+    (2, "admin")
+]
 
 
 class User(models.Model):
@@ -19,4 +23,5 @@ class User(models.Model):
     first_name = models.CharField(verbose_name='Firstname', max_length=64, null=False, blank=False)
     last_name = models.CharField(verbose_name='Lastname', max_length=64, null=False, blank=False)
     address = models.TextField(verbose_name='Address', null=True, blank=False)
+    type = models.IntegerField(verbose_name="User Type", choices=TYPE, null=False, default=1)
 

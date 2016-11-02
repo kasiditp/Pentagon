@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^profile/$', profile_view, name="profile_view"),
     url(r'^success/$', success, name="success_page"),
     url(r'^login/$', login, name="login"),
+    url(r'^logout/$', logout, name="logout"),
 ]
