@@ -34,7 +34,7 @@
 {#                            <img src="{{ image.image.url }}"/>#}
 {#                        {% endif %}#}
                         <div class="col-md-12 col-sm-2 col-xs-2">
-                            <img src="{{ image }}" class="img-thumbnail img-responsive gallery-items
+                            <img src="{{ image.image.url }}" class="img-thumbnail img-responsive gallery-items
 								{% if forloop.first %}
 									gallery-selected
 								   {% endif %}
@@ -43,7 +43,7 @@
                     {% endfor %}
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12 border">
-                    <img class="product_img img-responsive" src="{{ images.first }}" id="product_img">
+                    <img class="product_img img-responsive" src="{{ images.first.image.url }}" id="product_img">
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12" id="product_info">
                     {% load humanize %}
@@ -122,7 +122,7 @@
             {% for item in suggest %}
                 <a href="{% url 'product:product_details' product_id=item.id %} ">
                 <div class="col-md-4 col-sm-12 col-xs-12 border">
-                    <img class="img-responsive suggest_img" src="{{ item.get_image }}" align="middle" >
+                    <img class="img-responsive suggest_img" src="{{ item.get_image.image.url }}" align="middle" >
                     <h5><b>{{ item.brand | upper}}</b></h5>
                     <h5>{{ item.name }}</h5>
                 </div>

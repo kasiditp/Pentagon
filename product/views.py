@@ -38,7 +38,8 @@ def get_brand(request):
     for product in Product.objects.all():
         brand.add(product.brand)
 
-    return {'brand' : brand}
+    return {'brand': brand}
+
 
 def get_all_brand():
     brand = set()
@@ -113,10 +114,12 @@ def manage_cart(request):
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock_id)
     #     cart_items.append(stock)
+    total_price = Cart.get_total_price(user_id)
     context = {
         'cart': cart,
         'sex': SEX,
         'type': PRODUCT_TYPE,
+        'total_price': total_price,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/cart/manage_cart.html', context)

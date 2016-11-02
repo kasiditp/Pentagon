@@ -65,13 +65,12 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
-    image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True,null=True)
-    picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)
+    image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True, null=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)
 
     def __str__(self):
-        return u"%s" % self.picture
+        return u"%s" % self.image
 
 
 class Stock(models.Model):
@@ -87,3 +86,10 @@ class Cart(models.Model):
     stock_id = models.ForeignKey('Stock', null=False, blank=False)
     user_id = models.ForeignKey('member.User', null=False, blank=False)
 
+    @staticmethod
+    def get_total_price(user_id):
+        this_cart = Cart.objects.filter(user_id__unique_id=user_id)
+        total_price = 0
+        for item in this_cart:
+            total_price += item.stock_id.product.price
+        return total_price
