@@ -21,6 +21,11 @@
                 </div>
 
                 <div class="col-md-4" class = "image_profile_part">
+                    <form id="form-profile-upload" action="{% url 'vet:edit_profile_image' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" id="img-file" name="img-file" accept="image/*" class="upload" style="width: 100%;height: 225px;"/>
+                    </form>
+
                     <center><img id="blah" src = "http://bit.ly/2ekiI3P" alt="your image"  /></center>
 
                     <div class = "button_choose_file">

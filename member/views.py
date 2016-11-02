@@ -19,12 +19,10 @@ def register_view(request):
 
 
 def profile_view(request):
-
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id=unique_id)
     return render(request, 'pages/member/profile.html',{"user" : user})
 
-    return render(request, 'pages/member/profile.html', get_nav_context(request))
 
 
 
@@ -48,7 +46,8 @@ def logout(request):
 
 def add_new_user(request):
     if request.method == 'POST':
-        unique_id = 'PT-'.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        generate_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        unique_id = "PT-" + generate_id
         username = request.POST['username']
         password = request.POST['password']
         re_password = request.POST['re_password']
@@ -141,6 +140,11 @@ def change_general(request):
         user.save()
 
     return render(request, 'pages/member/profile.html', {"success": "Successfully change information!" , "user" : user})
+
+def change_profile_image(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id = unique_id)
+
 
 
 def success(request):

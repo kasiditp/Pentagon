@@ -10,7 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('product', 'picture', 'images')
+    list_display = ('product', 'picture', 'image')
 
 
 class StockAdmin(admin.ModelAdmin):

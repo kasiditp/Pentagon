@@ -25,7 +25,7 @@ class User(models.Model):
     first_name = models.CharField(verbose_name='Firstname', max_length=64, null=False, blank=False)
     last_name = models.CharField(verbose_name='Lastname', max_length=64, null=False, blank=False)
     address = models.TextField(verbose_name='Address', null=True, blank=False)
-    # image = models.ImageField(verbose_name='User Image', upload_to=user_image_path_name, blank=True, null=True)
+    image = models.ImageField(verbose_name='User Image', upload_to=user_image_path_name, blank=True, null=True)
     type = models.IntegerField(verbose_name="User Type", choices=TYPE, null=False, default=1)
 
 
