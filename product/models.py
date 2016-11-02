@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import random
+
 from django.db import models
 
 PRODUCT_TYPE = [
@@ -15,6 +17,10 @@ SEX = [
     (2, "Women"),
     (3, "Unisex")
 ]
+
+
+def product_image_path_name(self, filename):
+    return '/'.join(['product/images', filename])
 
 
 # Create your models here.
@@ -47,8 +53,19 @@ class Product(models.Model):
     def get_sex_name(self):
         return SEX[self.sex - 1][1]
 
+    def suggest_product(self):
+        suggest_pool = Product.objects.filter(type=self.type).exclude(id=self.id)
+        sample_size = 3
+        suggest_size = suggest_pool.count()
+        if suggest_size < 3:
+            sample_size = suggest_size
+        suggest = random.sample(suggest_pool, sample_size)
+        return suggest
+
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
+    image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True,null=True)
     picture = models.CharField(verbose_name="Picture", max_length=256, null=True, blank=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)
