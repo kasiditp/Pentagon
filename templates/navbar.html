@@ -7,7 +7,7 @@
 <nav class="navbar navbar-default navbar-polygon" style="margin-bottom: 0px">
     <div class="container-fluid">
         {% if user.type == 2 %}
-           <div class="navbar-header">
+            <div class="navbar-header">
                 <a class="navbar-brand" href="{% url 'home:index' %}">Polygon</a>
                 <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
             </div>
@@ -50,11 +50,16 @@
             </li>
             <li><a>|</a></li>
             <li>
-                <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                {% if is_login %}
+                     <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     {% if product_amount %}
                         ({{ product_amount }})
                     {% endif %}
                 </a>
+                {% else %}
+                     <a href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                {% endif %}
+
             </li>
         </ul>
     </div>

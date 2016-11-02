@@ -26,7 +26,7 @@ def product_view(request):
     context = {
         'product_list': product_list,
         'max_price': max_price,
-        'brands' : brands
+        'brands': brands
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -40,7 +40,6 @@ def get_brand(request):
         brand.add(product.brand)
 
     return {'brand': brand}
-
 
 
 def get_all_brand():
@@ -157,8 +156,6 @@ def filtered(request):
         remove_back = remove_front.replace("]",",end")
 
         filter_data = remove_back.split(',')
-
-        print filter_data
 
         for data in filter_data:
             # print data
