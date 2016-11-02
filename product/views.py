@@ -1,6 +1,6 @@
 from sets import Set
 
-from django.db.models import Max
+from django.db.models import Max,Min
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -21,10 +21,12 @@ num = 0
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
+    min_price = Product.objects.all().aggregate(Min('price'))
     brands = get_all_brand()
     context = {
         'product_list': product_list,
         'max_price': max_price,
+        'min_price': min_price,
         'brands' : brands
     }
     context.update(get_nav_context(request))
