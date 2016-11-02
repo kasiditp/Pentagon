@@ -12,8 +12,7 @@
                 <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
             </div>
             <ul class="nav navbar-nav topnav" id="myTopnav">
-                <li><a href="{% url 'product:product_view' %}">Admin1</a></li>
-                <li><a href="{% url 'product:product_view' %}">Admin2</a></li>
+                <li><a href="{% url 'product:admin_product_view' %}">Manage Product</a></li>
             </ul>
         {% else %}
             <div class="navbar-header">

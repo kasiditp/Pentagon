@@ -15,8 +15,9 @@ from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
-SEX_LIST = ['Men','Women','Unisex']
+SEX_LIST = ['Men', 'Women', 'Unisex']
 num = 0
+
 
 def product_view(request):
     product_list = Product.objects.all()
@@ -39,6 +40,7 @@ def get_brand(request):
         brand.add(product.brand)
 
     return {'brand' : brand}
+
 
 def get_all_brand():
     brand = set()
@@ -274,6 +276,7 @@ def is_number(s):
     except ValueError:
         return False
 
+
 def what_sex(sex):
     if sex == 'Men':
         return 1
@@ -281,3 +284,26 @@ def what_sex(sex):
         return 2
     elif sex == 'Unisex':
         return 3
+
+
+def admin_product_view(request):
+    return render(request, 'pages/product/admin-product.html', get_nav_context(request))
+
+
+def add_new_product(request):
+    product = request.POST
+    print(product)
+    name = product['name']
+    image = request.FILES.get('img-file')
+    price = product['price']
+    product_type = product['type']
+    brand = product['brand']
+    description = product['description']
+    sex = product['sex']
+    print(sex)
+    size = product['size']
+    amount = product['amount']
+    new_product = Product.objects.create(name=name, type=product_type, sex=sex, brand=brand, price=price, description=description)
+    Stock.objects.create(product=new_product, size=size, amount=amount)
+    ProductImage.objects.create(product=new_product, image=image)
+    return render(request, 'pages/product/admin-product.html', get_nav_context(request))
