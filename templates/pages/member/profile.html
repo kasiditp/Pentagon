@@ -25,7 +25,7 @@
 
                     <form id="form-profile-upload" action="{% url 'member:change_profile_image' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                         <center><img id="user_image" src = {{ user.image }} alt="your image"  /></center>
+                         <center><img id="user_image" src = {{ user.image.url }} alt="your image" height="300" width="300" /></center>
 
                         <div class = "button_choose_file">
                             <input type="file" id="img-file" name="img-file" accept="image/*" class="upload" onchange="readURL(this);"/>
@@ -52,7 +52,7 @@
                                     <div>
                                         <h5>New password <font color="red">*</font></h5>
                                         <input type="password" class="form-control" name="new_password" placeholder="Enter new password">
-                                        <font color="red"><h6>Minimum 6 characters contain both number and alphabet</h6></font>
+{#                                        <font color="red"><h6>Minimum 6 characters contain both number and alphabet</h6></font>#}
                                     </div>
 
                                     <div>
@@ -69,11 +69,11 @@
                         <div id="general" >
                             <form action="{% url 'member:change_general' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
-{#                                <div>#}
-{#                                    <font color ="red">#}
-{#                                        <h5>Input a fields you want to change only.</h5>#}
-{#                                    </font>#}
-{#                                </div>#}
+                                <div>
+                                    <font color ="red">
+                                        <h5>Input in a fields that you want to change only.</h5>
+                                    </font>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h5>First name </h5>

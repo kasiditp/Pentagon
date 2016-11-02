@@ -115,6 +115,8 @@
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+
+
     <script>
         var filtered_list = {};
         filtered_list['size'] = null;
@@ -125,18 +127,41 @@
         filtered_list['brand'] = [];
         var brandList = [];
         var checklist = "";
+        var handle = $("#custom-handle");
+
+
 
 
         {% for brand in brands %}
             brandList.push('{{ brand }}');
         {% endfor %}
 
+        function round(price,command) {
+            console.log("Before " + command + "Price is : "+  price);
+
+            if(price%100 != 0){
+                if(command == 'ceil') {
+                    price += (100 - price%100);
+                }
+                else if(command == 'floor') {
+                    price -= price%100;
+                }
+            }
+            else return price;
+            console.log("After " + command + "Price is : "+  price);
+            return price;
+        }
+
         $(function () {
-            var handle = $("#custom-handle");
+            var priceMax = round({{ max_price.price__max }},'ceil');
+            var priceMin = round({{ min_price.price__min }}, 'floor');
+            var step = 100;
 
             $("#slider").slider({
-                max: {{ max_price.price__max }},
-                min: 0,
+                max: priceMax,
+                min: priceMin,
+                step: step,
+
 
                 create: function () {
 
@@ -150,6 +175,7 @@
                 stop: function (event, ui) {
                     console.log(ui.value);
                     filtered_list['maxprice'] = ui.value;
+                    handle.text(ui.value);
                     console.log(filtered_list);
                     $('#product-content').html("");
                     $.ajax({
@@ -172,6 +198,7 @@
 
 
                 }
+
 
             });
         });
@@ -255,6 +282,10 @@
             for(var i = 0; i< brandList.length; i++) {
                 $('#'+i).prop('checked', false);
             }
+            $('#slider').slider("value",0);
+            var minPrice = {{ min_price.price__min }};
+            handle.text(round(minPrice,'floor'));
+
 
         });
 
