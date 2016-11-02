@@ -16,23 +16,37 @@
 
         <div class = "container">
             <div class =  "row_main">
+
+                <div class = "col-md-1">
+
+                </div>
+
+                <div class="col-md-4" class = "image_profile_part">
+
+                    <form id="form-profile-upload" action="{% url 'member:change_profile_image' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                         <center><img id="user_image" src = {{ user.image }} alt="your image"  /></center>
+
+                        <div class = "button_choose_file">
+                            <input type="file" id="img-file" name="img-file" accept="image/*" class="upload" onchange="readURL(this);"/>
+                        </div>
+
+                    <div class = "button_upload">
+                        <center><input type="submit" class="btn btn-primary custom_upload_button" value="Upload"></center>
+                    </div>
+                    </form>
+
+                </div>
+
                 <div class = "col-md-2">
 
                 </div>
-                <div class="col-md-4">
 
-                </div>
-
-                <div class = "col-md-4 ">
+                <div class = "col-md-4 well">
                     <h2>Settings</h2>
-                      <ul class="nav nav-tabs">
-                        <li><a data-toggle="tab" href="#change_password">Password</a></li>
-                        <li><a data-toggle="tab" href="#general">Personal</a></li>
-                      </ul>
 
-                      <div class="tab-content">
 
-                            <div id="change_password" class="tab-pane fade in active">
+                            <div id="change_password" >
                                 <form action="{% url 'member:change_password' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
                                     <div>
@@ -52,39 +66,39 @@
                             </div>
 
 
-                        <div id="general" class="tab-pane fade">
+                        <div id="general" >
                             <form action="{% url 'member:change_general' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
-                                <div>
-                                    <font color ="red">
-                                        <h5>Input a fields you want to change only.</h5>
-                                    </font>
-                                </div>
+{#                                <div>#}
+{#                                    <font color ="red">#}
+{#                                        <h5>Input a fields you want to change only.</h5>#}
+{#                                    </font>#}
+{#                                </div>#}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h5>First name </h5>
-                                        <input type="text" class="form-control" name="first_name" placeholder="First name">
+                                        <input type="text" class="form-control" name="first_name" placeholder="First name"  value={{ user.first_name }}>
                                     </div>
                                     <div class="col-md-6">
                                         <h5>Last name  </h5>
-                                        <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                                        <input type="text" class="form-control" name="last_name" placeholder="Last name" value={{ user.last_name }}>
                                     </div>
                                 </div>
 
                                 <div>
                                     <h5>Birthdate</h5>
-                                    <input type="date" class="form-control" name="birthdate">
+                                    <input type="date" class="form-control" name="birthdate" value={{ user.birth_date }}>
                                 </div>
 
                                 <div>
                                     <h5>Email </h5>
-                                    <input type="text" class="form-control" name="email" placeholder="Enter email">
+                                    <input type="text" class="form-control" name="email" placeholder="Enter email" value={{ user.email}}>
                                 </div>
 
 
                                 <div>
                                     <h5>Address</h5>
-                                    <textarea class="form-control" rows="2" name="address"></textarea>
+                                    <textarea class="form-control" rows="2" name="address" >{{ user.address }}</textarea>
 
                                 </div>
 
@@ -97,11 +111,28 @@
                       </div>
                 </div>
 
-                 <div class = "col-md-2">
+                 <div class = "col-md-1">
 
                 </div>
 
             </div>
         </div>
+
+        <script >
+            function readURL(input) {
+            if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#user_image')
+                    .attr('src', e.target.result)
+                    .width(300)
+                    .height(400);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+            }
+        </script>
         </section>
 {% endblock %}

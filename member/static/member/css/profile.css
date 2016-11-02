@@ -4,3 +4,16 @@
 .row_main{
     padding-top: 40px;
 }
+.image_profile_part{
+    padding-top: 60px;
+}
+.button_choose_file{
+    padding-top: 20px;
+    margin-left: 80px;
+}
+.button_upload{
+    padding-top: 40px;
+}
+.custom_upload_button {
+    width: 220px !important;
+}
