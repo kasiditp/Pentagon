@@ -297,7 +297,6 @@ def admin_product_view(request):
 
 def add_new_product(request):
     product = request.POST
-    print(product)
     name = product['name']
     image = request.FILES.get('img-file')
     price = product['price']
@@ -305,10 +304,13 @@ def add_new_product(request):
     brand = product['brand']
     description = product['description']
     sex = product['sex']
-    print(sex)
     size = product['size']
     amount = product['amount']
     new_product = Product.objects.create(name=name, type=product_type, sex=sex, brand=brand, price=price, description=description)
     Stock.objects.create(product=new_product, size=size, amount=amount)
     ProductImage.objects.create(product=new_product, image=image)
-    return render(request, 'pages/product/admin-product.html', get_nav_context(request))
+    context = {
+        "message": "Success add new product"
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/product/admin-product.html', context)
