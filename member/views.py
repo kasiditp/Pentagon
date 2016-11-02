@@ -21,7 +21,11 @@ def register_view(request):
 def profile_view(request):
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id=unique_id)
-    return render(request, 'pages/member/profile.html',{"user" : user})
+    context = {
+        "user":user
+    }
+    context.update( get_nav_context(request))
+    return render(request, 'pages/member/profile.html', context)
 
 
 
@@ -103,32 +107,48 @@ def add_new_user(request):
 
 
 def change_password(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+
     if request.method == 'POST':
-        unique_id = request.session['user_unique_id']
         new_password = request.POST['new_password']
         confirm_new_password = request.POST['confirm_new_password']
-        user = User.objects.get(unique_id=unique_id)
-
         if new_password != confirm_new_password:
-            return render(request, 'pages/member/profile.html', {"error": "New password and confirm new password field must be the same!" , "user" : user})
-        elif new_password != '' and confirm_new_password != '':
-            user = User.objects.get(unique_id=unique_id)
+            context = {
+                "user": user,
+                "error": "New password and confirm new password field must be the same!"
+            }
+            context.update(get_nav_context(request))
+            return render(request, 'pages/member/profile.html', context)
+        elif new_password != '' and confirm_new_password != '' and new_password == confirm_new_password:
             user.password = hashlib.md5(new_password).hexdigest()
             user.save()
-            return render(request, 'pages/member/profile.html', {"success": "Successfully change password!" , "user" : user})
-    return render(request, 'pages/member/profile.html', {"success": "Password not changed" , "user" : user})
+            context = {
+                "user": user,
+                "success": "Successfully change password!"
+            }
+            context.update(get_nav_context(request))
+            return render(request, 'pages/member/profile.html', context)
+
+    context = {
+        "user": user,
+        "success": "Password not changed"
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/member/profile.html', context)
 
 
 def change_general(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+
     if request.method == 'POST':
-        unique_id = request.session['user_unique_id']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         birthdate = request.POST['birthdate']
         email = request.POST['email']
         address = request.POST['address']
 
-        user = User.objects.get(unique_id=unique_id)
         if first_name != '':
             user.first_name = first_name
         if last_name != '':
@@ -141,7 +161,13 @@ def change_general(request):
             user.address = address
         user.save()
 
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change information!" , "user" : user})
+    context = {
+        "user": user,
+        "success": "Successfully change information!"
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/member/profile.html', context)
+
 
 def change_profile_image(request):
     unique_id = request.session['user_unique_id']
@@ -150,7 +176,12 @@ def change_profile_image(request):
         image = request.FILES.get('img-file')
         user.image = image
         user.save()
-    return render(request, 'pages/member/profile.html', {"success": "Successfully change profile image!", "user": user})
+    context = {
+        "user": user,
+        "success": "Successfully change profile image!"
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/member/profile.html',context)
 
 
 
