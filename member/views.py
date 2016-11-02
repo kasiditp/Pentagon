@@ -28,19 +28,16 @@ def profile_view(request):
     return render(request, 'pages/member/profile.html', context)
 
 
-
-
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
     password_md5 = hashlib.md5(password).hexdigest()
-    print password_md5
     user = User.objects.filter(username=username, password=password_md5)
-    if user is not None:
+    if user:
         Auth.login(request, user[0])
         return HttpResponseRedirect(reverse('home:index'))
     else:
-        return render(request, 'pages/member/login.html', {"error": "Please check your information!!"})
+        return render(request, 'pages/base/home.html', {"error": "Please check your information!!"})
 
 
 def logout(request):
