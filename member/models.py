@@ -7,6 +7,10 @@ SEX = [
     (2, "Women"),
     (3, "Unisex")
 ]
+TYPE = [
+    (1, "member"),
+    (2, "admin")
+]
 
 def user_image_path_name(self, filename):
     return '/'.join(['member/images', filename])
@@ -22,5 +26,6 @@ class User(models.Model):
     last_name = models.CharField(verbose_name='Lastname', max_length=64, null=False, blank=False)
     address = models.TextField(verbose_name='Address', null=True, blank=False)
     # image = models.ImageField(verbose_name='User Image', upload_to=user_image_path_name, blank=True, null=True)
+    type = models.IntegerField(verbose_name="User Type", choices=TYPE, null=False, default=1)
 
 

@@ -4,35 +4,46 @@ from django.urls import reverse
 import string
 import random
 from base.auth import Auth
+from base.views import get_nav_context
 from models import User
 import hashlib
 
 
 # Create your views here.
 def login_view(request):
-    return render(request, 'pages/member/login.html')
+    return render(request, 'pages/member/login.html', get_nav_context(request))
 
 
 def register_view(request):
-    return render(request, 'pages/member/register.html')
+    return render(request, 'pages/member/register.html', get_nav_context(request))
 
 
 def profile_view(request):
+
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id=unique_id)
     return render(request, 'pages/member/profile.html',{"user" : user})
+
+    return render(request, 'pages/member/profile.html', get_nav_context(request))
+
 
 
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
     password_md5 = hashlib.md5(password).hexdigest()
+    print password_md5
     user = User.objects.filter(username=username, password=password_md5)
     if user is not None:
         Auth.login(request, user[0])
         return HttpResponseRedirect(reverse('home:index'))
     else:
         return render(request, 'pages/member/login.html', {"error": "Please check your information!!"})
+
+
+def logout(request):
+    Auth.logout(request)
+    return HttpResponseRedirect(reverse('home:index'))
 
 
 def add_new_user(request):
