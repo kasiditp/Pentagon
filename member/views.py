@@ -95,7 +95,9 @@ def add_new_user(request):
                                "address": address
                            })
 
-        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),email=email,sex=sex,birth_date=birthdate,first_name=first_name,last_name=last_name,address=address)
+        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),
+                                       email=email,sex=sex,birth_date=birthdate,first_name=first_name,
+                                       last_name=last_name,address=address,image='http://bit.ly/2ekiI3P')
 
     return render(request, 'pages/member/register.html' , {"success" : "Registration successful!"})
 
@@ -144,6 +146,11 @@ def change_general(request):
 def change_profile_image(request):
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id = unique_id)
+    if request.method == 'POST':
+        image = request.FILES.get('img-file')
+        user.image = image
+        user.save()
+    return render(request, 'pages/member/profile.html', {"success": "Successfully change profile image!", "user": user})
 
 
 

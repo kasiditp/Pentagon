@@ -16,25 +16,25 @@
 
         <div class = "container">
             <div class =  "row_main">
+
                 <div class = "col-md-1">
 
                 </div>
 
                 <div class="col-md-4" class = "image_profile_part">
-                    <form id="form-profile-upload" action="{% url 'vet:edit_profile_image' %}" method="post" enctype="multipart/form-data">
+
+                    <form id="form-profile-upload" action="{% url 'member:change_profile_image' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="file" id="img-file" name="img-file" accept="image/*" class="upload" style="width: 100%;height: 225px;"/>
-                    </form>
+                         <center><img id="user_image" src = {{ user.image }} alt="your image"  /></center>
 
-                    <center><img id="blah" src = "http://bit.ly/2ekiI3P" alt="your image"  /></center>
-
-                    <div class = "button_choose_file">
-                        <center><input type='file'  onchange="readURL(this);" /></center>
-                    </div>
+                        <div class = "button_choose_file">
+                            <input type="file" id="img-file" name="img-file" accept="image/*" class="upload" onchange="readURL(this);"/>
+                        </div>
 
                     <div class = "button_upload">
                         <center><input type="submit" class="btn btn-primary custom_upload_button" value="Upload"></center>
                     </div>
+                    </form>
 
                 </div>
 
@@ -124,7 +124,7 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#blah')
+                $('#user_image')
                     .attr('src', e.target.result)
                     .width(300)
                     .height(400);
