@@ -12,10 +12,30 @@
     line-height: 1.6em;
 }
 
-#product-content {
-    border-style: solid;
+#breadcrumb {
+    margin: 0px;
 }
 
 .product-detail {
-    border-right: solid;
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    height: 300px;
 }
+
+#block-image {
+    background-color: darkgrey;
+}
+
+#product-image {
+    height: 200px;
+}
+
+.product-detail:hover {
+    box-shadow: 0 0 15px #191919;
+    opacity: 0.7;
+}
+
+/*#product-image .img-responsive {*/
+/*margin: 0 auto;*/
+/*}*/
+
