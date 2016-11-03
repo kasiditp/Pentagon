@@ -7,18 +7,16 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
         <!-- SlidesJS Required: Link to jQuery -->
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+{#        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
         <!-- End SlidesJS Required -->
 
         <!-- SlidesJS Required: Link to jquery.slides.js -->
         <script src="http://www.slidesjs.com/examples/basic-fade/js/jquery.slides.min.js"></script>
 
         <!-- End SlidesJS Required -->
-
-
-
     </section>
     <section>
+
         {# Firt row #}
         <div class="row" style="margin-left: 0px; margin-right: 0px">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -137,11 +135,14 @@
                 <hr id="hr">
             </div>
             <div class="row" style="margin-left: 0px; margin-right: 0px">
-                <img src="{% static 'base/image/promotion.png' %}"/>
+                <img src="{% static 'base/image/promotion_pic.png' %}" class="img-responsive"/>
             </div>
         </div>
     </section>
     <script>
-
+        {% if error %}
+            $('#login-modal').modal('show');
+            console.log('error login');
+        {% endif %}
     </script>
 {% endblock %}

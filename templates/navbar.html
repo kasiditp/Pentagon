@@ -7,13 +7,12 @@
 <nav class="navbar navbar-default navbar-polygon" style="margin-bottom: 0px">
     <div class="container-fluid">
         {% if user.type == 2 %}
-           <div class="navbar-header">
+            <div class="navbar-header">
                 <a class="navbar-brand" href="{% url 'home:index' %}">Polygon</a>
                 <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
             </div>
             <ul class="nav navbar-nav topnav" id="myTopnav">
-                <li><a href="{% url 'product:product_view' %}">Admin1</a></li>
-                <li><a href="{% url 'product:product_view' %}">Admin2</a></li>
+                <li><a href="{% url 'product:admin_product_view' %}">Manage Product</a></li>
             </ul>
         {% else %}
             <div class="navbar-header">
@@ -51,54 +50,24 @@
             </li>
             <li><a>|</a></li>
             <li>
-                <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                {% if is_login %}
+                     <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     {% if product_amount %}
                         ({{ product_amount }})
                     {% endif %}
                 </a>
+                {% else %}
+                     <a href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                {% endif %}
+
             </li>
         </ul>
     </div>
 </nav>
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-     style="display: none;">
-    <div class="modal-dialog">
-        <div class="loginmodal-container">
-            <h1>Login to Your Account</h1><br>
-            <form action="{% url 'member:login' %}" method="post">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="Username">
-                <input type="password" name="password" placeholder="Password">
-                <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-            </form>
 
-            <div class="login-help">
-                {#                <a href="#">Register</a> - <a href="#">Forgot Password</a>#}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-     style="display: none;">
-    <div class="modal-dialog">
-        <div class="loginmodal-container">
-            <h1>Welcome, {{ user.username }}</h1><br>
-            <div style="text-align: center">
-                <button type="button" name="profile" class="btn btn-default"><a href="{% url 'member:profile_view' %}">Profile</a>
-                </button>
-            </div>
-            <br>
-            <form action="{% url 'member:logout' %}" method="post" style="text-align: center">
-                {% csrf_token %}
-                <button type="submit" name="login" class="btn btn-danger">Logout</button>
-            </form>
+{% include 'pages/modal/login-modal.html' %}
+{% include 'pages/modal/profile-modal.html' %}
 
-            <div class="login-help">
-                {#                <a href="#">Register</a> - <a href="#">Forgot Password</a>#}
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     function myFunction() {
         var x = document.getElementById("myTopnav");
