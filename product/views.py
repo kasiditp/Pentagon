@@ -16,6 +16,13 @@ from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
 SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
 SEX_LIST = ['Men', 'Women', 'Unisex']
+PRODUCT_TYPES = {
+    "top": 1,
+    "bottom": 2,
+    "overall": 3,
+    "footwear": 4,
+    "accessory": 5
+}
 num = 0
 
 
@@ -33,6 +40,24 @@ def product_view(request):
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
 
+
+def product_type_view(request, product_type):
+    if product_type in PRODUCT_TYPES:
+        product_list = Product.objects.filter(type=PRODUCT_TYPES[product_type])
+        print product_list
+        max_price = product_list.aggregate(Max('price'))
+        min_price = product_list.aggregate(Min('price'))
+        brands = get_all_brand()
+        context = {
+            'product_list': product_list,
+            'max_price': max_price,
+            'min_price': min_price,
+            'brands': brands
+        }
+        context.update(get_nav_context(request))
+        return render(request, 'pages/product/product.html', context)
+    else:
+        return HttpResponse(reverse('product_view'))
 
 @ajax
 @csrf_exempt
