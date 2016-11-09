@@ -73,14 +73,17 @@
         filtered_list['brand'] = [];
         var brandList = [];
         var checklist = "";
+        var sizeList = [];
+        var sizeZone = ""
         var handle = $("#custom-handle");
-
-
-
 
 
         {% for brand in brands %}
             brandList.push('{{ brand }}');
+        {% endfor %}
+
+        {% for size in size_universe %}
+            sizeList.push('{{ size }}')
         {% endfor %}
 
         function round(price,command) {
@@ -150,74 +153,74 @@
             });
         });
 
-        $('#size_s').on('click', function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-            buttonClickRefresh();
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_m').on('click', function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-            buttonClickRefresh();
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_l').on('click', function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-            buttonClickRefresh();
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_xl').on('click', function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-            buttonClickRefresh();
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_xxl').on('click', function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-            buttonClickRefresh();
-
-            console.log(filtered_list);
-        });
+{#        $('#size_s').on('click', function () {#}
+{#            var element = $(this);#}
+{#            console.log(filtered_list['size']);#}
+{#            if (filtered_list['size'] != null)#}
+{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
+{##}
+{#            filtered_list['size'] = element.attr("data-id");#}
+{#            element.addClass("btn-success");#}
+{#            buttonClickRefresh();#}
+{##}
+{##}
+{#            console.log(filtered_list);#}
+{#        });#}
+{##}
+{#        $('#size_m').on('click', function () {#}
+{#            var element = $(this);#}
+{#            console.log(filtered_list['size']);#}
+{#            if (filtered_list['size'] != null)#}
+{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
+{#            filtered_list['size'] = element.attr("data-id");#}
+{#            element.addClass("btn-success");#}
+{#            buttonClickRefresh();#}
+{##}
+{##}
+{#            console.log(filtered_list);#}
+{#        });#}
+{##}
+{#        $('#size_l').on('click', function () {#}
+{#            var element = $(this);#}
+{#            console.log(filtered_list['size']);#}
+{##}
+{#            if (filtered_list['size'] != null)#}
+{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
+{##}
+{#            filtered_list['size'] = element.attr("data-id");#}
+{#            element.addClass("btn-success");#}
+{#            buttonClickRefresh();#}
+{##}
+{##}
+{#            console.log(filtered_list);#}
+{#        });#}
+{##}
+{#        $('#size_xl').on('click', function () {#}
+{#            var element = $(this);#}
+{#            console.log(filtered_list['size']);#}
+{#            if (filtered_list['size'] != null)#}
+{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
+{##}
+{#            filtered_list['size'] = element.attr("data-id");#}
+{#            element.addClass("btn-success");#}
+{#            buttonClickRefresh();#}
+{##}
+{##}
+{#            console.log(filtered_list);#}
+{#        });#}
+{##}
+{#        $('#size_xxl').on('click', function () {#}
+{#            var element = $(this);#}
+{#            console.log(filtered_list['size']);#}
+{#            if (filtered_list['size'] != null)#}
+{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
+{##}
+{#            filtered_list['size'] = element.attr("data-id");#}
+{#            element.addClass("btn-success");#}
+{#            buttonClickRefresh();#}
+{##}
+{#            console.log(filtered_list);#}
+{#        });#}
 
         $('#clear_button').on('click', function () {
             if (filtered_list['size'] != null)
@@ -274,6 +277,19 @@
             sexCheckboxRefresh();
 
         });
+
+        function sizeClickRefresh(id) {
+            var element = $('#'+id);
+            console.log(filtered_list['size']);
+            if (filtered_list['size'] != null)
+                $('#size_' + filtered_list['size']).removeClass("btn-success");
+
+            filtered_list['size'] = element.attr("data-id");
+            element.addClass("btn-success");
+            buttonClickRefresh();
+
+            console.log(filtered_list);
+        }
 
         function sexCheckboxRefresh() {
 
@@ -352,7 +368,11 @@
                 {#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
                 checklist += brandList[i] + "";
                 checklist += "</label> </div>";
-                console.log(checklist);
+            }
+
+            console.log(sizeList);
+            for (var i =0; i< sizeList.length; i++) {
+                sizeZone += "<button id=\"size_"+ sizeList[i] +"\" data-id=\""+ sizeList[i] +"\" onclick = \"sizeClickRefresh(this.id)\"><a href = \"#\">"+ sizeList[i] + "</a></button>"
             }
 
             function brandCheck(id) {
@@ -384,12 +404,14 @@
             }
 
             $('#checklist').html(checklist);
+            $('#size_zone').html(sizeZone);
 
             $.typeahead({
                         input: '.brand-typeahead',
                         order: "desc",
                         source: {
                             data: brandList
+
 
 
                         },
