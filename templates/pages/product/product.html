@@ -153,74 +153,6 @@
             });
         });
 
-{#        $('#size_s').on('click', function () {#}
-{#            var element = $(this);#}
-{#            console.log(filtered_list['size']);#}
-{#            if (filtered_list['size'] != null)#}
-{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
-{##}
-{#            filtered_list['size'] = element.attr("data-id");#}
-{#            element.addClass("btn-success");#}
-{#            buttonClickRefresh();#}
-{##}
-{##}
-{#            console.log(filtered_list);#}
-{#        });#}
-{##}
-{#        $('#size_m').on('click', function () {#}
-{#            var element = $(this);#}
-{#            console.log(filtered_list['size']);#}
-{#            if (filtered_list['size'] != null)#}
-{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
-{#            filtered_list['size'] = element.attr("data-id");#}
-{#            element.addClass("btn-success");#}
-{#            buttonClickRefresh();#}
-{##}
-{##}
-{#            console.log(filtered_list);#}
-{#        });#}
-{##}
-{#        $('#size_l').on('click', function () {#}
-{#            var element = $(this);#}
-{#            console.log(filtered_list['size']);#}
-{##}
-{#            if (filtered_list['size'] != null)#}
-{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
-{##}
-{#            filtered_list['size'] = element.attr("data-id");#}
-{#            element.addClass("btn-success");#}
-{#            buttonClickRefresh();#}
-{##}
-{##}
-{#            console.log(filtered_list);#}
-{#        });#}
-{##}
-{#        $('#size_xl').on('click', function () {#}
-{#            var element = $(this);#}
-{#            console.log(filtered_list['size']);#}
-{#            if (filtered_list['size'] != null)#}
-{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
-{##}
-{#            filtered_list['size'] = element.attr("data-id");#}
-{#            element.addClass("btn-success");#}
-{#            buttonClickRefresh();#}
-{##}
-{##}
-{#            console.log(filtered_list);#}
-{#        });#}
-{##}
-{#        $('#size_xxl').on('click', function () {#}
-{#            var element = $(this);#}
-{#            console.log(filtered_list['size']);#}
-{#            if (filtered_list['size'] != null)#}
-{#                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");#}
-{##}
-{#            filtered_list['size'] = element.attr("data-id");#}
-{#            element.addClass("btn-success");#}
-{#            buttonClickRefresh();#}
-{##}
-{#            console.log(filtered_list);#}
-{#        });#}
 
         $('#clear_button').on('click', function () {
             if (filtered_list['size'] != null)
@@ -279,15 +211,33 @@
         });
 
         function sizeClickRefresh(id) {
-            var element = $('#'+id);
-            console.log(filtered_list['size']);
-            if (filtered_list['size'] != null)
-                $('#size_' + filtered_list['size']).removeClass("btn-success");
+            var newId;
+            if (id.indexOf('.') > -1) {
+                newId = [id.slice(0,id.indexOf('.')), "\\", id.slice(id.indexOf('.'))].join('');
+            }
+            else
+                newId = id;
+
+
+
+            var element = $('#'+newId);
+
+            if (filtered_list['size'] != null){
+                if(filtered_list['size'].indexOf('.') > -1){
+                    newId = [filtered_list['size'].slice(0,filtered_list['size'].indexOf('.')), "\\", filtered_list['size'].slice(filtered_list['size'].indexOf('.'))].join('');
+                    console.log("New ID : " +newId);
+                }
+                else
+                    newId = filtered_list['size']
+                    $('#size_' + newId).removeClass("btn-success");
+            }
+
 
             filtered_list['size'] = element.attr("data-id");
             element.addClass("btn-success");
             buttonClickRefresh();
 
+            console.log("Filtered size list : " + filtered_list['size']);
             console.log(filtered_list);
         }
 
