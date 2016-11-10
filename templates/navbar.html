@@ -20,8 +20,8 @@
                 <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
             </div>
             <ul class="nav navbar-nav topnav" id="myTopnav">
-                <li><a href="{% url 'product:product_view' %}">Men</a></li>
-                <li><a href="{% url 'product:product_view' %}">Women</a></li>
+                <li><a href="{% url 'product:product_view' %}" id="navMen">Product</a></li>
+{#                <li><a href="{% url 'product:product_view' %}" id="navWomen">Women</a></li>#}
                 <li>
                     <div id="custom-search-input">
                         <div class="input-group col-md-12">
@@ -51,19 +51,29 @@
             <li><a>|</a></li>
             <li>
                 {% if is_login %}
-                     <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    {% if product_amount %}
-                        ({{ product_amount }})
-                    {% endif %}
-                </a>
+                    <a href="{% url 'manage_cart' %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        {% if product_amount %}
+                            ({{ product_amount }})
+                        {% endif %}
+                    </a>
                 {% else %}
-                     <a href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                    <a href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-shopping-cart"
+                                                                                  aria-hidden="true"></i></a>
                 {% endif %}
 
             </li>
         </ul>
     </div>
 </nav>
+<div class="col-md-12" style="background-color: #dfdfdf; text-align: center; display: none;" id="navCategory">
+    <div class="container" style="width: 50%">
+        <div class="col-md-2"><h5><a href="top/" id="link1">Top</a></h5></div>
+        <div class="col-md-2"><h5><a href="bottom/" id="link2">Bottom</a></h5></div>
+        <div class="col-md-2"><h5><a href="overall/" id="link3">Overall</a></h5></div>
+        <div class="col-md-2"><h5><a href="footwear/" id="link4">Footwear</a></h5></div>
+        <div class="col-md-2"><h5><a href="accessory/" id="link5">Accessory</a></h5></div>
+    </div>
+</div>
 
 {% include 'pages/modal/login-modal.html' %}
 {% include 'pages/modal/profile-modal.html' %}
@@ -77,4 +87,25 @@
             x.className = "topnav";
         }
     }
+{#    {% if product_list %}#}
+{#        $("#navCategory").show();#}
+{#    {% endif %}#}
+
+    $(document).ready(function () {
+        if (window.location.href.indexOf("top") > -1 || window.location.href.indexOf("bottom") > -1
+                || window.location.href.indexOf("overall") > -1 || window.location.href.indexOf("footwear") > -1
+                || window.location.href.indexOf("accessory") > -1) {
+            $("#link1").prop("href", "../top");
+            $("#link2").prop("href", "../bottom");
+            $("#link3").prop("href", "../overall");
+            $("#link4").prop("href", "../footwear");
+            $("#link5").prop("href", "../accessory");
+        } else {
+            $("#link1").prop("href", "top");
+            $("#link2").prop("href", "bottom");
+            $("#link3").prop("href", "overall");
+            $("#link4").prop("href", "footwear");
+            $("#link5").prop("href", "accessory");
+        }
+    });
 </script>

@@ -16,7 +16,8 @@ def get_nav_context(request):
         context = {
             'is_login': request.session['is_login'],
             'user': member_user,
-            'product_amount': Cart.objects.filter(user_id=member_user).count
+            'product_amount': Cart.objects.filter(user_id=member_user).count,
+            'top': "top"
         }
         return context
     else:
