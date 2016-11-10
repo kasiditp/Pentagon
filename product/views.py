@@ -14,9 +14,10 @@ from base.views import get_nav_context
 from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
 
-SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL']
+SIZE_LIST = set()
 SEX_LIST = ['Men', 'Women', 'Unisex']
 PRODUCT_TYPES = {
+    "all": 0,
     "top": 1,
     "bottom": 2,
     "overall": 3,
@@ -30,12 +31,16 @@ def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
     min_price = Product.objects.all().aggregate(Min('price'))
-    brands = get_all_brand()
+    brands = get_all_brand('all')
     context = {
         'product_list': product_list,
         'max_price': max_price,
         'min_price': min_price,
         'brands': brands,
+<<<<<<< HEAD
+=======
+        'type': PRODUCT_TYPES['all']
+>>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -46,12 +51,24 @@ def product_type_view(request, product_type):
         product_list = Product.objects.filter(type=PRODUCT_TYPES[product_type])
         max_price = product_list.aggregate(Max('price'))
         min_price = product_list.aggregate(Min('price'))
-        brands = get_all_brand()
+        brands = get_all_brand(product_type)
+        stock = Stock.objects.all()
+        size_universe = set()
+        for item in stock:
+            if str(item.product.type) == str(PRODUCT_TYPES[product_type]):
+                size_universe.add(item.size)
+
+        SIZE_LIST.update(size_universe)
         context = {
             'product_list': product_list,
             'max_price': max_price,
             'min_price': min_price,
             'brands': brands,
+<<<<<<< HEAD
+=======
+            'type': PRODUCT_TYPES[product_type],
+            'size_universe': size_universe
+>>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
         }
         context.update(get_nav_context(request))
         return render(request, 'pages/product/product.html', context)
@@ -68,12 +85,33 @@ def get_brand(request):
     return {'brand': brand}
 
 
-def get_all_brand():
+def get_all_brand(type):
     brand = set()
-    for product in Product.objects.all():
+    if type == 'all':
+        brand_universe = Product.objects.all()
+    elif type in PRODUCT_TYPES:
+        brand_universe = Product.objects.filter(type=PRODUCT_TYPES[type])
+
+    for product in brand_universe:
         brand.add(product.brand)
 
     return brand
+
+def value_to_key(type):
+    if type == '0':
+        return 'all'
+    elif type == '1':
+        return 'top'
+    elif type == '2':
+        return 'bottom'
+    elif type == '3':
+        return 'overall'
+    elif type == '4':
+        return 'footwear'
+    elif type == '5':
+        return 'accessory'
+    else:
+        return 'error'
 
 
 def product_details(request, product_id):
@@ -182,6 +220,16 @@ def filtered(request):
         remove_back = remove_front.replace("]",",end")
 
         filter_data = remove_back.split(',')
+        type = request.POST.get('type')
+
+        if type == 0:
+            universe_set = Product.objects.all()
+        else:
+            universe_set = Product.objects.filter(type=type)
+
+        print "Size universe is %s"%SIZE_LIST
+
+        print "filter data is %s"%filter_data
 
         for data in filter_data:
             # print data
@@ -191,8 +239,10 @@ def filtered(request):
             elif data in SIZE_LIST:
                 stock = Stock.objects.filter(size=data) # get array of filter
                 stock_set = Set()
+
                 for item in stock:
-                    stock_set.add(item.product)
+                    if str(item.product.type) == str(type):
+                        stock_set.add(item.product)
 
                 if len(filter_product_set) == 0:
                     filter_product_set.union_update(stock_set)
@@ -203,7 +253,7 @@ def filtered(request):
             # print filter_product_list
             # print "is number? %s" % is_number(data)
             elif is_number(data):
-                product = Product.objects.filter(price__lte=float(data))
+                product = universe_set.filter(price__lte=float(data))
                 product_set = Set(product)
                 if len(filter_product_set) == 0:
                     filter_product_set.union_update(product_set)
@@ -211,13 +261,13 @@ def filtered(request):
                     filter_product_set.intersection_update(product_set)
 
             elif data == 'c1':
-                filter_product_set = Product.objects.all()
+                filter_product_set = universe_set
                 break
 
             elif data == 's1':
                 brand = request.POST.get('brand')
 
-                product = Product.objects.filter(brand=brand)
+                product = universe_set.filter(brand=brand)
                 product_set = Set(product)
                 if len(filter_product_set) == 0:
                     filter_product_set.union_update(product_set)
@@ -231,7 +281,7 @@ def filtered(request):
                 while True:
                     if filter_data[num] in SEX_LIST:
                         sex = what_sex(filter_data[num])
-                        temp_set.update(Set(Product.objects.filter(sex=sex)))
+                        temp_set.update(Set(universe_set.filter(sex=sex)))
                         num+=1
                     elif filter_data[num] == 'end':
                         if len(filter_product_set) == 0:
@@ -246,9 +296,10 @@ def filtered(request):
             elif data == 'brand':
                 temp_set = set()
                 num+=2
+                key = value_to_key(type)
                 while True:
-                    if filter_data[num] in get_all_brand():
-                        temp_set.update(Set(Product.objects.filter(brand=filter_data[num])))
+                    if filter_data[num] in get_all_brand(key):
+                        temp_set.update(Set(universe_set.filter(brand=filter_data[num])))
                         num+=1
                     elif filter_data[num] == 'end':
                         if len(filter_product_set) == 0:
@@ -260,42 +311,16 @@ def filtered(request):
                         num+=1
                         break
 
-        if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '':
-            filter_product_set = Product.objects.all()
+        if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '' and filter_data[3] != 's1':
+            filter_product_set = universe_set
+
+        print "filtered product is %s"%filter_product_set
 
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({'product_list': filter_product_set})
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
-
-        # --------------------------
-
-        # if filter_button in SIZE_LIST:
-        #     print "Size"
-        #     stock = Stock.objects.filter(size=filter_button)
-        #     for item in stock :
-        #         filter_product = []
-        #         filter_product.append(item.product)
-        #     print filter_product
-        # print "is number? %s" % is_number(filter_button)
-        # if is_number(filter_button):
-        #     filter_product = Product.objects.filter(price__lte=float(filter_button))
-        #
-        # if filter_button == 'clear':
-        #     filter_product = Product.objects.all()
-        #
-        # if filter_button == 'search':
-        #     brand = request.POST.get('brand')
-        #     filter_product = Product.objects.filter(brand=brand)
-        #
-        #
-        # template = loader.get_template('pages/product/item/product_item.html')
-        # context = Context({'product_list': filter_product})
-        # rendered = template.render(context)
-        #
-        # return {'result': True, 'rendered': rendered}
-
 
 def is_number(s):
     try:
