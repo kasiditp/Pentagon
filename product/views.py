@@ -199,8 +199,6 @@ def filtered(request):
                     filter_product_set.union_update(product_set)
                 else:
                     filter_product_set.intersection_update(product_set)
-
-
             elif data == 'sex':
                 temp_set = set()
                 num = 5
