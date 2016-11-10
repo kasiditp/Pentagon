@@ -15,41 +15,48 @@
         </div>
 
         {% if type != 0 %}
-        <div class="col-md-2 filter" id="filter">
-            {% if type == 1 %}
-                {% include 'pages/product/item/filter_top.html' %}
+            <div class="col-md-2 filter" id="filter">
+                {% if type == 1 %}
+                    {% include 'pages/product/item/filter_top.html' %}
 
-            {% endif %}
+                {% endif %}
 
-            {% if type == 2 %}
-                {% include 'pages/product/item/filter_bottom.html' %}
+                {% if type == 2 %}
+                    {% include 'pages/product/item/filter_bottom.html' %}
 
-            {% endif %}
+                {% endif %}
 
-            {% if type == 3 %}
-                {% include 'pages/product/item/filter_overall.html' %}
+                {% if type == 3 %}
+                    {% include 'pages/product/item/filter_overall.html' %}
 
-            {% endif %}
+                {% endif %}
 
-            {% if type == 4 %}
-                {% include 'pages/product/item/filter_footwear.html' %}
+                {% if type == 4 %}
+                    {% include 'pages/product/item/filter_footwear.html' %}
 
-            {% endif %}
+                {% endif %}
 
-            {% if type == 5 %}
-                {% include 'pages/product/item/filter_accessory.html' %}
+                {% if type == 5 %}
+                    {% include 'pages/product/item/filter_accessory.html' %}
 
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
         {% endif %}
 
         {# Pic and Des #}
-        <div class="col-md-10 text-center" id="product-content">
+        {% if type == 0 %}
+            <div class="col-md-12 text-center" id="product-content">
 
-            {% include 'pages/product/item/product_item.html' %}
+                {% include 'pages/product/item/product_item.html' %}
 
-        </div>
+            </div>
+        {% else %}
+            <div class="col-md-10 text-center" id="product-content">
 
+                {% include 'pages/product/item/product_item.html' %}
+
+            </div>
+        {% endif %}
 
         {#        </div>#}
 
@@ -86,24 +93,24 @@
             sizeList.push('{{ size }}')
         {% endfor %}
 
-        function round(price,command) {
-            console.log("Before " + command + "Price is : "+  price);
+        function round(price, command) {
+            console.log("Before " + command + "Price is : " + price);
 
-            if(price%100 != 0){
-                if(command == 'ceil') {
-                    price += (100 - price%100);
+            if (price % 100 != 0) {
+                if (command == 'ceil') {
+                    price += (100 - price % 100);
                 }
-                else if(command == 'floor') {
-                    price -= price%100;
+                else if (command == 'floor') {
+                    price -= price % 100;
                 }
             }
             else return price;
-            console.log("After " + command + "Price is : "+  price);
+            console.log("After " + command + "Price is : " + price);
             return price;
         }
 
         $(function () {
-            var priceMax = round({{ max_price.price__max }},'ceil');
+            var priceMax = round({{ max_price.price__max }}, 'ceil');
             var priceMin = round({{ min_price.price__min }}, 'floor');
             var step = 100;
 
@@ -132,7 +139,7 @@
                         url: "{% url 'product:filtered' %}",
                         type: 'POST',
                         traditional: true,
-                        data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(),type: {{ type }} },
+                        data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                         success: function (json) {
                             if (json.content['result']) {
@@ -168,9 +175,9 @@
             for (var i = 0; i < brandList.length; i++) {
                 $('#' + i).prop('checked', false);
             }
-            $('#slider').slider("value",0);
+            $('#slider').slider("value", 0);
             var minPrice = {{ min_price.price__min }};
-            handle.text(round(minPrice,'floor'));
+            handle.text(round(minPrice, 'floor'));
             buttonClickRefresh();
 
 
@@ -213,23 +220,22 @@
         function sizeClickRefresh(id) {
             var newId;
             if (id.indexOf('.') > -1) {
-                newId = [id.slice(0,id.indexOf('.')), "\\", id.slice(id.indexOf('.'))].join('');
+                newId = [id.slice(0, id.indexOf('.')), "\\", id.slice(id.indexOf('.'))].join('');
             }
             else
                 newId = id;
 
 
+            var element = $('#' + newId);
 
-            var element = $('#'+newId);
-
-            if (filtered_list['size'] != null){
-                if(filtered_list['size'].indexOf('.') > -1){
-                    newId = [filtered_list['size'].slice(0,filtered_list['size'].indexOf('.')), "\\", filtered_list['size'].slice(filtered_list['size'].indexOf('.'))].join('');
-                    console.log("New ID : " +newId);
+            if (filtered_list['size'] != null) {
+                if (filtered_list['size'].indexOf('.') > -1) {
+                    newId = [filtered_list['size'].slice(0, filtered_list['size'].indexOf('.')), "\\", filtered_list['size'].slice(filtered_list['size'].indexOf('.'))].join('');
+                    console.log("New ID : " + newId);
                 }
                 else
                     newId = filtered_list['size']
-                    $('#size_' + newId).removeClass("btn-success");
+                $('#size_' + newId).removeClass("btn-success");
             }
 
 
@@ -249,7 +255,7 @@
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 traditional: true,
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(),type: {{ type }} },
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -264,14 +270,14 @@
         }
 
         function buttonClickRefresh() {
-             $('#product-content').html("");
+            $('#product-content').html("");
             var element = $(this);
 
             $.ajax({
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 traditional: true,
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(),type: {{ type }} },
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -294,7 +300,7 @@
             $.ajax({
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(),type: {{ type }} },
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -313,65 +319,64 @@
         });
 
 
-            for (var i = 0; i < brandList.length; i++) {
-                checklist += " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \"" + i + "\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\">";
-                {#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
-                checklist += brandList[i] + "";
-                checklist += "</label> </div>";
-            }
+        for (var i = 0; i < brandList.length; i++) {
+            checklist += " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \"" + i + "\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\">";
+            {#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
+            checklist += brandList[i] + "";
+            checklist += "</label> </div>";
+        }
 
-            console.log(sizeList);
-            for (var i =0; i< sizeList.length; i++) {
-                sizeZone += "<button id=\"size_"+ sizeList[i] +"\" data-id=\""+ sizeList[i] +"\" onclick = \"sizeClickRefresh(this.id)\"><a href = \"#\">"+ sizeList[i] + "</a></button>"
-            }
+        console.log(sizeList);
+        for (var i = 0; i < sizeList.length; i++) {
+            sizeZone += "<button id=\"size_" + sizeList[i] + "\" data-id=\"" + sizeList[i] + "\" onclick = \"sizeClickRefresh(this.id)\"><a href = \"#\">" + sizeList[i] + "</a></button>"
+        }
 
-            function brandCheck(id) {
-                var element = $('#' + id);
+        function brandCheck(id) {
+            var element = $('#' + id);
 
-                if (filtered_list['brand'].indexOf(element.attr("data-id")) != -1)
-                    filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")), 1);
-                else
-                    filtered_list['brand'].push(element.attr("data-id"));
+            if (filtered_list['brand'].indexOf(element.attr("data-id")) != -1)
+                filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")), 1);
+            else
+                filtered_list['brand'].push(element.attr("data-id"));
 
-                $('#product-content').html("");
+            $('#product-content').html("");
 
-                $.ajax({
-                    url: "{% url 'product:filtered' %}",
-                    type: 'POST',
-                    traditional: true,
-                    data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(),type: {{ type }} },
+            $.ajax({
+                url: "{% url 'product:filtered' %}",
+                type: 'POST',
+                traditional: true,
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
-                    success: function (json) {
-                        if (json.content['result']) {
-                            console.log('refreshed content');
-                            $('#product-content').append(json.content['rendered']);
-                            filtered_list['clear'] = 'c0';
-                        } else {
-                            console.log('Fail to filter');
-                        }
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                        filtered_list['clear'] = 'c0';
+                    } else {
+                        console.log('Fail to filter');
                     }
-                });
-            }
+                }
+            });
+        }
 
-            $('#checklist').html(checklist);
-            $('#size_zone').html(sizeZone);
+        $('#checklist').html(checklist);
+        $('#size_zone').html(sizeZone);
 
-            $.typeahead({
-                        input: '.brand-typeahead',
-                        order: "desc",
-                        source: {
-                            data: brandList
+        $.typeahead({
+            input: '.brand-typeahead',
+            order: "desc",
+            source: {
+                data: brandList
 
 
+            },
 
-                        },
+            callback: {
+                onInit: function (node) {
+                    {#                                console.log('Typeahead Initiated on ' + node.selector);#}
+                }
 
-                        callback: {
-                            onInit: function (node) {
-{#                                console.log('Typeahead Initiated on ' + node.selector);#}
-                            }
-
-                        },
+            },
 
 
         });
