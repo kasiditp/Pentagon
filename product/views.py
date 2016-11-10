@@ -35,7 +35,7 @@ def product_view(request):
         'product_list': product_list,
         'max_price': max_price,
         'min_price': min_price,
-        'brands': brands
+        'brands': brands,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -44,7 +44,6 @@ def product_view(request):
 def product_type_view(request, product_type):
     if product_type in PRODUCT_TYPES:
         product_list = Product.objects.filter(type=PRODUCT_TYPES[product_type])
-        print product_list
         max_price = product_list.aggregate(Max('price'))
         min_price = product_list.aggregate(Min('price'))
         brands = get_all_brand()
@@ -52,7 +51,7 @@ def product_type_view(request, product_type):
             'product_list': product_list,
             'max_price': max_price,
             'min_price': min_price,
-            'brands': brands
+            'brands': brands,
         }
         context.update(get_nav_context(request))
         return render(request, 'pages/product/product.html', context)
