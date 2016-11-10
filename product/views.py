@@ -37,14 +37,7 @@ def product_view(request):
         'max_price': max_price,
         'min_price': min_price,
         'brands': brands,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         'type': PRODUCT_TYPES['all']
->>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
-=======
-        'type': PRODUCT_TYPES['all']
->>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -68,16 +61,8 @@ def product_type_view(request, product_type):
             'max_price': max_price,
             'min_price': min_price,
             'brands': brands,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             'type': PRODUCT_TYPES[product_type],
             'size_universe': size_universe
->>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
-=======
-            'type': PRODUCT_TYPES[product_type],
-            'size_universe': size_universe
->>>>>>> 982116b373bf2ecccafde966a377fc909a8531a1
         }
         context.update(get_nav_context(request))
         return render(request, 'pages/product/product.html', context)
