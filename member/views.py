@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 import string
 import random
@@ -22,25 +22,22 @@ def profile_view(request):
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id=unique_id)
     context = {
-        "user":user
+        "user": user
     }
-    context.update( get_nav_context(request))
+    context.update(get_nav_context(request))
     return render(request, 'pages/member/profile.html', context)
-
-
 
 
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
     password_md5 = hashlib.md5(password).hexdigest()
-    print password_md5
     user = User.objects.filter(username=username, password=password_md5)
-    if user is not None:
+    if user:
         Auth.login(request, user[0])
         return HttpResponseRedirect(reverse('home:index'))
     else:
-        return render(request, 'pages/member/login.html', {"error": "Please check your information!!"})
+        return render(request, 'pages/base/home.html', {"error": "Please check your information!!"})
 
 
 def logout(request):
@@ -68,42 +65,44 @@ def add_new_user(request):
         if User.objects.filter(username=request.POST['username']).exists():
             return render(request, 'pages/member/register.html',
                           {"error": "This username is already exist!",
-                            "password" : password,
-                            "confirm_password" : re_password,
-                            "birthdate": birthdate,
-                            "first_name" : first_name,
-                            "last_name" : last_name,
-                            "email" : email,
-                            "address" : address
-                          })
-        if  username == '' or password == '' or re_password == '' or first_name == '' or last_name == '' or birthdate == '' or email == '' or address == '':
-            return render(request, 'pages/member/register.html' ,
-                          {"error":"Please input your information to all fields!",
-                               "username" : username,
-                               "password": password,
-                               "confirm_password": re_password,
-                               "birthdate" : birthdate,
-                               "first_name": first_name,
-                               "last_name": last_name,
-                               "email": email,
-                               "address": address
+                           "password": password,
+                           "confirm_password": re_password,
+                           "birthdate": birthdate,
+                           "first_name": first_name,
+                           "last_name": last_name,
+                           "email": email,
+                           "address": address
+                           })
+        if username == '' or password == '' or re_password == '' or first_name == '' or last_name == '' or birthdate == '' or email == '' or address == '':
+            return render(request, 'pages/member/register.html',
+                          {"error": "Please input your information to all fields!",
+                           "username": username,
+                           "password": password,
+                           "confirm_password": re_password,
+                           "birthdate": birthdate,
+                           "first_name": first_name,
+                           "last_name": last_name,
+                           "email": email,
+                           "address": address
                            })
         if password != re_password:
             return render(request, 'pages/member/register.html',
                           {"error": "Password and confirm password field must be the same!",
-                               "username" : username,
-                               "first_name": first_name,
-                               "birthdate": birthdate,
-                               "last_name": last_name,
-                               "email": email,
-                               "address": address
+                           "username": username,
+                           "first_name": first_name,
+                           "birthdate": birthdate,
+                           "last_name": last_name,
+                           "email": email,
+                           "address": address
                            })
 
-        new_user = User.objects.create(unique_id = unique_id , username = username ,password = hashlib.md5(password).hexdigest(),
-                                       email=email,sex=sex,birth_date=birthdate,first_name=first_name,
-                                       last_name=last_name,address=address,image='http://bit.ly/2ekiI3P')
+        new_user = User.objects.create(unique_id=unique_id, username=username,
+                                       password=hashlib.md5(password).hexdigest(),
+                                       email=email, sex=sex, birth_date=birthdate, first_name=first_name,
+                                       last_name=last_name, address=address,
+                                       image='member/images/default_user_profile.jpg')
 
-    return render(request, 'pages/member/register.html' , {"success" : "Registration successful!"})
+    return render(request, 'pages/member/register.html', {"success": "Registration successful!"})
 
 
 def change_password(request):
@@ -171,7 +170,7 @@ def change_general(request):
 
 def change_profile_image(request):
     unique_id = request.session['user_unique_id']
-    user = User.objects.get(unique_id = unique_id)
+    user = User.objects.get(unique_id=unique_id)
     if request.method == 'POST':
         image = request.FILES.get('img-file')
         user.image = image
@@ -181,8 +180,7 @@ def change_profile_image(request):
         "success": "Successfully change profile image!"
     }
     context.update(get_nav_context(request))
-    return render(request, 'pages/member/profile.html',context)
-
+    return render(request, 'pages/member/profile.html', context)
 
 
 def success(request):

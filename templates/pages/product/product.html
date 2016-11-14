@@ -2,110 +2,63 @@
 {% load static %}
 
 {% block content %}
-    <link href="{% static 'product/css/product.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/product.css' %}" rel="stylesheet">
     <link href="{% static 'product/addslider/addSlider.min.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <style>
-        #custom-handle {
-            width: 3em;
-            height: 1.6em;
-            top: 50%;
-            margin-top: -.8em;
-            text-align: center;
-            line-height: 1.6em;
-        }
-    </style>
-
     <section>
-        <div class="container">
-            <div class="row">
-                <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
-                </ol>
-            </div>
-
-                <div class="col-md-2 filter">
-                    <h3>Filter</h3>
-                    <button class="btn btn-danger" id ="clear_button" data-id="clear">Clear</button>
-
-                    <div><hr></div>
-
-                    <h3>Sex</h3>
-
-                    <div class="checkbox"> <label><input type="checkbox" id = "male_sex" data-id="Men" checked="">
-                    Men</label>
-                    </div>
-                    <div class="checkbox"> <label><input type="checkbox" id = "female_sex" data-id="Women" checked="">
-                    Women</label>
-                    </div>
-                    <div class="checkbox"> <label><input type="checkbox" id = "uni_sex" data-id="Unisex" checked="">
-                    Unisex</label>
-                    </div>
-
-
-                    <div><hr></div>
-
-                    <h3>Size</h3>
-                    <button id="size_s" data-id="S"><a href="#">S</a></button>
-                    <button id="size_m" data-id="M"><a href="#">M</a></button>
-                    <button id="size_l" data-id="L"><a href="#">L</a></button>
-                    <button id="size_xl" data-id="XL"><a href="#">XL</a></button>
-                    <button id="size_xxl" data-id="XXL"><a href="#">XXL</a></button>
-
-                    <div><hr></div>
-
-
-                    <div>
-                        <h3>Max Price</h3>
-                        <br>
-
-                        <div id="slider">
-                            <div id="custom-handle" class="ui-slider-handle"></div>
-                        </div>
-
-                    </div>
-
-                    <br><br>
-                    <div><hr></div>
-
-                    <div>
-                       <form id="brand_form" name="form-country_v1">
-                        <div class="typeahead__container">
-                            <div class="typeahead__field">
-
-                                <span class="typeahead__query">
-                                    <input class="brand-typeahead" id="brand_name" name="country_v1[query]" type="search" placeholder="Brand search" autocomplete="off">
-                                </span>
-                                <span class="typeahead__button">
-                                    <button class ="typeahead__search-icon" type="submit" data-id ="search">
-                                    </button>
-                                </span>
-
-                            </div>
-                        </div>
-                    </form>
-                    </div>
-
-
-
-                    <div id = "checklist">
-
-                    </div>
-
-                    <div><hr></div>
-
-            </div>
-
-
-                <div class="col-md-10 text-center" id = "product-content">
-
-                        {% include 'pages/product/item/product_item.html' %}
-
-                </div>
-
-
+        <div class="row">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="#">Home</a></li>
+            </ol>
         </div>
+
+        {% if type != 0 %}
+            <div class="col-md-2 filter" id="filter">
+                {% if type == 1 %}
+                    {% include 'pages/product/item/filter_top.html' %}
+
+                {% endif %}
+
+                {% if type == 2 %}
+                    {% include 'pages/product/item/filter_bottom.html' %}
+
+                {% endif %}
+
+                {% if type == 3 %}
+                    {% include 'pages/product/item/filter_overall.html' %}
+
+                {% endif %}
+
+                {% if type == 4 %}
+                    {% include 'pages/product/item/filter_footwear.html' %}
+
+                {% endif %}
+
+                {% if type == 5 %}
+                    {% include 'pages/product/item/filter_accessory.html' %}
+
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {# Pic and Des #}
+        {% if type == 0 %}
+            <div class="col-md-12 text-center" id="product-content">
+
+                {% include 'pages/product/item/product_item.html' %}
+
+            </div>
+        {% else %}
+            <div class="col-md-10 text-center" id="product-content">
+
+                {% include 'pages/product/item/product_item.html' %}
+
+            </div>
+        {% endif %}
+
+        {#        </div>#}
 
     </section>
 
@@ -114,6 +67,8 @@
     <script src="{% static 'product/addslider/Obj.min.js' %}"></script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 
     <script>
         var filtered_list = {};
@@ -125,18 +80,45 @@
         filtered_list['brand'] = [];
         var brandList = [];
         var checklist = "";
+        var sizeList = [];
+        var sizeZone = ""
+        var handle = $("#custom-handle");
 
 
         {% for brand in brands %}
             brandList.push('{{ brand }}');
         {% endfor %}
 
+        {% for size in size_universe %}
+            sizeList.push('{{ size }}')
+        {% endfor %}
+
+        function round(price, command) {
+            console.log("Before " + command + "Price is : " + price);
+
+            if (price % 100 != 0) {
+                if (command == 'ceil') {
+                    price += (100 - price % 100);
+                }
+                else if (command == 'floor') {
+                    price -= price % 100;
+                }
+            }
+            else return price;
+            console.log("After " + command + "Price is : " + price);
+            return price;
+        }
+
         $(function () {
-            var handle = $("#custom-handle");
+            var priceMax = round({{ max_price.price__max }}, 'ceil');
+            var priceMin = round({{ min_price.price__min }}, 'floor');
+            var step = 100;
 
             $("#slider").slider({
-                max: {{ max_price.price__max }},
-                min: 0,
+                max: priceMax,
+                min: priceMin,
+                step: step,
+
 
                 create: function () {
 
@@ -150,13 +132,14 @@
                 stop: function (event, ui) {
                     console.log(ui.value);
                     filtered_list['maxprice'] = ui.value;
+                    handle.text(ui.value);
                     console.log(filtered_list);
                     $('#product-content').html("");
                     $.ajax({
                         url: "{% url 'product:filtered' %}",
                         type: 'POST',
                         traditional: true,
-                        data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+                        data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                         success: function (json) {
                             if (json.content['result']) {
@@ -173,77 +156,14 @@
 
                 }
 
+
             });
         });
 
-        $('#size_s').on('click',function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
 
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_m').on('click',function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_l').on('click',function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_xl').on('click',function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-
-
-            console.log(filtered_list);
-        });
-
-        $('#size_xxl').on('click',function () {
-            var element = $(this);
-            console.log(filtered_list['size']);
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
-
-            filtered_list['size'] = element.attr("data-id");
-            element.addClass("btn-success");
-
-
-            console.log(filtered_list);
-        });
-
-        $('#clear_button').on('click',function() {
-            if(filtered_list['size']!=null)
-                $('#size_'+filtered_list['size'].toLowerCase()).removeClass("btn-success");
+        $('#clear_button').on('click', function () {
+            if (filtered_list['size'] != null)
+                $('#size_' + filtered_list['size'].toLowerCase()).removeClass("btn-success");
             filtered_list['clear'] = 'c1';
             filtered_list['maxprice'] = null;
             filtered_list['size'] = null;
@@ -252,80 +172,82 @@
             $('#male_sex').prop('checked', false);
             $('#female_sex').prop('checked', false);
             $('#uni_sex').prop('checked', false);
-            for(var i = 0; i< brandList.length; i++) {
-                $('#'+i).prop('checked', false);
+            for (var i = 0; i < brandList.length; i++) {
+                $('#' + i).prop('checked', false);
             }
+            $('#slider').slider("value", 0);
+            var minPrice = {{ min_price.price__min }};
+            handle.text(round(minPrice, 'floor'));
+            buttonClickRefresh();
+
 
         });
 
-        $('#male_sex').on('click',function(){
+        $('#male_sex').on('click', function () {
             var element = $(this);
-            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
-                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            if (filtered_list['sex'].indexOf(element.attr("data-id")) != -1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")), 1);
             else
                 filtered_list['sex'].push(element.attr("data-id"));
 
             console.log(filtered_list);
 
-            $('#product-content').html("");
-
-            $.ajax({
-                url: "{% url 'product:filtered' %}",
-                type: 'POST',
-                traditional: true,
-                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
-
-                success: function (json) {
-                    if (json.content['result']) {
-                        console.log('refreshed content');
-                        $('#product-content').append(json.content['rendered']);
-                        filtered_list['clear'] = 'c0';
-                    } else {
-                        console.log('Fail to filter');
-                    }
-                }
-            });
+            sexCheckboxRefresh();
         });
 
-        $('#female_sex').on('click',function(){
+        $('#female_sex').on('click', function () {
             var element = $(this);
-            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
-                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            if (filtered_list['sex'].indexOf(element.attr("data-id")) != -1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")), 1);
             else
                 filtered_list['sex'].push(element.attr("data-id"));
 
-             console.log(filtered_list);
-
-            $('#product-content').html("");
-
-            $.ajax({
-                url: "{% url 'product:filtered' %}",
-                type: 'POST',
-                traditional: true,
-                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
-
-                success: function (json) {
-                    if (json.content['result']) {
-                        console.log('refreshed content');
-                        $('#product-content').append(json.content['rendered']);
-                        filtered_list['clear'] = 'c0';
-                    } else {
-                        console.log('Fail to filter');
-                    }
-                }
-            });
+            sexCheckboxRefresh();
         });
 
-        $('#uni_sex').on('click',function(){
+        $('#uni_sex').on('click', function () {
             var element = $(this);
-            if(filtered_list['sex'].indexOf(element.attr("data-id"))!=-1)
-                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")),1);
+            if (filtered_list['sex'].indexOf(element.attr("data-id")) != -1)
+                filtered_list['sex'].splice(filtered_list['sex'].indexOf(element.attr("data-id")), 1);
             else
                 filtered_list['sex'].push(element.attr("data-id"));
 
-             console.log(filtered_list);
+            console.log(filtered_list);
+            sexCheckboxRefresh();
+
+        });
+
+        function sizeClickRefresh(id) {
+            var newId;
+            if (id.indexOf('.') > -1) {
+                newId = [id.slice(0, id.indexOf('.')), "\\", id.slice(id.indexOf('.'))].join('');
+            }
+            else
+                newId = id;
+
+
+            var element = $('#' + newId);
+
+            if (filtered_list['size'] != null) {
+                if (filtered_list['size'].indexOf('.') > -1) {
+                    newId = [filtered_list['size'].slice(0, filtered_list['size'].indexOf('.')), "\\", filtered_list['size'].slice(filtered_list['size'].indexOf('.'))].join('');
+                    console.log("New ID : " + newId);
+                }
+                else
+                    newId = filtered_list['size']
+                $('#size_' + newId).removeClass("btn-success");
+            }
+
+
+            filtered_list['size'] = element.attr("data-id");
+            element.addClass("btn-success");
+            buttonClickRefresh();
+
+            console.log("Filtered size list : " + filtered_list['size']);
+            console.log(filtered_list);
+        }
+
+        function sexCheckboxRefresh() {
 
             $('#product-content').html("");
 
@@ -333,8 +255,7 @@
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 traditional: true,
-                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -346,12 +267,9 @@
                     }
                 }
             });
+        }
 
-        });
-
-
-
-        $('button').on('click', function () {
+        function buttonClickRefresh() {
             $('#product-content').html("");
             var element = $(this);
 
@@ -359,8 +277,7 @@
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 traditional: true,
-{#                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},#}
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -372,23 +289,18 @@
                     }
                 }
             });
-
-        });
-
-
+        }
 
 
         $('#brand_form').submit(function (event) {
             filtered_list['search'] = 's1';
-            console.log('Enter key press');
             $('#product-content').html("");
             var element = $(this);
-            console.log(filtered_list['search']);
 
             $.ajax({
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -407,19 +319,23 @@
         });
 
 
-        for(var i = 0;i<brandList.length;i++){
-            checklist+= " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \""+ brandList[i] + "\" checked = \"checked\">";
-{#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
-            checklist+= brandList[i]+"";
-            checklist+= "</label> </div>";
-            console.log(checklist);
+        for (var i = 0; i < brandList.length; i++) {
+            checklist += " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \"" + i + "\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\">";
+            {#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
+            checklist += brandList[i] + "";
+            checklist += "</label> </div>";
+        }
+
+        console.log(sizeList);
+        for (var i = 0; i < sizeList.length; i++) {
+            sizeZone += "<button id=\"size_" + sizeList[i] + "\" data-id=\"" + sizeList[i] + "\" onclick = \"sizeClickRefresh(this.id)\"><a href = \"#\">" + sizeList[i] + "</a></button>"
         }
 
         function brandCheck(id) {
-            var element = $('#'+id);
+            var element = $('#' + id);
 
-            if(filtered_list['brand'].indexOf(element.attr("data-id"))!=-1)
-                filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")),1);
+            if (filtered_list['brand'].indexOf(element.attr("data-id")) != -1)
+                filtered_list['brand'].splice(filtered_list['brand'].indexOf(element.attr("data-id")), 1);
             else
                 filtered_list['brand'].push(element.attr("data-id"));
 
@@ -429,8 +345,7 @@
                 url: "{% url 'product:filtered' %}",
                 type: 'POST',
                 traditional: true,
-                data: {button_id: element.attr("data-id"), brand: $('#brand_name').val()},
-                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val()},
+                data: {data_id: JSON.stringify(filtered_list), brand: $('#brand_name').val(), type: {{ type }}},
 
                 success: function (json) {
                     if (json.content['result']) {
@@ -445,29 +360,26 @@
         }
 
         $('#checklist').html(checklist);
+        $('#size_zone').html(sizeZone);
 
         $.typeahead({
             input: '.brand-typeahead',
             order: "desc",
             source: {
-                 data: brandList
+                data: brandList
 
 
             },
 
             callback: {
                 onInit: function (node) {
-                    console.log('Typeahead Initiated on ' + node.selector);
+                    {#                                console.log('Typeahead Initiated on ' + node.selector);#}
                 }
 
             },
 
-    });
 
-    window.onload = function() {
-        $('#clear_button').click();
-    };
-
+        });
 
     </script>
 

@@ -30,9 +30,9 @@
                 <div class="col-md-1 col-sm-12 col-xs-12" id="gallery">
 
                     {% for image in images %}
-{#                        {% if images.images %}#}
-{#                            <img src="{{ images.images.url }}"/>#}
-{#                        {% endif %}#}
+                        {#                        {% if images.images %}#}
+                        {#                            <img src="{{ images.images.url }}"/>#}
+                        {#                        {% endif %}#}
                         <div class="col-md-12 col-sm-2 col-xs-2">
                             <img src="{{ image.image.url }}" class="img-thumbnail img-responsive gallery-items
 								{% if forloop.first %}
@@ -100,18 +100,28 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <button type="submit" class="btn btn-success btn-lg btn-block" id="add_to_cart_btn">
-                                    <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Put in cart
-                                </button>
+                                {% if is_login %}
+                                    <button type="submit" class="btn btn-success btn-lg btn-block" id="add_to_cart_btn">
+                                        <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Put in cart
+                                    </button>
+                                {% else %}
+                                    <a href="#" data-toggle="modal" data-target="#login-modal">
+                                        <button type="button" class="btn btn-success btn-lg btn-block"
+                                                id="add_to_cart_btn">
+                                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Put in cart
+                                        </button>
+                                    </a>
+                                {% endif %}
+
                             </div>
                         </div>
-{#                        <div class="row">#}
-{#                            <div class="col-md-12 col-sm-12 col-xs-12">#}
-{#                                <button class="btn btn-primary btn-lg btn-block" id="add_to_wishlist_btn">#}
-{#                                    <i class="fa fa-plus" aria-hidden="true"></i> Add to wishlist#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        </div>#}
+                        {#                        <div class="row">#}
+                        {#                            <div class="col-md-12 col-sm-12 col-xs-12">#}
+                        {#                                <button class="btn btn-primary btn-lg btn-block" id="add_to_wishlist_btn">#}
+                        {#                                    <i class="fa fa-plus" aria-hidden="true"></i> Add to wishlist#}
+                        {#                                </button>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
                     </form>
                 </div>
             </div>
@@ -119,15 +129,15 @@
         <div class="container" id="suggest_box">
             <h3><b>You might also like...</b></h3>
             <div class="row is-table-row" id="suggest_row">
-            {% for item in suggest %}
-                <a href="{% url 'product:product_details' product_id=item.id %} ">
-                <div class="col-md-4 col-sm-12 col-xs-12 border">
-                    <img class="img-responsive suggest_img" src="{{ item.get_image.image.url }}" align="middle" >
-                    <h5><b>{{ item.brand | upper}}</b></h5>
-                    <h5>{{ item.name }}</h5>
-                </div>
-                </a>
-            {% endfor %}
+                {% for item in suggest %}
+                    <a href="{% url 'product:product_details' product_id=item.id %} ">
+                        <div class="col-md-4 col-sm-12 col-xs-12 border">
+                            <img class="img-responsive suggest_img" src="{{ item.get_image.image.url }}" align="middle">
+                            <h5><b>{{ item.brand | upper }}</b></h5>
+                            <h5>{{ item.name }}</h5>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -153,7 +163,7 @@
                 var size = sel.val();
                 $('#remaining').text($('#amount' + size).val());
 
-                if(parseInt($('#remaining').text()) <= 0) {
+                if (parseInt($('#remaining').text()) <= 0) {
                     $('#add_to_cart_btn').addClass('disabled');
                     $('#add_to_cart_btn').prop("disabled", true);
                 }
