@@ -18,7 +18,7 @@ class StockAdmin(admin.ModelAdmin):
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'stock_id')
+    list_display = ('user_id', 'stock_id', 'amount')
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)

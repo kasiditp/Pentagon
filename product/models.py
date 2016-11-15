@@ -81,15 +81,22 @@ class Stock(models.Model):
     def __str__(self):
         return "%s %s" % (self.product, self.size)
 
+    def get_amount_range(self):
+        return range(1, self.amount+1)
+
 
 class Cart(models.Model):
     stock_id = models.ForeignKey('Stock', null=False, blank=False)
     user_id = models.ForeignKey('member.User', null=False, blank=False)
+    amount = models.IntegerField(verbose_name="Amount", default=0)
 
     @staticmethod
     def get_total_price(user_id):
         this_cart = Cart.objects.filter(user_id__unique_id=user_id)
         total_price = 0
         for item in this_cart:
-            total_price += item.stock_id.product.price
+            total_price += item.stock_id.product.price * item.amount
         return total_price
+
+    def get_amount_range(self):
+        return range(1, self.amount)
