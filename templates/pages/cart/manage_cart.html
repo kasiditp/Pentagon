@@ -48,7 +48,7 @@
                                             {% csrf_token %}
                                             <input type="hidden" value="{{ item.id }}" name="cart_id">
                                             <select onchange="this.form.submit()" name="select_amount">
-                                                {% for amount in item.stock_id.get_amount_range %}
+                                                {% for amount in item.get_amount_range %}
                                                     {% if amount == item.amount %}
                                                         <option selected>{{ amount }}</option>
                                                     {% else %}

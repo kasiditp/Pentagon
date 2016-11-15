@@ -81,9 +81,6 @@ class Stock(models.Model):
     def __str__(self):
         return "%s %s" % (self.product, self.size)
 
-    def get_amount_range(self):
-        return range(1, self.amount+1)
-
 
 class Cart(models.Model):
     stock_id = models.ForeignKey('Stock', null=False, blank=False)
@@ -99,4 +96,4 @@ class Cart(models.Model):
         return total_price
 
     def get_amount_range(self):
-        return range(1, self.amount)
+        return range(1, self.stock_id.amount + self.amount + 1)
