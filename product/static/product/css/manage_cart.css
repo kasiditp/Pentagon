@@ -16,3 +16,10 @@ div {
     margin-top: 0;
     font-size: medium;
 }
+.btn {
+    border-radius: 0;
+}
+
+a {
+    border-radius: 0;
+}
