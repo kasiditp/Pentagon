@@ -232,6 +232,15 @@ def remove_from_cart(request):
     return HttpResponseRedirect(reverse('manage_cart'))
 
 
+def clear_cart(request):
+    user_id = request.session['user_unique_id']
+    all_cart = Cart.objects.filter(user_id__unique_id=user_id)
+    for item in all_cart:
+        item.stock_id.amount += item.amount
+        item.stock_id.save()
+        Cart.delete(item)
+    return HttpResponseRedirect(reverse('manage_cart'))
+
 @ajax
 @csrf_exempt
 def filtered(request):
