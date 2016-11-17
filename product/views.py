@@ -228,6 +228,8 @@ def remove_from_cart(request):
     cart_to_delete.stock_id.amount += cart_to_delete.amount
     cart_to_delete.stock_id.save()
     Cart.delete(cart_to_delete)
+    request.session['success'] = True
+    request.session['success_message'] = "Successfully updated your cart."
 
     return HttpResponseRedirect(reverse('manage_cart'))
 
@@ -239,6 +241,8 @@ def clear_cart(request):
         item.stock_id.amount += item.amount
         item.stock_id.save()
         Cart.delete(item)
+    request.session['success'] = True
+    request.session['success_message'] = "Successfully updated your cart."
     return HttpResponseRedirect(reverse('manage_cart'))
 
 @ajax
