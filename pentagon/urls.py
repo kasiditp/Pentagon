@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^$', include('base.urls', namespace='home')),
     url(r'^product/', include('product.urls', namespace='product')),
     url(r'^member/', include('member.urls', namespace='member')),
-    url(r'^cart/$', manage_cart, name='manage_cart'),
-    url(r'^remove_cart/$', remove_from_cart, name='remove_from_cart'),
+    url(r'^cart/', manage_cart, name='manage_cart'),
+    url(r'^remove_cart/', remove_from_cart, name='remove_from_cart'),
+    url(r'^update_cart_amount/', update_cart_amount, name='update_cart_amount'),
     url(r'^login', login_view, name='login_view'),
 ]

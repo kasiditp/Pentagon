@@ -68,7 +68,7 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <p id="select_size_label">PLEASE SELECT SIZE: </p>
+                                <p class="select_label">PLEASE SELECT SIZE: </p>
                                 <input type="hidden" name="product_id" value="{{ product.id }}">
                             </div>
                         </div>
@@ -98,6 +98,21 @@
                                 </div>
                             </div>
                         </div>
+{#                        <div class="row">#}
+{#                            <div class="col-md-12">#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-12">#}
+{#                                        <p class="select_label">PLEASE SELECT AMOUNT: </p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-12">#}
+{#                                        <select class="form-control" type="hidden" id="amount_select" name="amount_select">#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {% if is_login %}
@@ -163,7 +178,7 @@
                 var size = sel.val();
                 $('#remaining').text($('#amount' + size).val());
 
-                if (parseInt($('#remaining').text()) <= 0) {
+                if (parseInt($('#remaining').text()) <= 0 || $('#remaining').text() == '') {
                     $('#add_to_cart_btn').addClass('disabled');
                     $('#add_to_cart_btn').prop("disabled", true);
                 }

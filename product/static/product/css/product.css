@@ -1,7 +1,9 @@
 .filter {
 
 }
-
+div {
+    font-family: Marvenpro;
+}
 #custom-handle {
     width: 3em;
     height: 1.6em;
