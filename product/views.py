@@ -9,7 +9,6 @@ from django.urls import reverse
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
-from django import template
 
 from base.views import get_nav_context
 from member.models import User
@@ -26,7 +25,6 @@ PRODUCT_TYPES = {
     "accessory": 5
 }
 num = 0
-register = template.Library()
 
 def product_view(request):
     product_list = Product.objects.all()
@@ -72,9 +70,8 @@ def product_type_view(request, product_type):
     else:
         return HttpResponse(reverse('product_view'))
 
-@register.filter()
-def index(List,x):
-    return List[int(x)]
+def simulate_view(request):
+    return render(request, 'pages/simulate/simulate.html')
 
 @ajax
 @csrf_exempt
