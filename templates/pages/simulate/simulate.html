@@ -6,21 +6,30 @@
     <section>
         <h1>This is simulate page</h1>
 
+        <div>
+            <img src="{% static "base/image/rabbit-icon.png" %}">
+        </div>
+
     </section>
 
-    <script src = {% static "base/js/pixi.js" %}></script>
+    <script src = https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js></script>
 
     <script>
-        var renderer = PIXI.autoDetectRenderer(800,600);
+        var renderer = PIXI.autoDetectRenderer(800, 600);
+        document.body.appendChild(renderer.view);
+
+        // create the root of the scene graph
         var stage = new PIXI.Container();
 
-        var texture = PIXI.Texture.fromImage('image/test.jpg')
+        // create a texture from an image path
+        var texture = PIXI.Texture.fromImage('{% static "base/image/rabbit-icon.png" %}');
 
-        for (var i = 0; i< 10; i++) {
-            createTestObject(Math.floor(Math.random() * 800), Math.floor(Math.random()*600));
+        for (var i = 0; i < 10; i++)
+        {
+            createBunny(Math.floor(Math.random() * 800) , Math.floor(Math.random() * 600));
         }
 
-        function createTestObject(x, y)
+        function createBunny(x, y)
         {
             // create our little bunny friend..
             var bunny = new PIXI.Sprite(texture);
@@ -98,6 +107,10 @@
                 this.position.y = newPosition.y;
             }
         }
+
+
+
+
 
 
     </script>

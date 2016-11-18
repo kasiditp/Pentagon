@@ -1,0 +1,25 @@
+<<<<<<< HEAD
+=======
+.filter {
+
+}
+div {
+    font-family: Marvenpro;
+}
+#custom-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+
+#product-content {
+    border-style: solid;
+}
+
+.product-detail {
+    border-right: solid;
+}
+>>>>>>> master

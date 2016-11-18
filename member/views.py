@@ -36,6 +36,7 @@ def login(request):
     if user:
         Auth.login(request, user[0])
         return HttpResponseRedirect(reverse('home:index'))
+        # return render(request, 'pages/base/home.html', {"error": ""})
     else:
         return render(request, 'pages/base/home.html', {"error": "Please check your information!!"})
 
