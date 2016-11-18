@@ -9,7 +9,7 @@ SEX = [
 ]
 TYPE = [
     (1, "member"),
-    (2, "admin")
+    (2, "webadmin")
 ]
 
 def user_image_path_name(self, filename):

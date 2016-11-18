@@ -16,7 +16,7 @@ class UserLoginTestCase(TestCase):
                             email='test@hotmail.com', sex='1', birth_date='1999-01-01', first_name='aaaa',
                             last_name='bbbb', address='123/222',
                             image='member/images/default_user_profile.jpg', type=1)
-        User.objects.create(unique_id='000001', username='admin',
+        User.objects.create(unique_id='000001', username='webadmin',
                             password=hashlib.md5('123456').hexdigest(),
                             email='test@hotmail.com', sex='1', birth_date='1999-01-01', first_name='aaaa',
                             last_name='bbbb', address='123/222',
@@ -32,7 +32,7 @@ class UserLoginTestCase(TestCase):
 
     def test_admin_login(self):
         print 'Test Admin Login'
-        user = User.objects.get(username='admin', password=hashlib.md5('123456').hexdigest())
+        user = User.objects.get(username='webadmin', password=hashlib.md5('123456').hexdigest())
         self.assertEqual(user.unique_id, '000001')
 
 
