@@ -9,6 +9,7 @@ from django.urls import reverse
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
+from django import template
 
 from base.views import get_nav_context
 from member.models import User
@@ -25,19 +26,20 @@ PRODUCT_TYPES = {
     "accessory": 5
 }
 num = 0
-
+register = template.Library()
 
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
     min_price = Product.objects.all().aggregate(Min('price'))
     brands = get_all_brand('all')
+
     context = {
         'product_list': product_list,
         'max_price': max_price,
         'min_price': min_price,
         'brands': brands,
-        'type': PRODUCT_TYPES['all']
+        'type': PRODUCT_TYPES['all'],
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -56,18 +58,23 @@ def product_type_view(request, product_type):
                 size_universe.add(item.size)
 
         SIZE_LIST.update(size_universe)
+
         context = {
             'product_list': product_list,
             'max_price': max_price,
             'min_price': min_price,
             'brands': brands,
             'type': PRODUCT_TYPES[product_type],
-            'size_universe': size_universe
+            'size_universe': size_universe,
         }
         context.update(get_nav_context(request))
         return render(request, 'pages/product/product.html', context)
     else:
         return HttpResponse(reverse('product_view'))
+
+@register.filter()
+def index(List,x):
+    return List[int(x)]
 
 @ajax
 @csrf_exempt
@@ -356,3 +363,4 @@ def add_new_product(request):
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/admin-product.html', context)
+
