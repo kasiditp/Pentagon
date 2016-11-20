@@ -9,6 +9,7 @@ from django.urls import reverse
 from django_ajax.decorators import ajax
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader, Context
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from base.views import get_nav_context
 from member.models import User
@@ -332,9 +333,11 @@ def what_sex(sex):
     elif sex == 'Unisex':
         return 3
 
-
+############# temporary usage ###################
 def admin_product_view(request):
-    return render(request, 'pages/product/admin-product.html', get_nav_context(request))
+
+    return render(request, 'pages/product/admin-all-product.html')
+
 
 
 def add_new_product(request):
@@ -356,3 +359,4 @@ def add_new_product(request):
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/admin-product.html', context)
+
