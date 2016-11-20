@@ -11,4 +11,3 @@ urlpatterns = [
     url(r'^(?P<product_type>[\w]+)/$', product_type_view, name="product_type")
 
 ]
-

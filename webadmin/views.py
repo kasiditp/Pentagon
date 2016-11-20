@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from base.views import get_nav_context
 from product.models import Product, Stock, ProductImage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 
 def admin_product(request):
@@ -29,3 +31,19 @@ def add_new_product(request):
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/admin/admin-product.html', context)
+
+def admin_all_product(request):
+    product_list = Product.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(product_list, 10)
+    try:
+        product_list = paginator.page(page)
+    except PageNotAnInteger:
+        product_list = paginator.page(1)
+    except EmptyPage:
+        product_list = paginator.page(paginator.num_pages)
+
+    context = {
+        'product_list': product_list
+    }
+    return render(request, 'pages/admin/admin-all-product.html', context)
