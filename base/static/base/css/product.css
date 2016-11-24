@@ -1,6 +1,8 @@
 #filter {
-    background-color: #191919;
+    background-color: #F75555;
     color: white;
+    border-right: solid 1px;
+    border-color: lightgrey;
 }
 
 #custom-handle {
