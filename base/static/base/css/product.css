@@ -19,6 +19,7 @@
 .product-detail {
     border-right: solid 1px;
     border-bottom: solid 1px;
+    border-color: lightgrey;
     height: 285px;
 }
 
