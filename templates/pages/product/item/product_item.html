@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="row" id="product-content">
+<div class="row" id="product-value">
     {% load humanize %}
         <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
         {% for product in product_list %}
@@ -45,9 +45,19 @@
 
     </div>
 
+    <div class="center-block" id="page_number_bar">
+        {% for i in num_page %}
+            <div class="btn btn-default" onclick="changePage(this.id)" id = {{ forloop.counter }}>
+                {{ forloop.counter }}
+            </div>
+        {% endfor %}
+    </div>
+
+
+
 
 <script>
-  {#    {% if product_list %}#}
-        $("#navCategory").show();
-{#    {% endif %}#}
+    $("#navCategory").show();
+
+
 </script>

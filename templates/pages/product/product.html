@@ -58,7 +58,7 @@
             </div>
         {% endif %}
 
-        {#        </div>#}
+
 
     </section>
 
@@ -81,16 +81,17 @@
         var brandList = [];
         var checklist = "";
         var sizeList = [];
-        var sizeZone = ""
+        var sizeZone = "";
         var handle = $("#custom-handle");
-
+        var type = {{ type }}
+        var allPage = {{ all_page }}
 
         {% for brand in brands %}
             brandList.push('{{ brand }}');
         {% endfor %}
 
         {% for size in size_universe %}
-            sizeList.push('{{ size }}')
+            sizeList.push('{{ size }}');
         {% endfor %}
 
         function round(price, command) {
@@ -329,7 +330,7 @@
 
 
         for (var i = 0; i < brandList.length; i++) {
-            checklist += " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \"" + i + "\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\">";
+            checklist += " <div class = \"checkbox\"> <label> <input type = \"checkbox\" id = \"brand_" + i + "\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\">";
             {#            checklist+= "<div class = \"checkbox\" id = \""+i+"\" onclick = \"brandCheck(this.id)\" data-id = \"" + brandList[i] + "\"> <label> <input type = \"checkbox\" data-id = \""+brandList[i]+"\">";#}
             checklist += brandList[i] + "";
             checklist += "</label> </div>";
@@ -389,6 +390,26 @@
 
 
         });
+
+        function changePage(id) {
+            $('#product-content').html("");
+
+            $.ajax({
+                url: "{% url 'product:change_page' %}",
+                type: 'POST',
+                traditional: true,
+                data: {data_id: JSON.stringify(filtered_list), page: id, type: type, all_page: allPage  },
+
+                success: function (json) {
+                    if (json.content['result']) {
+                        console.log('refreshed content');
+                        $('#product-content').append(json.content['rendered']);
+                    } else {
+                        console.log('Fail to change page');
+                    }
+                }
+            });
+        }
 
     </script>
 
