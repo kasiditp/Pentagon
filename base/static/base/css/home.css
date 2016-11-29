@@ -26,6 +26,7 @@
     margin-right: 0px;
     margin-left: 0px;
 }
+
 /* CAROUSEL */
 
 .item {
@@ -93,9 +94,9 @@
     outline-offset: 15px;
     text-shadow: 1px 1px 2px #427388;
 }
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 figure.snip1104 {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Nunito', sans-serif;
     position: relative;
     float: left;
     overflow: hidden;
@@ -110,7 +111,7 @@ figure.snip1104 {
 }
 
 figure.snip1104 * {
-    border: groove 1px;
+    border: groove 2px;
     border-color: white;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

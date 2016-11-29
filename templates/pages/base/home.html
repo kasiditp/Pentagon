@@ -4,10 +4,10 @@
     <link href="{% static 'base/css/home.css' %}" rel="stylesheet">
     <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
     <section>
-{#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+        {#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
 
         <!-- SlidesJS Required: Link to jQuery -->
-{#        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
+        {#        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
         <!-- End SlidesJS Required -->
 
         <!-- SlidesJS Required: Link to jquery.slides.js -->
@@ -112,7 +112,7 @@
                 {# Shoes #}
                 <div class="col-md-12 col-centered" style="padding: 0px">
                     <figure class="snip1104 yellow">
-                        <img src="{% static 'base/image/shoes2.png'%}"/>
+                        <img src="{% static 'base/image/shoes2.png' %}"/>
                         <figcaption>
                             <h5><span>Shoes</span></h5>
                         </figcaption>
@@ -130,9 +130,13 @@
                     </figure>
                 </div>
             </div>
-            <div class="row" style="margin-left: 0px; margin-right: 0px">
-                <img src="{% static 'base/image/promotion_pic.png' %}" class="img-responsive"/>
+
+            <div class="recommend">
+                <a href="{% url 'product:product_view' %}">
+                    <img src="{% static 'base/image/recommend.png' %}"/>
+                </a>
             </div>
+            </a>
         </div>
     </section>
     <script>

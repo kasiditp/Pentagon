@@ -10,6 +10,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', include('base.urls', namespace='home')),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^product/', include('product.urls', namespace='product')),
     url(r'^member/', include('member.urls', namespace='member')),
     url(r'^admin_page/', include('webadmin.urls', namespace='webadmin')),
