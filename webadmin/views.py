@@ -34,6 +34,7 @@ def add_new_product(request):
 
 def admin_all_product(request):
     product_list = Product.objects.all()
+    num_product = Product.objects.filter().count()
     page = request.GET.get('page', 1)
     paginator = Paginator(product_list, 10)
     try:
@@ -44,6 +45,11 @@ def admin_all_product(request):
         product_list = paginator.page(paginator.num_pages)
 
     context = {
-        'product_list': product_list
+        'product_list': product_list,
+        'num_product' : num_product
     }
+
     return render(request, 'pages/admin/admin-all-product.html', context)
+
+def admin_transaction(request):
+    return render(request,'pages/admin/admin-transaction.html')
