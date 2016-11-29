@@ -16,3 +16,20 @@ div {
     margin-top: 0;
     font-size: medium;
 }
+.btn {
+    border-radius: 0 !important;
+}
+
+.sidebar_btn {
+    font-size: small;
+    border-radius: 0;
+    font-weight: bold;
+}
+
+a {
+    border-radius: 0;
+}
+
+* {
+    border-radius: 0 !important;
+}

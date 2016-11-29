@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="{% static 'product/css/order.css' %}" rel="stylesheet">
+    <section>
+        <div class="container" id="order_panel">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-info" style="border-radius: 0">
+                        <div class="panel-heading" style="border-radius: 0">
+                            <h3 class="panel-title checkout-header" style="border-radius: 0">
+                                CONFIRM RECIPIENT INFORMATION</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            <p>{{ user.address | linebreaksbr }}</p>
+                            <a href="{% url 'member:profile_view' %}" class="btn btn-primary btn-borderless">EDIT INFORMATION</a>
+                        </div>
+                    </div>
+                    <div class="panel panel-info" style="border-radius: 0">
+                        <div class="panel-heading" style="border-radius: 0">
+                            <h3 class="panel-title checkout-header" style="border-radius: 0">
+                                PLEASE SELECT PAYMENT METHOD</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="paymentOption" id="paymentOption" value="option1" checked>
+                                   <!-- PayPal Logo -->
+                                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">
+                                      <!-- PayPal Logo -->
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="paymentOption" id="paymentOption" value="option2">
+                                    Bank transfer or cash transfer
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+
+    </script>
+{% endblock %}

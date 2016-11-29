@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from product.models import Product, ProductImage, Stock, Cart
+from product.models import *
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -18,9 +18,14 @@ class StockAdmin(admin.ModelAdmin):
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'stock_id', 'amount')
+    list_display = ('user', 'stock', 'amount')
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('cart', 'status', 'updated')
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Stock, StockAdmin)
 admin.site.register(Cart, CartAdmin)
+admin.site.register(Order, OrderAdmin)
