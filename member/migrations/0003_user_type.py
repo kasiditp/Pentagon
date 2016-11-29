@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='type',
-            field=models.IntegerField(choices=[(1, 'member'), (2, 'admin')], default=1, verbose_name='User Type'),
+            field=models.IntegerField(choices=[(1, 'member'), (2, 'webadmin')], default=1, verbose_name='User Type'),
         ),
     ]

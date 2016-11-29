@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link href="{% static 'product/css/admin_all_product_view.css' %}" rel="stylesheet">
+    <section>
+    <div class = "container">
+
+            <div class = "col-md-1">
+
+            </div>
+            <div class = "col-md-10 ">
+
+                <div class="search_component">
+                    <div class = "col-md-10">
+                    <input type = "search" class = "form-control" id = "search" placeholder="type recognizable keyword to let system searching.">
+                    </div>
+                    <div class = "col-md-2">
+                        <input type = "submit" class = "btn btn-primary" value="search">
+                    </div>
+                </div>
+
+                <div class = "row all_item">
+                    <ul>
+                        {% for product in product_list %}
+                           <div class="jumbotron" id = "single_product">
+                                <div class ="">
+                                    <img src="{{ product.get_image.image.url }}" class="img-thumbnail img-responsive gallery-items"
+                                     height="150" width="150">
+                                </div>
+                                <div class = "" >
+                                    <h6>Name : {{ product.name }}</h6>
+                                </div>
+                           </div>
+
+                        {% endfor %}
+
+                    </ul>
+
+                        {% if product_list.has_other_pages %}
+                          <ul class="pagination">
+                            {% if product_list.has_previous %}
+                              <li><a href="?page={{ product_list.previous_page_number }}">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in product_list.paginator.page_range %}
+                              {% if product_list.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if product_list.has_next %}
+                              <li><a href="?page={{ product_list.next_page_number }}">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                        {% endif %}
+
+
+
+                </div>
+
+
+            </div>
+            <div class = "col-md-1">
+
+            </div>
+
+    </div>
+
+    {% block script %}
+        <script>
+            var $rows = $('#single_product');
+            $('#search').keyup(function() {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function() {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+        </script>
+    {% endblock %}
+    </section>
+{% endblock %}

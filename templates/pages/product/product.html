@@ -175,6 +175,15 @@
             for (var i = 0; i < brandList.length; i++) {
                 $('#' + i).prop('checked', false);
             }
+            for (var i = 0; i < sizeList.length; i++) {
+                console.log(sizeList[i]);
+                if(sizeList[i].indexOf('.') > -1){
+                    var newId = [sizeList[i].slice(0, sizeList[i].indexOf('.')), "\\", sizeList[i].slice(sizeList[i].indexOf('.'))].join('');
+                    $('#size_'+newId).removeClass('btn-success');
+                } else {
+                    $('#size_' + sizeList[i]).removeClass('btn-success');
+                }
+            }
             $('#slider').slider("value", 0);
             var minPrice = {{ min_price.price__min }};
             handle.text(round(minPrice, 'floor'));
