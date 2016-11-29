@@ -2,7 +2,9 @@ from django.shortcuts import render
 
 from base.views import get_nav_context
 from product.models import Product, Stock, ProductImage
+from models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 
 
@@ -52,4 +54,12 @@ def admin_all_product(request):
     return render(request, 'pages/admin/admin-all-product.html', context)
 
 def admin_transaction(request):
-    return render(request,'pages/admin/admin-transaction.html')
+    transaction_list = Transaction.objects.all()
+    num_transaction = Transaction.objects.filter().count()
+
+    context = {
+        'transaction_list' : transaction_list,
+        'num_transaction' : num_transaction
+    }
+
+    return render(request,'pages/admin/admin-transaction.html' , context)

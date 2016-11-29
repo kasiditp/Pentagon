@@ -2,10 +2,83 @@
 {% load static %}
 
 {% block content %}
+    <link href="{% static 'webadmin/css/admin_transaction.css' %}" rel="stylesheet">
   <section>
-    <div>
-      <h1>This is transaction page</h1>
+    <div class="alert alert-success  ">
+          <center><strong>There are total {{ num_transaction }} available transaction are not accept</strong></center>
     </div>
+    <div class = "container">
+      <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Amount</th>
+                  <th>Date Requested</th>
+                  <th>Status</th>
+                  <th>Payment Reference</th>
+                  <th>Payment Acceptation</th>
+              </tr>
+            </thead>
+            <tbody>
+
+                {% for transaction in transaction_list %}
+                    <div>
+                        <tr>
+                    <td>{{ transaction.order_id }}</td>
+                    <td>{{ transaction.order.cart.user_id }}</td>
+                    <td>300</td>
+                  <td>{{ transaction.order.updated }}</td>
+                  <td>{{ transaction.order.status }}</td>
+                  <td>
+                        <img id="myImg" src={{ transaction.payment_image.url }} alt="" width="30" height="30">
+                                <div id="myModal" class="modal">
+                                  <span class="close">×</span>
+                                  <img class="modal-content" id="img01">
+                                  <div id="caption"></div>
+                                </div>﻿
+
+                  </td>
+                        <td>
+                            {% if transaction.order.status == 1 %}
+                                <button class="btn btn-success" name = "accept_button">Accept Transaction</button>
+                            {% endif %}
+                        </td>
+
+                  </tr>
+                    </div>
+
+                {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </div>
+
+    <script>
+// Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById('myImg');
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        img.onclick = function(){
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            captionText.innerHTML = this.alt;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
+
 
   </section>
 
