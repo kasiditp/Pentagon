@@ -1,0 +1,9 @@
+.add-img {
+    margin: auto;
+    text-align: center;
+}
+.add-img {
+    border: 2px dashed #ACACAC;
+    background: #EAEAEA;
+    width: 70%;
+}

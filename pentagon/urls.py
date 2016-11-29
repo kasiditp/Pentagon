@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^cart/', manage_cart, name='manage_cart'),
     url(r'^remove_cart/', remove_from_cart, name='remove_from_cart'),
     url(r'^update_cart_amount/', update_cart_amount, name='update_cart_amount'),
+    url(r'^clear_cart/', clear_cart, name='clear_cart'),
+    url(r'^checkout/$', order_checkout, name="checkout"),
     url(r'^login', login_view, name='login_view'),
     # url(r'^webadmin/', include(admin.site.urls)),
 ]
