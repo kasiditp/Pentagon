@@ -1,5 +1,5 @@
 #filter {
-    background-color: #191919;
+    background-color: black;
     color: white;
     border-right: solid 1px;
     border-color: lightgrey;
@@ -34,7 +34,7 @@
 }
 
 #detail-image {
-    background-color: grey;
+    background-color: salmon;
 }
 
 .product-detail:hover {
