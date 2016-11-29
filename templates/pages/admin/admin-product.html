@@ -9,16 +9,19 @@
         <div class="container" style="text-align:center;"><h1>Add new product</h1></div>
         <div class="col-md-4">
             <div class="add-img" style="padding: 20px;">
-                <img src="{% static 'webadmin/images/boxadd.png' %}" id="product-image-1"><br/>
-                <img id="product-image-2" src="#" alt="your image" style="display: none"/>
-                <img id="product-image-3" src="#" alt="your image" style="display: none"/>
-                <img id="product-image-4" src="#" alt="your image" style="display: none"/>
-                <img id="product-image-5" src="#" alt="your image" style="display: none"/>
-                <span><h3>Add image</h3></span>
-                <span><h5>You can add more than one image</h5></span>
-                <input type="file" id="product-img" name="img-file" accept="image/*" class="upload"
-                       style="margin-left: 50px;" multiple="multiple"/>
-                {#                </form>#}
+                <form id="form-product-image-upload" action="{% url 'webadmin:add_product_images' %}" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <img src="{% static 'webadmin/images/boxadd.png' %}" id="product-image-1"><br/>
+                    <img id="product-image-2" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-3" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-4" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-5" src="#" alt="your image" style="display: none"/>
+                    <span><h3>Add image</h3></span>
+                    <span><h5>You can add more than one image</h5></span>
+                    <input type="file" id="product-img" name="img-file" accept="image/*" class="upload"
+                           style="margin-left: 50px;" multiple="multiple"/>
+                </form>
             </div>
         </div>
         <div id="exTab1" class="container col-md-8">
@@ -202,10 +205,12 @@
                 success: function (json) {
                     $('#loadingModal').hide();
                     if (json.content['result']) {
-                        window.location.reload();
+                        console.log('Done add product');
+{#                        window.location.reload();#}
                         $('#loadingModal').hide();
                         $('#message-dialog').show();
                         $('#message-text').text(json.content['message']);
+                        $("form#form-product-image-upload").submit();
                     } else {
                         $('#message-dialog').className('alert-error');
                         $('#message-dialog').show();

@@ -1,4 +1,7 @@
 import json
+from django.core.urlresolvers import reverse
+
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django_ajax.decorators import ajax
@@ -40,14 +43,20 @@ def add_new_product(request):
         size = size_list['size']
         amount = size_list['amount']
         Stock.objects.create(product=new_product, size=size, amount=amount)
-
-    # ProductImage.objects.create(product=new_product, image=image)
+    request.session['temp-product'] = new_product.id
     context = {
         "result": True,
         "message": "Success add new product"
     }
     # context.update(get_nav_context(request))
     return context
+
+
+def add_product_images(request):
+    print 'add image function \n'
+    print request.FILES
+    print request.FILES.get('product-img')
+    return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
 
 
 def admin_all_product(request):

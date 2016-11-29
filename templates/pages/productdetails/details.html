@@ -149,7 +149,7 @@
                         <div class="col-md-4 col-sm-12 col-xs-12 border">
                             <img class="img-responsive suggest_img" src="{{ item.get_image.image.url }}" align="middle">
                             <h5><b>{{ item.brand | upper }}</b></h5>
-                            <h5>{{ item.name }}</h5>
+                            <span style="margin-bottom: 5px">{{ item.name }}</span> <span style="float: right; margin-bottom: 5px">{{ item.price | intcomma | floatformat:2 }} THB</span>
                         </div>
                     </a>
                 {% endfor %}
