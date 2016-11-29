@@ -1,0 +1,21 @@
+{% load static %}
+
+<div class="row">
+    {% for product in simulate_list_bottom %}
+        <div class="col-md-3 selection_block">
+            <div id = "selection_content">
+                <div class="row" id="selection_block_image">
+                    <div>
+                        <img class="img-responsive center-block" id="selection_image" onclick="simulate(this.src,'bottom')" src="{{ product.get_image.image.url }} ">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+            </div>
+            <div class="row">
+        {% endif %}
+
+    {% endfor %}
+
+</div>

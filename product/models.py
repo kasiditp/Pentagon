@@ -18,6 +18,12 @@ SEX = [
     (3, "Unisex")
 ]
 
+ORDERSTATUS = [
+    (1, "Ordered"),
+    (2, "Payment accepted"),
+    (3, "Delivery")
+]
+
 
 def product_image_path_name(self, filename):
     return '/'.join(['product/images', filename])
@@ -83,17 +89,26 @@ class Stock(models.Model):
         return "%s %s" % (self.product, self.size)
 
 class Cart(models.Model):
-    stock_id = models.ForeignKey('Stock', null=False, blank=False)
-    user_id = models.ForeignKey('member.User', null=False, blank=False)
+    stock = models.ForeignKey('Stock', null=False, blank=False)
+    user = models.ForeignKey('member.User', null=False, blank=False)
     amount = models.IntegerField(verbose_name="Amount", default=0)
 
     @staticmethod
     def get_total_price(user_id):
-        this_cart = Cart.objects.filter(user_id__unique_id=user_id)
+        this_cart = Cart.objects.filter(user__unique_id=user_id)
         total_price = 0
         for item in this_cart:
-            total_price += item.stock_id.product.price * item.amount
+            total_price += item.stock.product.price * item.amount
         return total_price
 
     def get_amount_range(self):
-        return range(1, self.stock_id.amount + self.amount + 1)
+        return range(1, self.stock.amount + self.amount + 1)
+
+
+class Order(models.Model):
+    cart = models.ForeignKey('Cart', null=False, blank=False)
+    status = models.IntegerField(verbose_name='OrderStatus', choices=ORDERSTATUS, null=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
+
+
+

@@ -3,118 +3,50 @@
 
 {% block content %}
 
-    <section>
-        <h1>This is simulate page</h1>
+    <link href="{% static "base/css/simulate.css" %}" rel="stylesheet">
 
-        <div>
-            <img src="{% static "base/image/rabbit-icon.png" %}">
+    <section>
+        <div class="row">
+
+
+            <div class="col-md-6" id="simulate_zone">
+                <div id ="top_zone">
+                    {% include 'pages/simulate/showcase/show_top.html' %}
+                </div>
+                <div id ="bottom_zone">
+                    {% include 'pages/simulate/showcase/show_bottom.html' %}
+                </div>
+
+            </div>
+
+            <div class="col-md-6 right">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#selection_top">Top</a></li>
+                        <li><a data-toggle="tab" href="#selection_bottom">Bottom</a></li>
+                    </ul>
+
+                    <div class="tab-content" id="selection_zone">
+                        <div id ="selection_top" class="tab-pane fade in active">
+                            {% include 'pages/simulate/catagory/selection_top.html' %}
+                        </div>
+                        <div id ="selection_bottom" class="tab-pane fade">
+                            {% include 'pages/simulate/catagory/selection_bottom.html' %}
+                        </div>
+                    </div>
+            </div>
         </div>
 
     </section>
 
-    <script src = https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js></script>
-
     <script>
-        var renderer = PIXI.autoDetectRenderer(800, 600);
-        document.body.appendChild(renderer.view);
 
-        // create the root of the scene graph
-        var stage = new PIXI.Container();
+        function simulate(id,type) {
+            var src = id;
+            $('#simulate_image_'+type).attr("src",src);
 
-        // create a texture from an image path
-        var texture = PIXI.Texture.fromImage('{% static "base/image/rabbit-icon.png" %}');
-
-        for (var i = 0; i < 10; i++)
-        {
-            createBunny(Math.floor(Math.random() * 800) , Math.floor(Math.random() * 600));
         }
-
-        function createBunny(x, y)
-        {
-            // create our little bunny friend..
-            var bunny = new PIXI.Sprite(texture);
-
-            // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
-            bunny.interactive = true;
-
-            // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
-            bunny.buttonMode = true;
-
-            // center the bunny's anchor point
-            bunny.anchor.set(0.5);
-
-            // make it a bit bigger, so it's easier to grab
-            bunny.scale.set(3);
-
-            // setup events
-            bunny
-                // events for drag start
-                .on('mousedown', onDragStart)
-                .on('touchstart', onDragStart)
-                // events for drag end
-                .on('mouseup', onDragEnd)
-                .on('mouseupoutside', onDragEnd)
-                .on('touchend', onDragEnd)
-                .on('touchendoutside', onDragEnd)
-                // events for drag move
-                .on('mousemove', onDragMove)
-                .on('touchmove', onDragMove);
-
-            // move the sprite to its designated position
-            bunny.position.x = x;
-            bunny.position.y = y;
-
-            // add it to the stage
-            stage.addChild(bunny);
-        }
-
-        requestAnimationFrame( animate );
-
-        function animate() {
-
-            requestAnimationFrame(animate);
-
-            // render the stage
-            renderer.render(stage);
-        }
-
-        function onDragStart(event)
-        {
-            // store a reference to the data
-            // the reason for this is because of multitouch
-            // we want to track the movement of this particular touch
-            this.data = event.data;
-            this.alpha = 0.5;
-            this.dragging = true;
-        }
-
-        function onDragEnd()
-        {
-            this.alpha = 1;
-
-            this.dragging = false;
-
-            // set the interaction data to null
-            this.data = null;
-        }
-
-        function onDragMove()
-        {
-            if (this.dragging)
-            {
-                var newPosition = this.data.getLocalPosition(this.parent);
-                this.position.x = newPosition.x;
-                this.position.y = newPosition.y;
-            }
-        }
-
-
-
-
-
 
     </script>
-
 
 
 {% endblock %}
