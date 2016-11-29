@@ -43,7 +43,7 @@
 
                     <div class="item">
                         <img src="{% static 'base/image/pic1.png' %}">
-                        <a href="{% url 'product:product_view' %}">
+                        <a href="{% url 'product:product_view' %}"
                             <button class="btn btn-5" id="buttonMen2" style="text-align: center">Men</button>
                         </a>
                         <a href="{% url 'product:product_view' %}">
@@ -85,7 +85,7 @@
         {# Second Row #}
         <div class="row" id="container" style="margin-left: 0px; margin-right: 0px">
             <div class="row" style="margin-top: 20px; margin-left: 0px; margin-right: 0px">
-                <h3><p align="center" id="text">What's new in Polygon</p></h3>
+                <h3><p align="center" id="text">~ What's new in Polygon ~</p></h3>
                 <hr id="hr">
             </div>
             <div class="row" style="margin-left: 0px; margin-right: 0px">
@@ -96,7 +96,7 @@
                         <figcaption>
                             <h4><span>Shirts</span></h4>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Pants #}
@@ -106,7 +106,7 @@
                         <figcaption>
                             <h4><span>Pants</span></h4>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Shoes #}
@@ -116,7 +116,7 @@
                         <figcaption>
                             <h4><span>Shoes</span></h4>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Accesories #}
@@ -126,7 +126,7 @@
                         <figcaption>
                             <h4><span>Accessories</span></h4>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
             </div>
