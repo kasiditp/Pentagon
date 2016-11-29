@@ -35,15 +35,60 @@
                     </div>
             </div>
         </div>
+        <br>
+        <div class="text-center">
+            <div class="btn btn-success">Add Selected item to cart</div>
+        </div>
 
     </section>
 
     <script>
-
-        function simulate(id,type) {
+        var currentSelectedProductName = "";
+        function simulate(name,id,type) {
+            currentSelectedProductName = name;
             var src = id;
             $('#simulate_image_'+type).attr("src",src);
 
+            $('#'+type+'_dropdown_div').removeClass("invisible");
+
+            $('#'+type+'_size_dropdown_button').html("Size " + "<span class = \"caret\"></span>");
+
+            changeDropDownMenu(type);
+        }
+
+        function changeDropDownMenu(type) {
+            var dropdown = $('#'+type+'_size_dropdown_menu');
+            var sizeList = [];
+            var injection = "";
+            var top = 'top';
+            $.ajax({
+                url: "{% url 'product:get_product_stock' %}",
+                type: 'POST',
+                data: {
+                    name: currentSelectedProductName
+                },
+               success: function (json) {
+                    if (json.content['result']) {
+                        sizeList = json.content['content'];
+                        for(var i = 0; i<sizeList.length; i++) {
+                            if(type == 'top')
+                                injection+= "<li><a onclick = \"changeDropDownButton(this.text,"+ "\'top\'" +")\">"+ sizeList[i] +"</a></li>";
+                            else if(type == "bottom")
+                                injection+= "<li><a onclick = \"changeDropDownButton(this.text,"+ "\'bottom\'" +")\">"+ sizeList[i] +"</a></li>";
+                        }
+                        dropdown.html(injection);
+                    } else {
+                        console.log('Fail to change page');
+                    }
+                }
+            });
+
+
+        }
+
+        function changeDropDownButton(val,type) {
+            var button = $('#'+type+'_size_dropdown_button');
+            button.html("Size : "+ val+ " <span class=\"caret\"></span>");
         }
 
     </script>

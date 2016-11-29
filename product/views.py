@@ -95,7 +95,6 @@ def simulate_view(request):
     context.update(get_nav_context(request))
     return render(request, 'pages/simulate/simulate.html',context)
 
-
 @ajax
 @csrf_exempt
 def get_brand(request):
@@ -309,6 +308,21 @@ def change_page(request):
         })
         rendered = template.render(context)
         return {'result': True, 'rendered': rendered}
+
+@ajax
+@csrf_exempt
+def get_product_stock(request):
+    if request.POST:
+        return_list = []
+        product_name = request.POST.get('name')
+        product = Product.objects.filter(name=product_name)
+        if product is None:
+            return {'result': False}
+        stock_list = Stock.objects.filter(product=product).order_by('-size')
+        for stock in stock_list:
+            return_list.append(stock.size)
+        print return_list
+        return {'result': True, 'content' : return_list }
 
 @ajax
 @csrf_exempt
