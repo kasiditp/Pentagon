@@ -157,7 +157,7 @@ def put_in_cart(request):
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        new_cart_item = Cart(user_id=user, stock_id=stock, amount=1)
+        new_cart_item = Cart(user=user, stock=stock, amount=1)
         new_cart_item.save()
         stock.amount -= 1
         stock.save()
@@ -169,9 +169,9 @@ def put_in_cart(request):
 def manage_cart(request):
     user_id = request.session['user_unique_id']
     cart_items = []
-    cart = Cart.objects.filter(user_id__unique_id=user_id)
+    cart = Cart.objects.filter(user__unique_id=user_id)
     # for item in cart:
-    #     stock = get_object_or_404(Stock, pk=item.stock_id)
+    #     stock = get_object_or_404(Stock, pk=item.stock)
     #     cart_items.append(stock)
     total_price = Cart.get_total_price(user_id)
     error = False
@@ -201,23 +201,35 @@ def manage_cart(request):
     return render(request, 'pages/cart/manage_cart.html', context)
 
 
+def order_checkout(request):
+    user_id = request.session['user_unique_id']
+    user = get_object_or_404(User, unique_id=user_id)
+    carts = Cart.objects.filter(user=user)
+    context = {
+        'user': user,
+        'carts': carts,
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/cart/order.html', context)
+
+
 def update_cart_amount(request):
     cart_id = request.POST['cart_id']
     cart = get_object_or_404(Cart, pk=cart_id)
     new_amount = int(request.POST['select_amount'])
-    cart.stock_id.amount += cart.amount
-    cart.stock_id.save()
-    if cart.stock_id.amount < new_amount:
-        cart.stock_id.amount -= cart.amount
+    cart.stock.amount += cart.amount
+    cart.stock.save()
+    if cart.stock.amount < new_amount:
+        cart.stock.amount -= cart.amount
         request.session['error'] = True
         request.session['error_message'] = "Looks like that number is not available anymore. Please try again."
-        cart.stock_id.save()
+        cart.stock.save()
     else:
-        cart.stock_id.amount -= new_amount
+        cart.stock.amount -= new_amount
         cart.amount = new_amount
         request.session['success'] = True
         request.session['success_message'] = "Successfully updated your cart."
-        cart.stock_id.save()
+        cart.stock.save()
         cart.save()
     return HttpResponseRedirect(reverse('manage_cart'))
 
@@ -225,8 +237,8 @@ def update_cart_amount(request):
 def remove_from_cart(request):
     cart_item_id = request.POST['cart_id']
     cart_to_delete = get_object_or_404(Cart, pk=cart_item_id)
-    cart_to_delete.stock_id.amount += cart_to_delete.amount
-    cart_to_delete.stock_id.save()
+    cart_to_delete.stock.amount += cart_to_delete.amount
+    cart_to_delete.stock.save()
     Cart.delete(cart_to_delete)
     request.session['success'] = True
     request.session['success_message'] = "Successfully updated your cart."
@@ -236,14 +248,16 @@ def remove_from_cart(request):
 
 def clear_cart(request):
     user_id = request.session['user_unique_id']
-    all_cart = Cart.objects.filter(user_id__unique_id=user_id)
+    all_cart = Cart.objects.filter(user__unique_id=user_id)
     for item in all_cart:
-        item.stock_id.amount += item.amount
-        item.stock_id.save()
+        item.stock.amount += item.amount
+        item.stock.save()
         Cart.delete(item)
     request.session['success'] = True
     request.session['success_message'] = "Successfully updated your cart."
     return HttpResponseRedirect(reverse('manage_cart'))
+
+
 
 @ajax
 @csrf_exempt

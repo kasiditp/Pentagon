@@ -26,17 +26,17 @@
                         <li class="list-group-item" style="border-radius: 0;">
                             <div class="row">
                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                    <img class="img-responsive" src="{{ item.stock_id.product.get_image.image.url }}">
+                                    <img class="img-responsive" src="{{ item.stock.product.get_image.image.url }}">
                                 </div>
                                 <div class="col-md-9 col-sm-9 col-xs-9">
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <h3><b>{{ item.stock_id.product.brand | upper }}</b></h3>
+                                            <h3><b>{{ item.stock.product.brand | upper }}</b></h3>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-8 col-sm-8 col-xs-8">
-                                            <h4>{{ item.stock_id.product.name }}</h4>
+                                            <h4>{{ item.stock.product.name }}</h4>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -59,7 +59,7 @@
                                         </form>
                                         </div>
                                         <div class="col-md-4 col-sm-4 col-xs-4">
-                                            <p><b>{{ item.amount }} × {{ item.stock_id.product.price | floatformat:2 | intcomma}} THB</b></p>
+                                            <p><b>{{ item.amount }} × {{ item.stock.product.price | floatformat:2 | intcomma}} THB</b></p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -71,11 +71,11 @@
                                         </div>
                                         <div class="row" id="sizetypesexrow">
                                             <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
-                                                {{ item.stock_id.size }}</p></div>
+                                                {{ item.stock.size }}</p></div>
                                             <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
-                                                {{ item.stock_id.product.get_type_name }}</p></div>
+                                                {{ item.stock.product.get_type_name }}</p></div>
                                             <div class="col-md-4 col-sm-4 col-xs-4"><p class="sizetypesexrow">
-                                                {{ item.stock_id.product.get_sex_name }}</p></div>
+                                                {{ item.stock.product.get_sex_name }}</p></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-3">
@@ -112,7 +112,7 @@
                     </div>
                     <div class="panel-body">
                         {# Dummy checkout button #}
-                        <a href="#" class="btn btn-success btn-block sidebar_btn">PROCEED TO CHECKOUT</a>
+                        <a href="{% url 'checkout' %}" class="btn btn-success btn-block sidebar_btn">PROCEED TO CHECKOUT</a>
                         <a href="{% url 'product:product_view' %}" class="btn-info btn-block btn sidebar_btn">
                             CONTINUE SHOPPING</a>
 

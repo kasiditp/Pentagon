@@ -12,8 +12,10 @@ TYPE = [
     (2, "admin")
 ]
 
+
 def user_image_path_name(self, filename):
     return '/'.join(['member/images', filename])
+
 
 class User(models.Model):
     unique_id = models.CharField(verbose_name='Unique id', max_length=10, null=False, blank=False)

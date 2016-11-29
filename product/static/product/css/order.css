@@ -1,0 +1,16 @@
+#order_panel {
+    margin-top: 10px;
+}
+.checkout-header {
+    font-size: medium;
+    font-weight: bolder;
+}
+div {
+    font-family: Marvenpro;
+}
+
+.btn-borderless {
+    border-radius: 0;
+    font-size: small;
+    font-weight: bold;
+}
