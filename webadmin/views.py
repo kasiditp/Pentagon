@@ -84,11 +84,15 @@ def admin_transaction(request):
     create_transaction()
     transaction_list = Transaction.objects.all()
     num_transaction = Transaction.objects.filter().count()
+    cart_list = Cart.objects.all()
 
     context = {
         'transaction_list' : transaction_list,
-        'num_transaction' : num_transaction
+        'num_transaction' : num_transaction,
+        'cart_list' : cart_list,
     }
+
+    context.update(get_nav_context(request))
 
     return render(request,'pages/admin/admin-transaction.html' , context)
 
@@ -114,6 +118,9 @@ def accept_transaction(request):
     if request.method == 'POST':
         invoice_number = request.POST['invoice_number']
         focusing_transaction = Transaction.objects.get(invoice_number = invoice_number)
+        for cart in Cart.objects.filter(invoice_number = invoice_number):
+            cart.invoice_number = 3
+            cart.save()
         focusing_transaction.status = 3
         focusing_transaction.save()
 
@@ -127,3 +134,13 @@ def reject_transaction(request):
 
         return HttpResponseRedirect(reverse('webadmin:admin_transaction'))
 
+def enter_delivery_code(request):
+    if request.method == 'POST':
+        invoice_number = request.POST['invoice_number']
+        delivery_code = request.POST['delivery_code']
+        focusing_transaction = Transaction.objects.get(invoice_number=invoice_number)
+        focusing_transaction.delivery_code = delivery_code
+        focusing_transaction.status = 4
+        focusing_transaction.save()
+
+        return HttpResponseRedirect(reverse('webadmin:admin_transaction'))

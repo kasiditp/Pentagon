@@ -187,3 +187,7 @@ def change_profile_image(request):
 
 def success(request):
     return render(request, 'pages/member/success.html')
+
+def trace(request):
+    return render(request, 'pages/member/trace.html')
+
