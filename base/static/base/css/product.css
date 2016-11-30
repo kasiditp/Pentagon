@@ -34,10 +34,7 @@
 .product-detail {
     border-right: solid 1px;
     border-bottom: solid 1px;
-<<<<<<< HEAD
     border-color: lightgray;
-    height: 285px;
-=======
     height: 310px;
 >>>>>>> master
 }
@@ -58,11 +55,7 @@
 .product-detail:hover {
     box-shadow: 0 0 15px #191919;
     opacity: 0.7;
-<<<<<<< HEAD
     background-color: orange;
-=======
-
->>>>>>> master
 }
 
 
