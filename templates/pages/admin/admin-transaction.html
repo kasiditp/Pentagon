@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link href="{% static 'webadmin/css/admin_transaction.css' %}" rel="stylesheet">
+  <section>
+    <div class="alert alert-success  ">
+          <center><strong>There are {{ num_transaction }} available transactions</strong></center>
+    </div>
+    <div class = "container">
+      <div class = "col-md-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Amount</th>
+                  <th>Date Requested</th>
+                  <th>Status</th>
+                  <th>Payment Reference</th>
+                  <th>Accept Payment</th>
+                  <th>Delivery code</th>
+                  <th>Reject this order</th>
+              </tr>
+            </thead>
+            <tbody>
+
+                {% for transaction in transaction_list %}
+                    <div>
+                    <tr>
+                      <td>{{ transaction.invoice_number }}</td>
+
+                      <td>
+{#                          <a id="user_info" href="#" data-toggle="tooltip" data-placement="top" data-html="true"#}
+{#                             title="First Name : {{  }}  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
+{#                             Last Name : {{  }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
+{#                             Address : {{  }}">#}
+{#                              {{  }}</a>#}
+
+
+                      </td>
+
+                      <td>{{ transaction.total_amount }}</td>
+                      <td>{{ transaction.updated }}</td>
+                      <td>{{ transaction.status }}</td>
+                      <td>
+                          {% if transaction.payment_image %}
+                            <img id="myImg" src={{ transaction.payment_image.url }} alt="Order ID : {{ transaction.invoice_number }}" width="30" height="30">
+                                     <div id="myModal" class="modal">
+                                      <span class="close">×</span>
+                                      <img class="modal-content" id="img01">
+                                      <div id="caption"></div>
+                                    </div>﻿
+                          {% endif %}
+
+                      </td>
+                        <td>
+                                <form action="{% url 'webadmin:accept_transaction' %}" id="change_password_form" method="POST">
+                                {% csrf_token %}
+                                {% if transaction.status == 1 or transaction.status == 2 %}
+                                    <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success" >Accept</button>
+                                {% else %}
+                                    <h6>Already accepted</h6>
+                                {% endif %}
+                                </form>
+
+                        </td>
+
+                        <td>
+                                <div>
+                                   {% if transaction.status == 3 %}
+                                        <input type = "text" name = "order_id">
+                                        <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success btn-small" >Enter</button>
+                                    {% else %}
+                                        <h6>Wait for order acceptation</h6>
+                                    {% endif %}
+                                </div>
+
+
+                        </td>
+
+                        <td>
+                                <form action="{% url 'webadmin:reject_transaction' %}"  method="POST" onsubmit="return confirm('Do you really want to delete Order: {{ transaction.invoice_number }}?');">
+                                {% csrf_token %}
+                                {% if transaction.status != 4 %}
+                                    <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-danger" >Reject</button>
+
+                                {% endif %}
+                                </form>
+                        </td>
+
+                    </tr>
+                    </div>
+
+                {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </div>
+
+    <script>
+// Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById('myImg');
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        img.onclick = function(){
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            captionText.innerHTML = this.alt;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        $("[data-toggle=tooltip]").tooltip();
+
+    </script>
+
+
+  </section>
+
+{% endblock %}
