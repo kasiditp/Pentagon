@@ -121,7 +121,7 @@ def accept_transaction(request):
         invoice_number = request.POST['invoice_number']
         focusing_transaction = Transaction.objects.get(invoice_number = invoice_number)
         for cart in Cart.objects.filter(invoice_number = invoice_number):
-            cart.invoice_number = 3
+            cart.status = 3
             cart.save()
         focusing_transaction.status = 3
         focusing_transaction.save()
