@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
-
 from django.db import models
-
 import product
-from product.models import *
+from product.models import Cart
 
 # Create your models here.
 
