@@ -177,7 +177,7 @@ def put_in_cart(request):
 def manage_cart(request):
     user_id = request.session['user_unique_id']
     cart_items = []
-    cart = Cart.objects.filter(user__unique_id=user_id)
+    cart = Cart.objects.filter(user__unique_id=user_id, status=0)
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock)
     #     cart_items.append(stock)
