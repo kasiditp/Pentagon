@@ -81,6 +81,7 @@ def admin_all_product(request):
     return render(request, 'pages/admin/admin-all-product.html', context)
 
 def admin_transaction(request):
+    create_transaction()
     transaction_list = Transaction.objects.all()
     num_transaction = Transaction.objects.filter().count()
 
@@ -91,22 +92,38 @@ def admin_transaction(request):
 
     return render(request,'pages/admin/admin-transaction.html' , context)
 
+def create_transaction():
+    for cart in Cart.objects.all():
+        cart_invoice_number = cart.invoice_number
+
+        if not Transaction.objects.filter(invoice_number = cart_invoice_number):
+            total_amount = find_total_amount(cart_invoice_number)
+            Transaction.objects.create(invoice_number = cart_invoice_number , status  = cart.status, updated = cart.updated , total_amount = total_amount)
+
+
+
+def find_total_amount(invoice_number):
+    sum = 0
+    for cart in Cart.objects.filter(invoice_number=invoice_number):
+        sum  = sum + (cart.amount * cart.stock.product.price)
+    return  sum
+
+
+
 def accept_transaction(request):
     if request.method == 'POST':
-        order_id = request.POST['order_id']
-        order_match = 2 #mock up
-        focusing_order = Transaction.objects.get(order = order_match)
-        print focusing_order
-        focusing_order.status = 2
-        focusing_order.save()
+        invoice_number = request.POST['invoice_number']
+        focusing_transaction = Transaction.objects.get(invoice_number = invoice_number)
+        focusing_transaction.status = 3
+        focusing_transaction.save()
 
         return HttpResponseRedirect(reverse('webadmin:admin_transaction'))
 
 def reject_transaction(request):
     if request.method == 'POST':
-        order_id = request.POST['order_id']
-        focusing_order = Transaction.objects.get(order =order_id)
-        focusing_order.delete()
+        invoice_number = request.POST['invoice_number']
+        focusing_transaction = Transaction.objects.get(invoice_number=invoice_number)
+        focusing_transaction.delete()
 
         return HttpResponseRedirect(reverse('webadmin:admin_transaction'))
 

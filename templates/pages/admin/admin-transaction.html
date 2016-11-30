@@ -5,10 +5,10 @@
     <link href="{% static 'webadmin/css/admin_transaction.css' %}" rel="stylesheet">
   <section>
     <div class="alert alert-success  ">
-          <center><strong>There are total {{ num_transaction }} available transaction are not accept</strong></center>
+          <center><strong>There are {{ num_transaction }} available transactions</strong></center>
     </div>
     <div class = "container">
-      <div>
+      <div class = "col-md-12">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -28,35 +28,37 @@
                 {% for transaction in transaction_list %}
                     <div>
                     <tr>
-                      <td>{{ transaction.order_id }}</td>
+                      <td>{{ transaction.invoice_number }}</td>
 
                       <td>
-                          <a id="user_info" href="#" data-toggle="tooltip" data-placement="top" data-html="true"
-                             title="First Name : {{ transaction.order.cart.user.first_name }}  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                             Last Name : {{ transaction.order.cart.user.last_name }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                             Address : {{ transaction.order.cart.user.address }}">
-                              {{ transaction.order.cart.user_id }}</a>
+{#                          <a id="user_info" href="#" data-toggle="tooltip" data-placement="top" data-html="true"#}
+{#                             title="First Name : {{  }}  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
+{#                             Last Name : {{  }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
+{#                             Address : {{  }}">#}
+{#                              {{  }}</a>#}
 
 
                       </td>
 
-                      <td>300</td>
-                      <td>{{ transaction.order.updated }}</td>
-                      <td>{{ transaction.order.status }}</td>
+                      <td>{{ transaction.total_amount }}</td>
+                      <td>{{ transaction.updated }}</td>
+                      <td>{{ transaction.status }}</td>
                       <td>
-                            <img id="myImg" src={{ transaction.payment_image.url }} alt="Order ID : {{ transaction.order_id }}" width="30" height="30">
+                          {% if transaction.payment_image %}
+                            <img id="myImg" src={{ transaction.payment_image.url }} alt="Order ID : {{ transaction.invoice_number }}" width="30" height="30">
                                      <div id="myModal" class="modal">
                                       <span class="close">×</span>
                                       <img class="modal-content" id="img01">
                                       <div id="caption"></div>
                                     </div>﻿
+                          {% endif %}
 
                       </td>
                         <td>
                                 <form action="{% url 'webadmin:accept_transaction' %}" id="change_password_form" method="POST">
                                 {% csrf_token %}
-                                {% if transaction.order.status == 1 %}
-                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-success" >Accept</button>
+                                {% if transaction.status == 1 or transaction.status == 2 %}
+                                    <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success" >Accept</button>
                                 {% else %}
                                     <h6>Already accepted</h6>
                                 {% endif %}
@@ -65,20 +67,23 @@
                         </td>
 
                         <td>
+                                <div>
+                                   {% if transaction.status == 3 %}
+                                        <input type = "text" name = "order_id">
+                                        <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success btn-small" >Enter</button>
+                                    {% else %}
+                                        <h6>Wait for order acceptation</h6>
+                                    {% endif %}
+                                </div>
 
-                                {% if transaction.order.status == 2 %}
-                                    <input type = "text" name = "order_id">
-                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-success" >Enter</button>
-                                {% else %}
-                                    <h6>Wait for order acceptation</h6>
-                                {% endif %}
 
                         </td>
 
                         <td>
-                                <form action="{% url 'webadmin:reject_transaction' %}" id="change_password_form" method="POST">
-                                {% if transaction.order.status == 1 %}
-                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-danger" >Reject</button>
+                                <form action="{% url 'webadmin:reject_transaction' %}"  method="POST" onsubmit="return confirm('Do you really want to delete Order: {{ transaction.invoice_number }}?');">
+                                {% csrf_token %}
+                                {% if transaction.status != 4 %}
+                                    <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-danger" >Reject</button>
 
                                 {% endif %}
                                 </form>

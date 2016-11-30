@@ -213,7 +213,6 @@ def order_checkout(request):
     user_id = request.session['user_unique_id']
     user = get_object_or_404(User, unique_id=user_id)
     carts = Cart.objects.filter(user=user)
-    trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     context = {
         'user': user,
         'carts': carts,
@@ -277,10 +276,12 @@ def paypal_ordered(request):
         user = get_object_or_404(User, unique_id=user_id)
         print(user.first_name)
         carts = Cart.objects.filter(user=user)
+        trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
         print("POST2")
         for cart in carts:
             print(cart.stock.product.name)
             cart.status = 3
+            cart.invoice_number = trans_id
             cart.save()
             print(cart.updated)
 
