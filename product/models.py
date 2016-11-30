@@ -93,7 +93,7 @@ class Cart(models.Model):
     stock = models.ForeignKey('Stock', null=False, blank=False)
     user = models.ForeignKey('member.User', null=False, blank=False)
     amount = models.IntegerField(verbose_name="Amount", default=0)
-    invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, max_length=10)
+    invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, max_length=10, null=True)
     status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
     updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 
