@@ -1,6 +1,8 @@
 #filter {
-    background-color: #191919;
+    background-color: #1f253d;
     color: white;
+    border-right: solid 1px;
+    border-color: lightgrey;
 }
 
 #custom-handle {
@@ -32,7 +34,12 @@
 .product-detail {
     border-right: solid 1px;
     border-bottom: solid 1px;
+<<<<<<< HEAD
+    border-color: lightgray;
+    height: 285px;
+=======
     height: 310px;
+>>>>>>> master
 }
 
 #block-image {
@@ -45,14 +52,19 @@
 
 
 #detail-image {
-    background-color: #d9534f;
+    background-color: #1f253d;
 }
 
 .product-detail:hover {
     box-shadow: 0 0 15px #191919;
     opacity: 0.7;
+<<<<<<< HEAD
+    background-color: orange;
+=======
 
+>>>>>>> master
 }
+
 
 #brand {
     color: white;
@@ -64,7 +76,7 @@
 }
 
 #price {
-    color:yellow;
+    color: yellow;
 }
 
 #product-content {
