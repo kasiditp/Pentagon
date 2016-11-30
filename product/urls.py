@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^filtered/$', filtered, name="filtered"),
     url(r'^get_brand/$', get_brand, name="get_brand"),
     url(r'^put_in_cart/$', put_in_cart, name="put_in_cart"),
+    url(r'^paypal_checkout/$', paypal_ordered, name="paypal_checkout"),
     url(r'^(?P<product_type>[\w]+)/$', product_type_view, name="product_type")
+
 
 ]

@@ -1,3 +1,5 @@
+import random
+import string
 from sets import Set
 
 from django.db.models import Max,Min
@@ -24,6 +26,12 @@ PRODUCT_TYPES = {
     "footwear": 4,
     "accessory": 5
 }
+ORDERSTATUS = [
+    (1, "Ordered"),
+    (2, "Payment accepted"),
+    (3, "Delivery")
+]
+
 num = 0
 
 
@@ -157,7 +165,7 @@ def put_in_cart(request):
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        new_cart_item = Cart(user=user, stock=stock, amount=1)
+        new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
         new_cart_item.save()
         stock.amount -= 1
         stock.save()
@@ -205,6 +213,7 @@ def order_checkout(request):
     user_id = request.session['user_unique_id']
     user = get_object_or_404(User, unique_id=user_id)
     carts = Cart.objects.filter(user=user)
+    trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     context = {
         'user': user,
         'carts': carts,
@@ -257,6 +266,27 @@ def clear_cart(request):
     request.session['success_message'] = "Successfully updated your cart."
     return HttpResponseRedirect(reverse('manage_cart'))
 
+
+@ajax
+@csrf_exempt
+def paypal_ordered(request):
+    if request.POST:
+        print("POST1")
+        user_id = request.POST.get('user')
+        print(user_id)
+        user = get_object_or_404(User, unique_id=user_id)
+        print(user.first_name)
+        carts = Cart.objects.filter(user=user)
+        print("POST2")
+        for cart in carts:
+            print(cart.stock.product.name)
+            cart.status = 3
+            cart.save()
+            print(cart.updated)
+
+    request.session['success'] = True
+    request.session['success_message'] = "Thank you for shopping with us!"
+    return HttpResponseRedirect(reverse('product:product_view'))
 
 
 @ajax
@@ -378,6 +408,7 @@ def filtered(request):
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
+
 
 def is_number(s):
     try:
