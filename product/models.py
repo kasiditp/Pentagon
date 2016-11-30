@@ -25,6 +25,12 @@ ORDERSTATUS = [
     (3, "Payment accepted"),
 ]
 
+SHIPMENT = [
+    (0, "THAILAND POST"),
+    (1, "DHL"),
+    (2, "FEDEX"),
+]
+
 
 def product_image_path_name(self, filename):
     return '/'.join(['product/images', filename])
@@ -96,6 +102,7 @@ class Cart(models.Model):
     amount = models.IntegerField(verbose_name="Amount", default=0)
     invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, max_length=10, null=True)
     status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
+    shipment = models.IntegerField(verbose_name="shipment", choices=SHIPMENT, blank=False, null=True, default=None)
     updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 
     @staticmethod
