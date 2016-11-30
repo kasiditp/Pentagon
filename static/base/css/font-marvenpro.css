@@ -1,0 +1,13 @@
+@font-face {
+    font-family: Marvenpro;
+    src: url("../fonts/OpenSans-Regular.ttf");
+}
+
+@font-face {
+    font-family: UPCdl;
+    src: url("../fonts/upcdl.ttf");
+}
+
+.navbar .nav > li > a, .navbar-header > a{
+    font-family: Marvenpro;
+}

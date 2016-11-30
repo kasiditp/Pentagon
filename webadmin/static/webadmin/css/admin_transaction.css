@@ -1,3 +1,4 @@
+
 #myImg {
     border-radius: 5px;
     cursor: pointer;
@@ -26,7 +27,7 @@
     margin: auto;
     display: block;
     width: 80%;
-    max-width: 700px;
+    max-width: 600px;
 }
 
 /* Caption of Modal Image */
@@ -64,8 +65,8 @@
     position: absolute;
     top: 50px;
     right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
+    color: red;
+    font-size: 100px;
     font-weight: bold;
     transition: 0.3s;
 }

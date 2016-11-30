@@ -173,6 +173,7 @@ def change_profile_image(request):
     unique_id = request.session['user_unique_id']
     user = User.objects.get(unique_id=unique_id)
     if request.method == 'POST':
+        print request.FILES
         image = request.FILES.get('img-file')
         user.image = image
         user.save()

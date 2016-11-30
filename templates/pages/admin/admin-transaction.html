@@ -18,35 +18,73 @@
                   <th>Date Requested</th>
                   <th>Status</th>
                   <th>Payment Reference</th>
-                  <th>Payment Acceptation</th>
+                  <th>Accept Payment</th>
+                  <th>Delivery code</th>
+                  <th>Reject this order</th>
               </tr>
             </thead>
             <tbody>
 
                 {% for transaction in transaction_list %}
                     <div>
-                        <tr>
-                    <td>{{ transaction.order_id }}</td>
-                    <td>{{ transaction.order.cart.user_id }}</td>
-                    <td>300</td>
-                  <td>{{ transaction.order.updated }}</td>
-                  <td>{{ transaction.order.status }}</td>
-                  <td>
-                        <img id="myImg" src={{ transaction.payment_image.url }} alt="" width="30" height="30">
-                                <div id="myModal" class="modal">
-                                  <span class="close">×</span>
-                                  <img class="modal-content" id="img01">
-                                  <div id="caption"></div>
-                                </div>﻿
+                    <tr>
+                      <td>{{ transaction.order_id }}</td>
 
-                  </td>
+                      <td>
+                          <a id="user_info" href="#" data-toggle="tooltip" data-placement="top" data-html="true"
+                             title="First Name : {{ transaction.order.cart.user.first_name }}  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                             Last Name : {{ transaction.order.cart.user.last_name }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                             Address : {{ transaction.order.cart.user.address }}">
+                              {{ transaction.order.cart.user_id }}</a>
+
+
+                      </td>
+
+                      <td>300</td>
+                      <td>{{ transaction.order.updated }}</td>
+                      <td>{{ transaction.order.status }}</td>
+                      <td>
+                            <img id="myImg" src={{ transaction.payment_image.url }} alt="Order ID : {{ transaction.order_id }}" width="30" height="30">
+                                     <div id="myModal" class="modal">
+                                      <span class="close">×</span>
+                                      <img class="modal-content" id="img01">
+                                      <div id="caption"></div>
+                                    </div>﻿
+
+                      </td>
                         <td>
-                            {% if transaction.order.status == 1 %}
-                                <button class="btn btn-success" name = "accept_button">Accept Transaction</button>
-                            {% endif %}
+                                <form action="{% url 'webadmin:accept_transaction' %}" id="change_password_form" method="POST">
+                                {% csrf_token %}
+                                {% if transaction.order.status == 1 %}
+                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-success" >Accept</button>
+                                {% else %}
+                                    <h6>Already accepted</h6>
+                                {% endif %}
+                                </form>
+
                         </td>
 
-                  </tr>
+                        <td>
+
+                                {% if transaction.order.status == 2 %}
+                                    <input type = "text" name = "order_id">
+                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-success" >Enter</button>
+                                {% else %}
+                                    <h6>Wait for order acceptation</h6>
+                                {% endif %}
+
+                        </td>
+
+                        <td>
+                                <form action="{% url 'webadmin:reject_transaction' %}" id="change_password_form" method="POST">
+                                {% if transaction.order.status == 1 %}
+                                    <button type = "submit" value = {{ transaction.order_id }} name = "order_id" class="btn btn-danger" >Reject</button>
+
+                                {% endif %}
+                                </form>
+                        </td>
+
+                    </tr>
                     </div>
 
                 {% endfor %}
@@ -77,6 +115,8 @@
         span.onclick = function() {
             modal.style.display = "none";
         }
+        $("[data-toggle=tooltip]").tooltip();
+
     </script>
 
 

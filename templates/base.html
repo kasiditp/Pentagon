@@ -17,9 +17,13 @@
     <link href="{% static 'base/css/font-awesome.min.css' %}" rel="stylesheet">
     <!-- Typeahead CSS -->
     <link href="{% static 'base/css/jquery.typeahead.css' %}" rel="stylesheet">
-
     <!-- Marven Pro -->
     <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
+    <!-- Token CSS -->
+    <link href="{% static 'webadmin/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
+    <link href="{% static 'webadmin/css/tokenfield-typeahead.min.css' %}" rel="stylesheet">
+    <!-- Jquery UI CSS -->
+    <link href="{% static 'base/css/jquery-ui.min.css' %}" rel="stylesheet">
     <!-- Jquery Core -->
     <script src="{% static 'base/js/jquery-3.1.0.min.js' %}"></script>
     <!-- Tether -->
@@ -28,6 +32,12 @@
     <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
     <!-- Typeahead JS -->
     <script src="{% static 'base/js/jquery.typeahead.js' %}"></script>
+    <!-- Drag Drop JS -->
+    <script src="{% static 'base/js/dropzone.js' %}"></script>
+    <!-- Token multi input -->
+    <script src="{% static 'webadmin/js/bootstrap-tokenfield.js' %}"></script>
+    <!-- Jquery UI -->
+    <script src="{% static 'base/js/jquery-ui.min.js' %}"></script>
 
 </head>
 <body>
@@ -36,6 +46,7 @@
     {% block content %}{% endblock %}
 
 {#    {% include 'footer.html' %}#}
+    {% include 'loading.html' %}
 
 </body>
 </html>

@@ -61,6 +61,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     # Thidparty app
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    # Auto Logout
+    'pentagon.middleware.AutoLogout',
 )
 
 ROOT_URLCONF = 'pentagon.urls'
@@ -83,6 +85,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pentagon.wsgi.application'
 
+# Auto logout delay in minutes
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+AUTO_LOGOUT_DELAY = 5
+
+
 # Database
 
 urlparse.uses_netloc.append('mysql')
@@ -93,7 +100,7 @@ try:
     # If not default to {}
 
     if 'DATABASES' not in locals():
-        print 'hello db'
+        print 'Local db'
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.mysql',
@@ -106,7 +113,7 @@ try:
         }
 
     if 'DATABASE_URL' in os.environ:
-        print 'using online db'
+        print 'Online db'
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
         # Ensure default database exists.
