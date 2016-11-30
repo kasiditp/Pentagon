@@ -70,6 +70,7 @@ class Product(models.Model):
         return suggest
 
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
     image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True, null=True)
@@ -88,12 +89,11 @@ class Stock(models.Model):
     def __str__(self):
         return "%s %s" % (self.product, self.size)
 
-
 class Cart(models.Model):
     stock = models.ForeignKey('Stock', null=False, blank=False)
     user = models.ForeignKey('member.User', null=False, blank=False)
     amount = models.IntegerField(verbose_name="Amount", default=0)
-    invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, null=True,max_length=10)
+    invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, max_length=10, null=True)
     status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
     updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 

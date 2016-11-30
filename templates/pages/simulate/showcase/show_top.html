@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="row">
+    <div class="col-md-10">
+        <img class= "img-responsive center-block simulate_image" id="simulate_image_top" src="{{ top_image.get_image.image.url }}">
+    </div>
+    <div class="col-md-2">
+        <div class="dropdown invisible" id = "top_dropdown_div">
+              <button id="top_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+              <span class="caret"></span></button>
+              <ul id="top_size_dropdown_menu" class="dropdown-menu">
+
+              </ul>
+        </div>
+    </div>
+
+</div>
