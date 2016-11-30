@@ -98,8 +98,8 @@ class Cart(models.Model):
     updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 
     @staticmethod
-    def get_total_price(user_id):
-        this_cart = Cart.objects.filter(user__unique_id=user_id)
+    def get_total_price_in_cart(user_id):
+        this_cart = Cart.objects.filter(user__unique_id=user_id, status=0)
         total_price = 0
         for item in this_cart:
             total_price += item.stock.product.price * item.amount

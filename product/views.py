@@ -181,7 +181,7 @@ def manage_cart(request):
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock)
     #     cart_items.append(stock)
-    total_price = Cart.get_total_price(user_id)
+    total_price = Cart.get_total_price_in_cart(user_id)
     error = False
     error_message = ""
     success = False
@@ -213,9 +213,11 @@ def order_checkout(request):
     user_id = request.session['user_unique_id']
     user = get_object_or_404(User, unique_id=user_id)
     carts = Cart.objects.filter(user=user)
+    total_price = Cart.get_total_price_in_cart(user_id)
     context = {
         'user': user,
         'carts': carts,
+        'total_price': total_price,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/cart/order.html', context)
@@ -256,7 +258,7 @@ def remove_from_cart(request):
 
 def clear_cart(request):
     user_id = request.session['user_unique_id']
-    all_cart = Cart.objects.filter(user__unique_id=user_id)
+    all_cart = Cart.objects.filter(user__unique_id=user_id, status=0)
     for item in all_cart:
         item.stock.amount += item.amount
         item.stock.save()
