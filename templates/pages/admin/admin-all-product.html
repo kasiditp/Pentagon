@@ -22,30 +22,31 @@
             <div class="row all_item">
                 {% for product in product_list %}
                     <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4>{{ product.brand }}</h4>
+                        <div class="panel-heading">
+                            <h4>{{ product.brand }}</h4>
 
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <img src="{{ product.get_image.image.url }}"
-                                     class="img-thumbnail img-responsive gallery-items"
-                                     height="200"
-                                     width="200"
-                                     id="product-image">
-                            </div>
-                            <div class="col-md-7">
-                                <h4>
-                                    {{ product.name }}
-                                </h4>
-                                <p>{{ product.get_type_name }}  {{ product.get_sex_name }}</p>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{{ product.get_image.image.url }}"
+                                         class="img-thumbnail img-responsive gallery-items"
+                                         height="200"
+                                         width="200"
+                                         id="product-image">
+                                </div>
+                                <div class="col-md-7">
+                                    <h4>
+                                        {{ product.name }}
+                                    </h4>
+                                    <p>{{ product.get_type_name }} {{ product.get_sex_name }}</p>
 
-                                {{ product.price }} THB
+                                    {{ product.price }} THB
 
-                            </div>
-                            <div class="col-md-2"><br><br><br><br><br><br><br><br>
-                                <input type="submit" class="btn btn-danger" value="Delete">
+                                </div>
+                                <div class="col-md-2"><br><br><br><br><br><br><br><br>
+                                    <input type="submit" class="btn btn-danger" value="Delete">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -73,7 +74,7 @@
                         {% endif %}
                     </ul>
                 {% endif %}
-                </div>
+
 
                 {% block script %}
                     <script>
