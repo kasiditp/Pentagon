@@ -165,13 +165,11 @@ def create_transaction():
             Transaction.objects.create(invoice_number = cart_invoice_number , status  = cart.status, updated = cart.updated , total_amount = total_amount)
 
 
-
 def find_total_amount(invoice_number):
     sum = 0
     for cart in Cart.objects.filter(invoice_number=invoice_number):
         sum  = sum + (cart.amount * cart.stock.product.price)
     return  sum
-
 
 
 def accept_transaction(request):
@@ -183,6 +181,7 @@ def accept_transaction(request):
 
         return HttpResponseRedirect(reverse('webadmin:admin_transaction'))
 
+
 def reject_transaction(request):
     if request.method == 'POST':
         invoice_number = request.POST['invoice_number']
@@ -191,4 +190,10 @@ def reject_transaction(request):
 
         return HttpResponseRedirect(reverse('webadmin:admin_transaction'))
 
->>>>>>> master
+
+def delete_product(request, product_id):
+    product = Product.objects.filter(pk=product_id)
+    ProductImage.objects.filter(product=product).delete()
+    Stock.objects.filter(product=product).delete()
+    product.delete()
+    return HttpResponseRedirect(reverse('webadmin:admin_all_product'))

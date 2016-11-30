@@ -87,12 +87,7 @@ WSGI_APPLICATION = 'pentagon.wsgi.application'
 
 # Auto logout delay in minutes
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-<<<<<<< HEAD
 AUTO_LOGOUT_DELAY = 60
-=======
-AUTO_LOGOUT_DELAY = 50
->>>>>>> master
-
 
 # Database
 
