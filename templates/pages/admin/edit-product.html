@@ -20,14 +20,20 @@
         <center><strong id="message-text">{{ message }}</strong></center>
     </div>
     {% if user.type == 2 %}
-    <section>
-        <div class="container" style="text-align:center;"><h1>Add new product</h1></div>
+        <section>
+        <div class="container" style="text-align:center;"><h1>Edit product</h1></div>
         <div class="col-md-4">
             <div class="add-img" style="padding: 20px;">
                 <form id="form-product-image-upload" action="{% url 'webadmin:add_product_images' %}" method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
-                    <img src="{% static 'webadmin/images/boxadd.png' %}" id="product-image-1"><br/>
+                    {% if result_product.get_image %}
+                        <img src="{{ result_product.get_image.image.url }}" id="product-image-1" style="width: 250px">
+                        <br/>
+                    {% else %}
+                        <img src="{% static 'webadmin/images/boxadd.png' %}" id="product-image-1"><br/>
+                    {% endif %}
+
                     <img id="product-image-2" src="#" alt="your image" style="display: none"/>
                     <img id="product-image-3" src="#" alt="your image" style="display: none"/>
                     <img id="product-image-4" src="#" alt="your image" style="display: none"/>
@@ -57,7 +63,8 @@
                             <div class="col-md-12">
                                 <div><label for="inputName">Name</label></div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" id="product-name">
+                                    <input type="text" class="form-control" name="name" id="product-name"
+                                           value="{{ result_product.name }}">
                                 </div>
                             </div>
                         </div>
@@ -89,7 +96,8 @@
                             <div class="col-md-6">
                                 <div><label for="product-brand">Brand</label></div>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" name="brand" id="product-brand">
+                                    <input type="text" class="form-control" name="brand" id="product-brand"
+                                           value="{{ result_product.brand }}">
                                 </div>
                             </div>
                         </div>
@@ -97,7 +105,8 @@
                             <div class="col-md-6">
                                 <div><label>Description</label></div>
                                 <div class="col-md-12">
-                                    <textarea id="product-description" rows="3" cols="50" name="description"></textarea>
+                                    <textarea id="product-description" rows="3" cols="50"
+                                              name="description">{{ result_product.description }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +114,8 @@
                             <div class="col-md-6">
                                 <div><label>Price</label></div>
                                 <div class="col-md-6"><input type="number" class="form-control" name="price"
-                                                             id="product-price"></div>
+                                                             id="product-price" value="{{ result_product.price }}">
+                                </div>
                             </div>
                         </div>
                         <ul class="pager" style="text-align: left">
@@ -117,21 +127,24 @@
                 </div>
                 <div class="tab-pane" id="2a" style="background: #F5F5F5;padding: 20px;width:60%">
                     <div id="tab2-content">
-                        <div class="row" id="stock-row">
-                            <div class="col-md-4">
-                                <div><label>Size</label></div>
-                                <div class="col-md-6"><input type="text" id="product-size-1" value=""/></div>
+                        {% for size in result_product.get_stocks %}
+                            {% cycle '1' '2' '3' '4' '5' as rownumber silent %}
+                            <div class="row" id="stock-row">
+                                <div class="col-md-4">
+                                    <div><label>Size</label></div>
+                                    <div class="col-md-6"><input type="text" id="product-size-{{ rownumber }}" value="{{ size.size }}"/></div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div><label>Amount</label></div>
+                                    <div class="col-md-6"><input type="text" id="product-amount-{{ rownumber }}" value="{{ size.amount }}"/></div>
+                                </div>
+                                <button type="button" class="btn btn-default" aria-label="Left Align"
+                                        style="margin-top: 10px"
+                                        id="add-stock-row-0">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
                             </div>
-                            <div class="col-md-5">
-                                <div><label>Amount</label></div>
-                                <div class="col-md-6"><input type="text" id="product-amount-1" value=""/></div>
-                            </div>
-                            <button type="button" class="btn btn-default" aria-label="Left Align"
-                                    style="margin-top: 10px"
-                                    id="add-stock-row-0">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                        {% endfor %}
                     </div>
 
                     <ul class="pager" style="text-align: left">
@@ -144,11 +157,16 @@
         </div>
     {% else %}
         <script>
-            document.location.href="/";
+            document.location.href = "/";
         </script>
     {% endif %}
-    </section>
+</section>
     <script>
+        $(document).ready(function () {
+            $('#product-type').val({{ result_product.type }});
+            $("#product-sex").val({{ result_product.sex }});
+
+        });
         var product_name = "";
         var product_type = "";
         var product_sex = "";

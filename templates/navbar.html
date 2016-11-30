@@ -3,6 +3,21 @@
 <link href="{% static 'base/css/polygon-navbar.css' %}" rel="stylesheet">
 <link href="{% static 'base/css/navbar-search.css' %}" rel="stylesheet">
 <link href="{% static 'base/css/login-modal.css' %}" rel="stylesheet">
+<!-- Typeahead CSS -->
+<link href="{% static 'base/css/jquery.typeahead.css' %}" rel="stylesheet">
+<!-- Typeahead JS -->
+<script src="{% static 'base/js/jquery.typeahead.js' %}"></script>
+<!-- Type ahead bootstrap3 -->
+<script src="{% static 'base/js/bootstrap3-typeahead.min.js' %}"></script>
+
+<style>
+    .dropdown-menu {
+        z-index: 99999;
+        position: fixed;
+        margin-left: 27%;
+        margin-top: 25px;
+    }
+</style>
 
 <nav class="navbar navbar-default navbar-polygon" style="margin-bottom: 0px">
     <div class="container-fluid">
@@ -12,7 +27,10 @@
                 <img src="{% static 'icons/drop_down.png' %}" style="margin-top: 20px; width:25px">
             </div>
             <ul class="nav navbar-nav topnav" id="myTopnav">
-                <li><a href="{% url 'webadmin:admin_product' %}">Manage Product</a></li>
+                <li><a href="{% url 'webadmin:admin_all_product' %}">Manage Product</a></li>
+            </ul>
+            <ul class="nav navbar-nav topnav" id="myTopnav">
+                <li><a href="{% url 'webadmin:admin_product' %}">Add Product</a></li>
             </ul>
         {% else %}
             <div class="navbar-header">
@@ -21,11 +39,12 @@
             </div>
             <ul class="nav navbar-nav topnav" id="myTopnav">
                 <li><a href="{% url 'product:product_view' %}" id="navMen">Product</a></li>
-{#                <li><a href="{% url 'product:product_view' %}" id="navWomen">Women</a></li>#}
+                {#                <li><a href="{% url 'product:product_view' %}" id="navWomen">Women</a></li>#}
                 <li>
                     <div id="custom-search-input">
                         <div class="input-group col-md-12">
-                            <input type="text" class="form-control input-lg" placeholder="Need to be fix"/>
+                            <input type="text" class="form-control input-lg" data-provide="typeahead" placeholder="Need to be fix"
+                                   id="search-product"/>
                     <span class="input-group-btn">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -87,9 +106,9 @@
             x.className = "topnav";
         }
     }
-{#    {% if product_list %}#}
-{#        $("#navCategory").show();#}
-{#    {% endif %}#}
+    {#    {% if product_list %}#}
+    {#        $("#navCategory").show();#}
+    {#    {% endif %}#}
 
     $(document).ready(function () {
         if (window.location.href.indexOf("top") > -1 || window.location.href.indexOf("bottom") > -1
@@ -106,6 +125,31 @@
             $("#link3").prop("href", "overall");
             $("#link4").prop("href", "footwear");
             $("#link5").prop("href", "accessory");
+        }
+    });
+    var productList = [];
+
+    {% for p in product %}
+        productList.push("{{ p }}");
+    {% endfor %}
+
+    console.log(productList);
+
+    $('#search-product').typeahead({
+        source: productList,
+        afterSelect: function (data) {
+             $.ajax({
+                url: "{% url 'search_redirect' %}", // the endpoint
+                type: "POST",
+                data: { 'product_name' : data},
+                // handle a successful response
+                success: function (json) {
+                    window.location.replace(json.content);
+                },
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                }
+            });
         }
     });
 </script>

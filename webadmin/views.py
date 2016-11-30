@@ -13,32 +13,28 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def admin_product(request):
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
-    # return render(request, 'pages/base/home.html', get_nav_context(request))
-    # return None
 
 @ajax
 @csrf_exempt
 def add_new_product(request):
-    print request
+    # print request
     product = request.POST
-    print product
-    # print product['product_name']
+    # print product
     name = product['product_name']
-    print name
-    # image = request.FILES.get('image')
+    # print name
     price = product['product_price']
-    print price
+    # print price
     product_type = product['product_type']
-    print product_type
+    # print product_type
     brand = product['product_brand']
-    print brand
+    # print brand
     description = product['product_description']
-    print description
+    # print description
     sex = product['product_sex']
-    print sex
+    # print sex
     new_product = Product.objects.create(name=name, type=product_type, sex=sex, brand=brand, price=price, description=description)
 
-    print json.loads(product['product_size'])
+    # print json.loads(product['product_size'])
     for size_list in json.loads(product['product_size']):
         size = size_list['size']
         amount = size_list['amount']
@@ -48,14 +44,14 @@ def add_new_product(request):
         "result": True,
         "message": "Success add new product"
     }
-    # context.update(get_nav_context(request))
+    context.update(get_nav_context(request))
     return context
 
 
 def add_product_images(request):
-    print 'add image function \n'
-    print request.FILES
-    print request.FILES.get('product-img')
+    # print request.FILES.get('product-img')
+    product = Product.objects.filter(id=request.session['temp-product'])
+    ProductImage.objects.create(product=product,image=request.FILES.get('product-img'))
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
 
 
@@ -73,4 +69,14 @@ def admin_all_product(request):
     context = {
         'product_list': product_list
     }
+    context.update(get_nav_context(request))
     return render(request, 'pages/admin/admin-all-product.html', context)
+
+
+def edit_product(request, product_id):
+    product = Product.objects.filter(id=product_id)[0]
+    context = {
+        'result_product': product,
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/admin/edit-product.html', context)

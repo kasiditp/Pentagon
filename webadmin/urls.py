@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^add_new_product/$', add_new_product, name="add_new_product"),
     url(r'^admin_all_product/$', admin_all_product, name="admin_all_product"),
     url(r'^add_product_images/$', add_product_images, name='add_product_images'),
+    url(r'^edit_product/(?P<product_id>[0-9]+)/$', edit_product, name="edit_product"),
 ]
