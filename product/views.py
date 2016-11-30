@@ -193,6 +193,36 @@ def put_in_cart(request):
         request.session['success_message'] = "Done! Successfully added this item into your cart."
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
 
+@ajax
+@csrf_exempt
+def put_in_cart_by_simulate(request):
+    if request.POST:
+        user_unique_id = request.session['user_unique_id']
+        user = get_object_or_404(User,unique_id=user_unique_id)
+        if request.POST.get('top_stock_id') != 'null':
+            top_stock_id = request.POST.get('top_stock_id')
+            top_stock = get_object_or_404(Stock, pk=top_stock_id)
+            if top_stock.amount <= 0:
+                print "Do nothing"
+            else:
+                new_cart_item = Cart(user=user, stock=top_stock, amount=1)
+                new_cart_item.save()
+                top_stock.amount -=1
+                top_stock.save()
+
+        if request.POST.get('bottom_stock_id') != 'null':
+            bottom_stock_id = request.POST.get('bottom_stock_id')
+            bottom_stock = get_object_or_404(Stock, pk=bottom_stock_id)
+            if bottom_stock.amount <= 0:
+                print "Do nothing"
+            else:
+                new_cart_item = Cart(user=user, stock=bottom_stock, amount=1)
+                new_cart_item.save()
+                bottom_stock.amount -=1
+                bottom_stock.save()
+        if request.POST.get('top_stock_id') == 'null' and request.POST.get('bottom_stock_id') == 'null':
+            return {'Fail': True }
+        return HttpResponseRedirect(reverse('manage_cart'))
 
 def manage_cart(request):
     user_id = request.session['user_unique_id']
@@ -314,15 +344,18 @@ def change_page(request):
 def get_product_stock(request):
     if request.POST:
         return_list = []
+        stock_id_list = []
         product_name = request.POST.get('name')
         product = Product.objects.filter(name=product_name)
         if product is None:
             return {'result': False}
         stock_list = Stock.objects.filter(product=product).order_by('-size')
+
         for stock in stock_list:
             return_list.append(stock.size)
-        print return_list
-        return {'result': True, 'content' : return_list }
+            stock_id_list.append(stock.id)
+
+        return {'result': True, 'content' : return_list, 'stock_id': stock_id_list }
 
 @ajax
 @csrf_exempt

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^filtered/$', filtered, name="filtered"),
     url(r'^change_page/$', change_page, name="change_page"),
     url(r'^get_product_stock', get_product_stock, name="get_product_stock"),
+    url(r'^put_in_cart_by_simulate', put_in_cart_by_simulate, name="put_in_cart_by_simulate"),
     url(r'^get_brand/$', get_brand, name="get_brand"),
     url(r'^put_in_cart/$', put_in_cart, name="put_in_cart"),
     url(r'^admin_product_view/$', admin_product_view, name="admin_product_view"),
