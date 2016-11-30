@@ -152,6 +152,9 @@ def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     images = product.get_all_image()
     stocks = product.get_stocks()
+    no_stock = False
+    if stocks.__len__() == 0:
+        no_stock = True
     error = False
     error_message = ""
     success = False
@@ -180,6 +183,7 @@ def product_details(request, product_id):
         'success': success,
         'success_message': success_message,
         'suggest': suggest,
+        'no_stock': no_stock,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
@@ -197,10 +201,18 @@ def put_in_cart(request):
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
-        new_cart_item.save()
+        cart_check = Cart.objects.filter(stock=stock, user=user, status=0)
+        if cart_check.__len__() < 1:
+            new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
+            new_cart_item.save()
+        else:
+            for cart in cart_check:
+                cart.amount += 1
+                cart.save()
+
         stock.amount -= 1
         stock.save()
+
         request.session['success'] = True
         request.session['success_message'] = "Done! Successfully added this item into your cart."
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
