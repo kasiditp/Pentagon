@@ -1,0 +1,8 @@
+.img-add {
+    text-align: center;
+}
+.img-add button {
+    border: 2px dashed #ACACAC;
+    background: #EAEAEA;
+    width: 70%;
+}
