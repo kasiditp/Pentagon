@@ -1,16 +1,23 @@
 <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
      style="display: none;">
     <div class="modal-dialog">
-        <div class="loginmodal-container">
+        <div class="loginmodal-container" style="text-align: center">
             <h1>Welcome, {{ user.username }}</h1><br>
+            <div class="row">
+                <img src="{{ user.image.url }}" class="img-circle" alt="Cinque Terre" style="width: 100px">
+            </div><br>
             <div style="text-align: center">
-                <button type="button" name="profile" class="btn btn-default"><a href="{% url 'member:profile_view' %}">Profile</a>
-                </button>
+                <a href="{% url 'member:profile_view' %}"><button type="button" name="profile" class="btn btn-default" style="width: 200px">Profile
+                </button></a>
+            </div>
+            <div style="text-align: center">
+                <a href="{% url 'member:trace' %}"><button type="button" name="profile" class="btn btn-default" style="width: 200px">Trace
+                </button></a>
             </div>
             <br>
             <form action="{% url 'member:logout' %}" method="post" style="text-align: center">
                 {% csrf_token %}
-                <button type="submit" name="login" class="btn btn-danger">Logout</button>
+                <button type="submit" name="login" class="btn btn-danger"  style="width: 200px">Logout</button>
             </form>
 
             <div class="login-help">

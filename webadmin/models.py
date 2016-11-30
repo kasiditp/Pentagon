@@ -22,4 +22,5 @@ class Transaction(models.Model):
     status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
     updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
     payment_image = models.ImageField(verbose_name='Payment Image' , upload_to=payment_image_path_name , blank = True , null = True)
+    delivery_code = models.CharField(verbose_name="Delivery Code" , blank=True , null=True, max_length= 20)
 

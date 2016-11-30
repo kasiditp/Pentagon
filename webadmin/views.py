@@ -1,4 +1,5 @@
 import json
+
 from django.core.urlresolvers import reverse
 
 from django.http import HttpResponseRedirect
@@ -12,12 +13,47 @@ from product.models import Product, Stock, ProductImage
 from models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+
 def admin_home(request):
-    return render(request, 'pages/admin/admin-home.html',get_nav_context(request))
+    transaction_list = Transaction.objects.filter(status__gte=3)
+    ctemp = []
+    for tl in transaction_list:
+        ctemp.append(tl.invoice_number)
+    cart_list = Cart.objects.filter(invoice_number__in=ctemp)
+    dtemp = []
+    for cl in cart_list:
+        dtemp.append(cl.stock_id)
+    stock = Stock.objects.filter(pk__in=dtemp)
+    sell_out = {}
+    for s in stock:
+        if s.product.brand in sell_out:
+            sell_out[s.product.brand] += 1
+        else:
+            sell_out[s.product.brand] = 1
+        print s.product.brand
+
+    sell_out_price = {}
+    for s in stock:
+        if s.product.brand in sell_out_price:
+            sell_out_price[s.product.brand] += s.product.price
+        else:
+            sell_out_price[s.product.brand] = s.product.price
+
+    total_price = 0
+    for tl in transaction_list:
+        total_price += tl.total_amount
+
+    context = {
+        'sell_out': json.dumps(sell_out),
+        'sell_out_price': json.dumps(sell_out_price),
+        'total_price': total_price
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/admin/admin-home.html', context)
+
 
 def admin_product(request):
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
-
 
 @ajax
 @csrf_exempt
@@ -147,11 +183,15 @@ def admin_transaction(request):
     create_transaction()
     transaction_list = Transaction.objects.all()
     num_transaction = Transaction.objects.filter().count()
+    cart_list = Cart.objects.all()
 
     context = {
         'transaction_list' : transaction_list,
-        'num_transaction' : num_transaction
+        'num_transaction' : num_transaction,
+        'cart_list' : cart_list,
     }
+
+    context.update(get_nav_context(request))
 
     return render(request,'pages/admin/admin-transaction.html' , context)
 
@@ -176,6 +216,9 @@ def accept_transaction(request):
     if request.method == 'POST':
         invoice_number = request.POST['invoice_number']
         focusing_transaction = Transaction.objects.get(invoice_number = invoice_number)
+        for cart in Cart.objects.filter(invoice_number = invoice_number):
+            cart.status = 3
+            cart.save()
         focusing_transaction.status = 3
         focusing_transaction.save()
 
@@ -197,3 +240,15 @@ def delete_product(request, product_id):
     Stock.objects.filter(product=product).delete()
     product.delete()
     return HttpResponseRedirect(reverse('webadmin:admin_all_product'))
+
+
+def enter_delivery_code(request):
+    if request.method == 'POST':
+        invoice_number = request.POST['invoice_number']
+        delivery_code = request.POST['delivery_code']
+        focusing_transaction = Transaction.objects.get(invoice_number=invoice_number)
+        focusing_transaction.delivery_code = delivery_code
+        focusing_transaction.status = 4
+        focusing_transaction.save()
+
+        return HttpResponseRedirect(reverse('webadmin:admin_transaction'))

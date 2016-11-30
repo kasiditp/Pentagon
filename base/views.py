@@ -36,7 +36,7 @@ def get_nav_context(request):
             'user': member_user,
             'product_amount': Cart.objects.filter(user_id=member_user, status=0).count,
             'top': "top",
-            'product': product
+            'all_product': product
         }
         return context
     else:
@@ -45,7 +45,7 @@ def get_nav_context(request):
             'is_login': False,
             'user': 000000,
             'product_amount': None,
-            'product': product
+            'all_product': product
         }
         return context
 

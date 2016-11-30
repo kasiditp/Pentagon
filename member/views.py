@@ -6,7 +6,10 @@ import random
 from base.auth import Auth
 from base.views import get_nav_context
 from models import User
+from webadmin.models import Transaction
+from product.models import *
 import hashlib
+
 
 
 # Create your views here.
@@ -187,3 +190,34 @@ def change_profile_image(request):
 
 def success(request):
     return render(request, 'pages/member/success.html')
+
+def trace(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+    cart_list = Cart.objects.filter(user = user)
+    user_invoice_number = []
+    for cart in cart_list:
+        user_invoice_number.append(cart.invoice_number)
+    user_transaction = Transaction.objects.filter(invoice_number__in=user_invoice_number)
+
+    context = {
+        'user_transaction' : user_transaction
+    }
+    context.update(get_nav_context(request))
+
+    return render(request, 'pages/member/trace.html', context)
+
+def payment_upload(request):
+    unique_id = request.session['user_unique_id']
+    user = User.objects.get(unique_id=unique_id)
+
+    if request.method == 'POST':
+        image = request.FILES.get('img-file')
+        invoice_number = request.POST['invoice_number']
+        user_transaction = Transaction.objects.get(invoice_number=invoice_number)
+        user_transaction.payment_image = image
+        user_transaction.status = 2
+        user_transaction.save()
+
+    return HttpResponseRedirect(reverse('member:trace'))
+

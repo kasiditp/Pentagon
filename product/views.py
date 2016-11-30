@@ -197,7 +197,8 @@ def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
     user_unique_id = request.session['user_unique_id']
-    product = get_object_or_404(Product, pk=product_id)
+    print product_id
+    # product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
     user = get_object_or_404(User, unique_id=user_unique_id)
     if stock.amount <= 0:

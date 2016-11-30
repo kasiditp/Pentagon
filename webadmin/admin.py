@@ -3,6 +3,6 @@ from webadmin.models import *
 # Register your models here.
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display =  ('invoice_number','total_amount','status','updated','payment_image')
+    list_display =  ('invoice_number','total_amount','status','updated','payment_image','delivery_code')
 
 admin.site.register(Transaction,TransactionAdmin)
