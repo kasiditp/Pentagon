@@ -34,18 +34,26 @@ ORDERSTATUS = [
 
 num = 0
 
-
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
     min_price = Product.objects.all().aggregate(Min('price'))
     brands = get_all_brand('all')
+    if len(product_list) > 8:
+        num_page = (len(product_list)/8) + 1
+        product_list = product_list[0:8]
+    else:
+        num_page = 1
+
     context = {
         'product_list': product_list,
         'max_price': max_price,
         'min_price': min_price,
         'brands': brands,
-        'type': PRODUCT_TYPES['all']
+        'type': PRODUCT_TYPES['all'],
+        'num_page': range(num_page),
+        'all_page': num_page
+
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/product/product.html', context)
@@ -64,18 +72,36 @@ def product_type_view(request, product_type):
                 size_universe.add(item.size)
 
         SIZE_LIST.update(size_universe)
+        if len(product_list) > 8:
+            num_page = (len(product_list) / 8) + 1
+            product_list = product_list[0:8]
+        else:
+            num_page = 1
+
         context = {
             'product_list': product_list,
             'max_price': max_price,
             'min_price': min_price,
             'brands': brands,
             'type': PRODUCT_TYPES[product_type],
-            'size_universe': size_universe
+            'size_universe': size_universe,
+            'num_page': range(num_page),
+            'all_page': num_page
         }
         context.update(get_nav_context(request))
         return render(request, 'pages/product/product.html', context)
     else:
         return HttpResponse(reverse('product_view'))
+
+def simulate_view(request):
+    simulate_list_top = Product.objects.filter(type=PRODUCT_TYPES["top"])
+    simulate_list_bottom = Product.objects.filter(type=PRODUCT_TYPES["bottom"])
+    context = {
+        'simulate_list_top': simulate_list_top,
+        'simulate_list_bottom': simulate_list_bottom,
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/simulate/simulate.html',context)
 
 @ajax
 @csrf_exempt
@@ -93,6 +119,8 @@ def get_all_brand(type):
         brand_universe = Product.objects.all()
     elif type in PRODUCT_TYPES:
         brand_universe = Product.objects.filter(type=PRODUCT_TYPES[type])
+    else:
+        brand_universe = Product.objects.all()
 
     for product in brand_universe:
         brand.add(product.brand)
@@ -100,17 +128,17 @@ def get_all_brand(type):
     return brand
 
 def value_to_key(type):
-    if type == '0':
+    if type == '0' or type == 0:
         return 'all'
-    elif type == '1':
+    elif type == '1' or type == 1:
         return 'top'
-    elif type == '2':
+    elif type == '2' or type == 2:
         return 'bottom'
-    elif type == '3':
+    elif type == '3' or type == 3:
         return 'overall'
-    elif type == '4':
+    elif type == '4' or type == 4:
         return 'footwear'
-    elif type == '5':
+    elif type == '5' or type == 5:
         return 'accessory'
     else:
         return 'error'
@@ -173,6 +201,36 @@ def put_in_cart(request):
         request.session['success_message'] = "Done! Successfully added this item into your cart."
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
 
+@ajax
+@csrf_exempt
+def put_in_cart_by_simulate(request):
+    if request.POST:
+        user_unique_id = request.session['user_unique_id']
+        user = get_object_or_404(User,unique_id=user_unique_id)
+        if request.POST.get('top_stock_id') != 'null':
+            top_stock_id = request.POST.get('top_stock_id')
+            top_stock = get_object_or_404(Stock, pk=top_stock_id)
+            if top_stock.amount <= 0:
+                print "Do nothing"
+            else:
+                new_cart_item = Cart(user=user, stock=top_stock, amount=1, status=0, invoice_number=None)
+                new_cart_item.save()
+                top_stock.amount -=1
+                top_stock.save()
+
+        if request.POST.get('bottom_stock_id') != 'null':
+            bottom_stock_id = request.POST.get('bottom_stock_id')
+            bottom_stock = get_object_or_404(Stock, pk=bottom_stock_id)
+            if bottom_stock.amount <= 0:
+                print "Do nothing"
+            else:
+                new_cart_item = Cart(user=user, stock=bottom_stock, amount=1, status=0, invoice_number=None)
+                new_cart_item.save()
+                bottom_stock.amount -=1
+                bottom_stock.save()
+        if request.POST.get('top_stock_id') == 'null' and request.POST.get('bottom_stock_id') == 'null':
+            return {'Fail': True }
+        return HttpResponseRedirect(reverse('manage_cart'))
 
 def manage_cart(request):
     user_id = request.session['user_unique_id']
@@ -255,7 +313,6 @@ def remove_from_cart(request):
 
     return HttpResponseRedirect(reverse('manage_cart'))
 
-
 def clear_cart(request):
     user_id = request.session['user_unique_id']
     all_cart = Cart.objects.filter(user__unique_id=user_id, status=0)
@@ -266,7 +323,6 @@ def clear_cart(request):
     request.session['success'] = True
     request.session['success_message'] = "Successfully updated your cart."
     return HttpResponseRedirect(reverse('manage_cart'))
-
 
 @ajax
 @csrf_exempt
@@ -291,123 +347,65 @@ def paypal_ordered(request):
     request.session['success_message'] = "Thank you for shopping with us!"
     return HttpResponseRedirect(reverse('product:product_view'))
 
+@ajax
+@csrf_exempt
+def change_page(request):
+    if request.POST:
+        type = request.POST.get('type')
+        if int(type) == 0:
+            product_list = Product.objects.all()
+        else:
+            product_list = filter_by_value(request.POST.get('data_id'), int(type), request.POST.get('brand'))
+        num_page = request.POST.get('page')
+        all_page = request.POST.get('all_page')
+        if len(product_list) - int(num_page)*8 >= 0:
+            product_list = product_list[(int(num_page)-1)*8:(int(num_page)-1)*8+8]
+        else:
+            product_list = product_list[(int(num_page)-1)*8:]
+
+
+        template = loader.get_template('pages/product/item/product_item.html')
+        context = Context({
+            'product_list': product_list,
+            'num_page': range(int(all_page))
+        })
+        rendered = template.render(context)
+        return {'result': True, 'rendered': rendered}
+
+@ajax
+@csrf_exempt
+def get_product_stock(request):
+    if request.POST:
+        return_list = []
+        stock_id_list = []
+        product_name = request.POST.get('name')
+        product = Product.objects.filter(name=product_name)
+        if product is None:
+            return {'result': False}
+        stock_list = Stock.objects.filter(product=product).order_by('-size')
+
+        for stock in stock_list:
+            return_list.append(stock.size)
+            stock_id_list.append(stock.id)
+
+        return {'result': True, 'content' : return_list, 'stock_id': stock_id_list }
 
 @ajax
 @csrf_exempt
 def filtered(request):
     if request.POST:
-        # filter_product = None
-        filter_product_set = Set()
-        # filter_button = request.POST.get('button_id')
-        raw_filter_data = request.POST.get('data_id')
-        remove_quote_filter_data = raw_filter_data.replace("\"","")
-        remove_front_bracket_data = remove_quote_filter_data.replace("{","")
-        remove_back_bracket_data = remove_front_bracket_data.replace("}","")
-        remove_colon_bracket_data = remove_back_bracket_data.replace(":","")
-        remove_size_bracket_data = remove_colon_bracket_data.replace("size","")
-        remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice","")
-        remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear","")
-        remove_search_bracket_data = remove_clear_bracket_data.replace("search","")
-        remove_front = remove_search_bracket_data.replace("[",",")
-        remove_back = remove_front.replace("]",",end")
-
-        filter_data = remove_back.split(',')
-        type = request.POST.get('type')
-
-        if type == 0:
-            universe_set = Product.objects.all()
+        filter_product_set = filter_by_value(request.POST.get('data_id'),request.POST.get('type'),request.POST.get('brand'))
+        if len(filter_product_set) > 8:
+            num_page = (len(filter_product_set) / 8) + 1
+            filter_product_set = filter_product_set[0:8]
         else:
-            universe_set = Product.objects.filter(type=type)
-
-        print "Size universe is %s"%SIZE_LIST
-
-        print "filter data is %s"%filter_data
-
-        for data in filter_data:
-            # print data
-            if data == 'null':
-                continue
-
-            elif data in SIZE_LIST:
-                stock = Stock.objects.filter(size=data) # get array of filter
-                stock_set = Set()
-
-                for item in stock:
-                    if str(item.product.type) == str(type):
-                        stock_set.add(item.product)
-
-                if len(filter_product_set) == 0:
-                    filter_product_set.union_update(stock_set)
-                else:
-                    filter_product_set.intersection_update(stock_set)
-
-
-            # print filter_product_list
-            # print "is number? %s" % is_number(data)
-            elif is_number(data):
-                product = universe_set.filter(price__lte=float(data))
-                product_set = Set(product)
-                if len(filter_product_set) == 0:
-                    filter_product_set.union_update(product_set)
-                else:
-                    filter_product_set.intersection_update(product_set)
-
-            elif data == 'c1':
-                filter_product_set = universe_set
-                break
-
-            elif data == 's1':
-                brand = request.POST.get('brand')
-
-                product = universe_set.filter(brand=brand)
-                product_set = Set(product)
-                if len(filter_product_set) == 0:
-                    filter_product_set.union_update(product_set)
-                else:
-                    filter_product_set.intersection_update(product_set)
-            elif data == 'sex':
-                temp_set = set()
-                num = 5
-                while True:
-                    if filter_data[num] in SEX_LIST:
-                        sex = what_sex(filter_data[num])
-                        temp_set.update(Set(universe_set.filter(sex=sex)))
-                        num+=1
-                    elif filter_data[num] == 'end':
-                        if len(filter_product_set) == 0:
-                            filter_product_set.union_update(temp_set)
-                        else:
-                            filter_product_set.intersection_update(temp_set)
-                        break
-                    else:
-                        num+=1
-                        break
-
-            elif data == 'brand':
-                temp_set = set()
-                num+=2
-                key = value_to_key(type)
-                while True:
-                    if filter_data[num] in get_all_brand(key):
-                        temp_set.update(Set(universe_set.filter(brand=filter_data[num])))
-                        num+=1
-                    elif filter_data[num] == 'end':
-                        if len(filter_product_set) == 0:
-                            filter_product_set.union_update(temp_set)
-                        else:
-                            filter_product_set.intersection_update(temp_set)
-                        break
-                    else:
-                        num+=1
-                        break
-
-        if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '' and filter_data[3] != 's1':
-            filter_product_set = universe_set
-
-        print "filtered product is %s"%filter_product_set
+            num_page = 1
 
         template = loader.get_template('pages/product/item/product_item.html')
-        context = Context({'product_list': filter_product_set})
+        context = Context({
+            'product_list': filter_product_set,
+            'num_page': range(num_page)
+        })
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
@@ -420,6 +418,108 @@ def is_number(s):
     except ValueError:
         return False
 
+def filter_by_value(filter,type,brand):
+    # filter_product = None
+    filter_product_set = Set()
+    # filter_button = request.POST.get('button_id')
+    raw_filter_data = filter
+    remove_quote_filter_data = raw_filter_data.replace("\"", "")
+    remove_front_bracket_data = remove_quote_filter_data.replace("{", "")
+    remove_back_bracket_data = remove_front_bracket_data.replace("}", "")
+    remove_colon_bracket_data = remove_back_bracket_data.replace(":", "")
+    remove_size_bracket_data = remove_colon_bracket_data.replace("size", "")
+    remove_maxprice_bracket_data = remove_size_bracket_data.replace("maxprice", "")
+    remove_clear_bracket_data = remove_maxprice_bracket_data.replace("clear", "")
+    remove_search_bracket_data = remove_clear_bracket_data.replace("search", "")
+    remove_front = remove_search_bracket_data.replace("[", ",")
+    remove_back = remove_front.replace("]", ",end")
+
+    filter_data = remove_back.split(',')
+    type = type
+
+    if type == 0:
+        universe_set = Product.objects.all()
+    else:
+        universe_set = Product.objects.filter(type=type)
+
+
+    for data in filter_data:
+        if data == 'null':
+            continue
+
+        elif data in SIZE_LIST:
+            stock = Stock.objects.filter(size=data)  # get array of filter
+            stock_set = Set()
+
+            for item in stock:
+                if str(item.product.type) == str(type):
+                    stock_set.add(item.product)
+
+            if len(filter_product_set) == 0:
+                filter_product_set.union_update(stock_set)
+            else:
+                filter_product_set.intersection_update(stock_set)
+
+        elif is_number(data):
+            product = universe_set.filter(price__lte=float(data))
+            product_set = Set(product)
+            if len(filter_product_set) == 0:
+                filter_product_set.union_update(product_set)
+            else:
+                filter_product_set.intersection_update(product_set)
+
+        elif data == 'c1':
+            filter_product_set = universe_set
+            break
+
+        elif data == 's1':
+            product = universe_set.filter(brand=brand)
+            product_set = Set(product)
+            if len(filter_product_set) == 0:
+                filter_product_set.union_update(product_set)
+            else:
+                filter_product_set.intersection_update(product_set)
+        elif data == 'sex':
+            temp_set = set()
+            num = 5
+            while True:
+                if filter_data[num] in SEX_LIST:
+                    sex = what_sex(filter_data[num])
+                    temp_set.update(Set(universe_set.filter(sex=sex)))
+                    num += 1
+                elif filter_data[num] == 'end':
+                    if len(filter_product_set) == 0:
+                        filter_product_set.union_update(temp_set)
+                    else:
+                        filter_product_set.intersection_update(temp_set)
+                    break
+                else:
+                    num += 1
+                    break
+
+        elif data == 'brand':
+            temp_set = set()
+            num += 2
+            key = value_to_key(int(type))
+            while True:
+                if filter_data[num] in get_all_brand(key):
+                    temp_set.update(Set(universe_set.filter(brand=filter_data[num])))
+                    num += 1
+                elif filter_data[num] == 'end':
+                    if len(filter_product_set) == 0:
+                        filter_product_set.union_update(temp_set)
+                    else:
+                        filter_product_set.intersection_update(temp_set)
+                    break
+                else:
+                    num += 1
+                    break
+
+    if filter_data[0] == 'null' and filter_data[1] == 'null' and filter_data[5] == '' and filter_data[8] == '' and filter_data[3] != 's1':
+        filter_product_set = universe_set
+
+    filter_product_set = list(filter_product_set)
+    return filter_product_set
 
 def what_sex(sex):
     if sex == 'Men':
@@ -428,3 +528,28 @@ def what_sex(sex):
         return 2
     elif sex == 'Unisex':
         return 3
+
+
+def admin_product_view(request):
+    return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
+
+
+def add_new_product(request):
+    product = request.POST
+    name = product['name']
+    image = request.FILES.get('img-file')
+    price = product['price']
+    product_type = product['type']
+    brand = product['brand']
+    description = product['description']
+    sex = product['sex']
+    size = product['size']
+    amount = product['amount']
+    new_product = Product.objects.create(name=name, type=product_type, sex=sex, brand=brand, price=price, description=description)
+    Stock.objects.create(product=new_product, size=size, amount=amount)
+    ProductImage.objects.create(product=new_product, image=image)
+    context = {
+        "message": "Success add new product"
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/admin/admin-product.html', context)

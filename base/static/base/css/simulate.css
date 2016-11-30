@@ -1,0 +1,15 @@
+.simulate_image {
+    width: 50%;
+    height: 50%;
+}
+#selection_image {
+    height: 190px
+}
+
+.selection_block {
+    border-color: black;
+    border-left: solid 1px;
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    height: 220px;
+}

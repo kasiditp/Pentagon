@@ -1,32 +1,38 @@
 {% load static %}
 
-<div class="row" id="product-content">
+<div class="row" id="product-value">
     {% load humanize %}
-
+        <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
         {% for product in product_list %}
-            <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
             <a href="{% url 'product:product_details' product.pk %}">
                 <div class="col-md-3 product-detail">
-                    <div class="row" id="block-image">
-                        <div class="">
-                            {#image-center#}
-                            <img class="img-responsive center-block" id="product-image"
-                                 src="{{ product.get_image.image.url }}"><br>
+                    <div id = "product-content">
+                        <div class="row" id="block-image">
+                            <div class="">
+                                {#image-center#}
+                                <img class="img-responsive center-block" id="product-image"
+                                     src="{{ product.get_image.image.url }}"><br>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row" id="detail-image">
-                        <div id="brand">
-                            <b>{{ product.brand|upper }}</b><br>
+                        <div class="row" id="detail-image">
+                            <div id="brand">
+                                <b>{{ product.brand|upper }}</b><br>
+                            </div>
+                            <div id="name">
+                                <b>{{ product.name }}</b><br>
+                            </div>
+
+                            <div id="price">
+                                <b>{{ product.price|floatformat:2|intcomma }} THB</b>
+                            </div>
+
                         </div>
-                        <div id="name">
-                            <b>{{ product.name }}</b><br>
+                        <div id="hoverbar">
+                            {% for stock in product.get_stocks %}
+                                {{ stock.size }}
+                            {% endfor %}
                         </div>
-                        <div>
-                            <a class="divider"></a>
-                        </div>
-                        <div id="price">
-                            <b>{{ product.price|floatformat:2|intcomma }} THB</b>
-                        </div>
+
                     </div>
                 </div>
             </a>
@@ -38,10 +44,20 @@
         {% endfor %}
 
     </div>
-</div>
+
+    <div class="center-block" id="page_number_bar">
+        {% for i in num_page %}
+            <div class="btn btn-default" onclick="changePage(this.id)" id = {{ forloop.counter }}>
+                {{ forloop.counter }}
+            </div>
+        {% endfor %}
+    </div>
+
+
+
 
 <script>
-  {#    {% if product_list %}#}
-        $("#navCategory").show();
-{#    {% endif %}#}
+    $("#navCategory").show();
+
+
 </script>

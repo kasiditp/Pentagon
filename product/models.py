@@ -70,6 +70,7 @@ class Product(models.Model):
         return suggest
 
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
     image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True, null=True)
@@ -87,7 +88,6 @@ class Stock(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.product, self.size)
-
 
 class Cart(models.Model):
     stock = models.ForeignKey('Stock', null=False, blank=False)
