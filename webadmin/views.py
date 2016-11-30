@@ -10,6 +10,8 @@ from base.views import get_nav_context
 from product.models import Product, Stock, ProductImage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+def admin_home(request):
+    return render(request, 'pages/admin/admin-home.html',get_nav_context(request))
 
 def admin_product(request):
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))
