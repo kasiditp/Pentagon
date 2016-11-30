@@ -19,6 +19,7 @@ SEX = [
 ]
 
 ORDERSTATUS = [
+    (0, "In cart"),
     (1, "Ordered"),
     (2, "Payment accepted"),
     (3, "Delivery")
@@ -92,6 +93,8 @@ class Cart(models.Model):
     stock = models.ForeignKey('Stock', null=False, blank=False)
     user = models.ForeignKey('member.User', null=False, blank=False)
     amount = models.IntegerField(verbose_name="Amount", default=0)
+    status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
+    updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 
     @staticmethod
     def get_total_price(user_id):
@@ -104,11 +107,6 @@ class Cart(models.Model):
     def get_amount_range(self):
         return range(1, self.stock.amount + self.amount + 1)
 
-
-class Order(models.Model):
-    cart = models.ForeignKey('Cart', null=False, blank=False)
-    status = models.IntegerField(verbose_name='OrderStatus', choices=ORDERSTATUS, null=False)
-    updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
 
 
 

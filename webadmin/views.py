@@ -94,7 +94,7 @@ def admin_transaction(request):
 def accept_transaction(request):
     if request.method == 'POST':
         order_id = request.POST['order_id']
-        order_match = Order.objects.get(id = order_id)
+        order_match = 2 #mock up
         focusing_order = Transaction.objects.get(order = order_match)
         print focusing_order
         focusing_order.status = 2

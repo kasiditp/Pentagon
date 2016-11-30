@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
     <link href="{% static 'product/css/order.css' %}" rel="stylesheet">
     <section>
         <div class="container" id="order_panel">
@@ -26,9 +27,9 @@
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="paymentOption" id="paymentOption" value="option1" checked>
-                                   <!-- PayPal Logo -->
+                                    <!-- PayPal Logo -->
                                     <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">
-                                      <!-- PayPal Logo -->
+                                    <!-- PayPal Logo -->
                                 </label>
                             </div>
                             <div class="radio">
@@ -39,6 +40,7 @@
                             </div>
 
                         </div>
+                        <div id="paypal-button"></div>
                     </div>
 
                 </div>
@@ -46,6 +48,47 @@
         </div>
     </section>
     <script>
+        paypal.Button.render({
 
+            env: 'sandbox', // Specify 'sandbox' for the test environment
+            client: {
+                sandbox: 'ATE1kqBkVx0Pfbsm4tDk-Hals5NLif-N7nb5K9jHAINQaXa57TD_KZ0eFgW22IRt3c8lXRj2r2vPgVh-'
+            },
+            payment: function() {
+                // Set up the payment here, when the buyer clicks on the button
+                var env = this.props.env;
+                var client = this.props.client;
+                return paypal.rest.payment.create(env, client, {
+                    transactions: [
+                        {
+                            amount: {total: '600.0', currency: 'THB'}
+                        }
+                    ]
+                })
+            },
+
+            commit: true,
+            onAuthorize: function(data, actions) {
+                // Execute the payment here, when the buyer approves the transaction
+                $.ajax({
+                    url: "{% url 'product:paypal_checkout' %}",
+                    type: 'POST',
+                    traditional: true,
+                    data: {'user':"{{ user.unique_id }}"},
+
+                    success: function (json) {
+                        if (json.content['result']) {
+
+                        } else {
+
+                        }
+                    }
+                });
+                return actions.payment.execute().then(function () {
+
+                })
+            }
+
+        }, '#paypal-button');
     </script>
 {% endblock %}
