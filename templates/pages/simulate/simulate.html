@@ -9,11 +9,23 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6" id="simulate_zone">
-                    <div id ="top_zone">
-                        {% include 'pages/simulate/showcase/show_top.html' %}
+                    <div id="top_zone">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img style="margin-bottom: 0; padding-bottom: 0;"
+                                     class="img-responsive center-block simulate_image" id="simulate_image_top"
+                                     src="http://www.clipartkid.com/images/277/ist2-379063-t-shirt-template-jpg-photo-by-mikomiko321-photobucket-wvSDrk-clipart.jpg">
+                            </div>
+                        </div>
                     </div>
-                    <div id ="bottom_zone">
-                        {% include 'pages/simulate/showcase/show_bottom.html' %}
+                    <div id="bottom_zone">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img style="margin-top: 0; padding-top: 0; width: 80%;"
+                                     class="img-responsive center-block simulate_image" id="simulate_image_bottom"
+                                     src="http://upic.me/i/q1/6622330163_b31164cec8_o.png">
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -27,10 +39,10 @@
                     </nav>
 
                     <div class="tab-content" id="selection_zone">
-                        <div id ="selection_top" class="tab-pane fade in active">
+                        <div id="selection_top" class="tab-pane fade in active">
                             {% include 'pages/simulate/catagory/selection_top.html' %}
                         </div>
-                        <div id ="selection_bottom" class="tab-pane fade">
+                        <div id="selection_bottom" class="tab-pane fade">
                             {% include 'pages/simulate/catagory/selection_bottom.html' %}
                         </div>
                     </div>
@@ -39,20 +51,22 @@
             <br>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="dropdown invisible text-right" id = "top_dropdown_div">
+                    <div class="dropdown invisible text-right" id="top_dropdown_div">
                         Top :
-                        <button id="top_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
-                         <span class="caret"></span></button>
-                     <ul id="top_size_dropdown_menu" class="dropdown-menu">
+                        <button id="top_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown">Size
+                            <span class="caret"></span></button>
+                        <ul id="top_size_dropdown_menu" class="dropdown-menu">
 
-                    </ul>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-md-6">
-                     <div class="dropdown invisible text-left" id="bottom_dropdown_div" >
-                         Bottom :
-                        <button id="bottom_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
-                        <span class="caret"></span></button>
+                    <div class="dropdown invisible text-left" id="bottom_dropdown_div">
+                        Bottom :
+                        <button id="bottom_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button"
+                                data-toggle="dropdown">Size
+                            <span class="caret"></span></button>
                         <ul id="bottom_size_dropdown_menu" class="dropdown-menu">
 
                         </ul>
@@ -72,25 +86,25 @@
         var bottomStock = [];
         var topIndex = 'null';
         var bottomIndex = 'null';
-        function simulate(name,id,type) {
+        function simulate(name, id, type) {
             currentSelectedProductName = name;
             var src = id;
-            $('#simulate_image_'+type).attr("src",src);
+            $('#simulate_image_' + type).attr("src", src);
 
-            $('#'+type+'_dropdown_div').removeClass("invisible");
+            $('#' + type + '_dropdown_div').removeClass("invisible");
 
-            $('#'+type+'_size_dropdown_button').html("Size " + "<span class = \"caret\"></span>");
+            $('#' + type + '_size_dropdown_button').html("Size " + "<span class = \"caret\"></span>");
 
             changeDropDownMenu(type);
         }
 
         function changeDropDownMenu(type) {
-            var dropdown = $('#'+type+'_size_dropdown_menu');
+            var dropdown = $('#' + type + '_size_dropdown_menu');
             var sizeList = [];
             var injection = "";
-            if(type == 'bottom')
+            if (type == 'bottom')
                 bottomIndex = 'null';
-            if(type == 'top')
+            if (type == 'top')
                 topIndex = 'null';
 
             $.ajax({
@@ -102,20 +116,20 @@
                 success: function (json) {
                     if (json.content['result']) {
                         sizeList = json.content['content'];
-                        if(type == 'top') {
+                        if (type == 'top') {
                             topStock = json.content['stock_id'];
                             console.log(topStock)
 
-                        } else if(type == "bottom") {
+                        } else if (type == "bottom") {
                             bottomStock = json.content['stock_id'];
                             console.log(bottomStock);
                         }
-                        for(var i = 0; i<sizeList.length; i++) {
-                            if(type == 'top') {
-                                injection += "<li><a id = \"dropdown_"+ i +"\" onclick = \"changeDropDownButton(this.id,this.text," + "\'top\'" + ")\">" + sizeList[i] + "</a></li>";
+                        for (var i = 0; i < sizeList.length; i++) {
+                            if (type == 'top') {
+                                injection += "<li><a id = \"dropdown_" + i + "\" onclick = \"changeDropDownButton(this.id,this.text," + "\'top\'" + ")\">" + sizeList[i] + "</a></li>";
                             }
-                            else if(type == "bottom") {
-                                injection+= "<li><a id = \"dropdown_"+ i +"\" onclick = \"changeDropDownButton(this.id,this.text,"+ "\'bottom\'" +")\">"+ sizeList[i] +"</a></li>";
+                            else if (type == "bottom") {
+                                injection += "<li><a id = \"dropdown_" + i + "\" onclick = \"changeDropDownButton(this.id,this.text," + "\'bottom\'" + ")\">" + sizeList[i] + "</a></li>";
 
                             }
                         }
@@ -129,12 +143,12 @@
 
         }
 
-        function changeDropDownButton(id,val,type) {
-            var button = $('#'+type+'_size_dropdown_button');
-            button.html("Size : "+ val+ " <span class=\"caret\"></span>");
-            if(type == 'top') {
+        function changeDropDownButton(id, val, type) {
+            var button = $('#' + type + '_size_dropdown_button');
+            button.html("Size : " + val + " <span class=\"caret\"></span>");
+            if (type == 'top') {
                 topIndex = id.split("_")[1];
-            } else if (type == 'bottom'){
+            } else if (type == 'bottom') {
                 bottomIndex = id.split("_")[1];
             }
 
@@ -147,21 +161,21 @@
         function addToCart() {
             var topStockId = 'null';
             var bottomStockId = 'null';
-            if(topIndex != 'null')
+            if (topIndex != 'null')
                 topStockId = topStock[topIndex];
-            if(bottomIndex != 'null')
+            if (bottomIndex != 'null')
                 bottomStockId = bottomStock[bottomIndex];
             $.ajax({
                 url: "{% url 'product:put_in_cart_by_simulate' %}",
                 type: "POST",
                 data: {
-                    'top_stock_id' : topStockId,
-                    'bottom_stock_id' : bottomStockId
+                    'top_stock_id': topStockId,
+                    'bottom_stock_id': bottomStockId
                 },
                 success: function (json) {
                     {#                    $('#top_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
                     {#                    $('#bottom_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
-                    if(json.content['Fail'])
+                    if (json.content['Fail'])
                         console.log("Do nothing");
                     else
                         window.location.replace(json.content);
