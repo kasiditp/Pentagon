@@ -19,9 +19,10 @@ SEX = [
 ]
 
 ORDERSTATUS = [
+    (0, "In cart"),
     (1, "Ordered"),
-    (2, "Payment accepted"),
-    (3, "Delivery")
+    (2, "Waiting for payment confirmation"),
+    (3, "Payment accepted"),
 ]
 
 
@@ -69,6 +70,7 @@ class Product(models.Model):
         return suggest
 
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', null=False, blank=False)
     image = models.ImageField(verbose_name='Product Image', upload_to=product_image_path_name, blank=True, null=True)
@@ -92,10 +94,13 @@ class Cart(models.Model):
     stock = models.ForeignKey('Stock', null=False, blank=False)
     user = models.ForeignKey('member.User', null=False, blank=False)
     amount = models.IntegerField(verbose_name="Amount", default=0)
+    invoice_number = models.CharField(verbose_name="Invoice Number", blank=False, default=None, max_length=10, null=True)
+    status = models.IntegerField(verbose_name="status", choices=ORDERSTATUS, blank=False, null=False, default=0)
+    updated = models.DateTimeField(verbose_name="updated", auto_now_add=False, auto_now=True, null=True)
 
     @staticmethod
-    def get_total_price(user_id):
-        this_cart = Cart.objects.filter(user__unique_id=user_id)
+    def get_total_price_in_cart(user_id):
+        this_cart = Cart.objects.filter(user__unique_id=user_id, status=0)
         total_price = 0
         for item in this_cart:
             total_price += item.stock.product.price * item.amount
@@ -104,11 +109,6 @@ class Cart(models.Model):
     def get_amount_range(self):
         return range(1, self.stock.amount + self.amount + 1)
 
-
-class Order(models.Model):
-    cart = models.ForeignKey('Cart', null=False, blank=False)
-    status = models.IntegerField(verbose_name='OrderStatus', choices=ORDERSTATUS, null=False)
-    updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
 
 
 

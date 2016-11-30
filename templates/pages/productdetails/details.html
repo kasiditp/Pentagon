@@ -64,6 +64,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12 col-xs-12 border" id="cart_interact">
+                {% if not no_stock %}
                     <form method="post" action="{% url 'product:put_in_cart' %}" id="cart_form">
                         {% csrf_token %}
                         <div class="row">
@@ -138,6 +139,9 @@
                         {#                            </div>#}
                         {#                        </div>#}
                     </form>
+                    {% else %}
+                    No stock information
+                {% endif %}
                 </div>
             </div>
         </div>

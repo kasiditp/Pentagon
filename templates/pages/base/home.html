@@ -4,10 +4,10 @@
     <link href="{% static 'base/css/home.css' %}" rel="stylesheet">
     <link href="{% static 'base/css/font-marvenpro.css' %}" rel="stylesheet">
     <section>
-{#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+        {#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
 
         <!-- SlidesJS Required: Link to jQuery -->
-{#        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
+        {#        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
         <!-- End SlidesJS Required -->
 
         <!-- SlidesJS Required: Link to jquery.slides.js -->
@@ -32,33 +32,33 @@
 
                 <div class="carousel-inner" role="listbox" style="height: 650px;">
                     <div class="item active">
-                        <img src="{% static 'base/image/pic2.png' %}">
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonMen1" style="text-align: center">Men</button>
-                        </a>
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonWomen1" style="text-align: center">Women</button>
-                        </a>
+                        <img src="{% static 'base/image/pic13.png' %}">
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonMen1" style="text-align: center">Men</button>#}
+{#                        </a>#}
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonWomen1" style="text-align: center">Women</button>#}
+{#                        </a>#}
                     </div>
 
                     <div class="item">
-                        <img src="{% static 'base/image/pic1.png' %}">
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonMen2" style="text-align: center">Men</button>
-                        </a>
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonWomen2" style="text-align: center">Women</button>
-                        </a>
+                        <img src="{% static 'base/image/pic10.png' %}">
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonMen2" style="text-align: center">Men</button>#}
+{#                        </a>#}
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonWomen2" style="text-align: center">Women</button>#}
+{#                        </a>#}
                     </div>
 
                     <div class="item">
-                        <img src="{% static 'base/image/pic3.png' %}">
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonMen3" style="text-align: center">Men</button>
-                        </a>
-                        <a href="{% url 'product:product_view' %}">
-                            <button class="btn btn-5" id="buttonWomen3" style="text-align: center">Women</button>
-                        </a>
+                        <img src="{% static 'base/image/pic11.png' %}">
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonMen3" style="text-align: center">Men</button>#}
+{#                        </a>#}
+{#                        <a href="{% url 'product:product_view' %}">#}
+{#                            <button class="btn btn-5" id="buttonWomen3" style="text-align: center">Women</button>#}
+{#                        </a>#}
                     </div>
                     <div class="item">
                         <img src="{% static 'base/image/pic4.png' %}">
@@ -85,58 +85,58 @@
         {# Second Row #}
         <div class="row" id="container" style="margin-left: 0px; margin-right: 0px">
             <div class="row" style="margin-top: 20px; margin-left: 0px; margin-right: 0px">
-                <h3><p align="center" id="text">What's new in Polygon</p></h3>
+                <h2><p align="center" id="text">WHAT'S NEW IN POLYGON</p></h2>
                 <hr id="hr">
             </div>
             <div class="row" style="margin-left: 0px; margin-right: 0px">
                 {# Shirts #}
-                <div class="col-md-3 col-centered">
+                <div class="col-md-12 col-centered" style="padding: 0px">
                     <figure class="snip1104 red">
-                        <img src="{% static 'base/image/shirt.png' %}"/>
+                        <img src="{% static 'base/image/shirt2.png' %}"/>
                         <figcaption>
-                            <h4><span>Shirts</span></h4>
+                            <h5><span>Shirts</span></h5>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Pants #}
-                <div class="col-md-3 col-centered">
+                <div class="col-md-12 col-centered" style="padding: 0px">
                     <figure class="snip1104 blue">
-                        <img src="{% static 'base/image/pants.png' %}"/>
+                        <img src="{% static 'base/image/trouser2.png' %}"/>
                         <figcaption>
-                            <h4><span>Pants</span></h4>
+                            <h5><span>Pants</span></h5>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Shoes #}
-                <div class="col-md-3 col-centered">
+                <div class="col-md-12 col-centered" style="padding: 0px">
                     <figure class="snip1104 yellow">
-                        <img src="{% static 'base/image/shoes.png' %}"/>
+                        <img src="{% static 'base/image/shoes2.png' %}"/>
                         <figcaption>
-                            <h4><span>Shoes</span></h4>
+                            <h5><span>Shoes</span></h5>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
                 {# Accesories #}
-                <div class="col-md-3 col-centered">
-                    <figure class="snip1104">
-                        <img src="{% static 'base/image/accessories.png' %}"/>
+                <div class="col-md-12 col-centered" style="padding: 0px">
+                    <figure class="snip1104 green">
+                        <img src="{% static 'base/image/accessories2.png' %}"/>
                         <figcaption>
-                            <h4><span>Accessories</span></h4>
+                            <h5><span>Accessories</span></h5>
                         </figcaption>
-                        <a href="#"></a>
+                        <a href="{% url 'product:product_view' %}"></a>
                     </figure>
                 </div>
             </div>
-            <div class="row" style="margin-left: 0px; margin-right: 0px">
-                <h3><p align="center" id="text">Promotion</p></h3>
-                <hr id="hr">
+
+            <div class="recommend">
+                <a href="{% url 'product:product_view' %}">
+                    <img src="{% static 'base/image/recommend.png' %}"/>
+                </a>
             </div>
-            <div class="row" style="margin-left: 0px; margin-right: 0px">
-                <img src="{% static 'base/image/promotion_pic.png' %}" class="img-responsive"/>
-            </div>
+            </a>
         </div>
     </section>
     <script>

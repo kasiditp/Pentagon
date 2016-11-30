@@ -1,6 +1,8 @@
 #filter {
-    background-color: #191919;
+    background-color: #1f253d;
     color: white;
+    border-right: solid 1px;
+    border-color: lightgrey;
 }
 
 #custom-handle {
@@ -12,6 +14,19 @@
     line-height: 1.6em;
 }
 
+#hoverbar {
+    height:30px;
+    width:87%;
+    /*background-color: #1b6d85;*/
+    position:absolute;
+    bottom:0;
+    margin:0;
+    padding:0;
+    /*opacity: 0.3;*/
+    visibility:hidden;
+
+}
+
 #breadcrumb {
     margin: 0px;
 }
@@ -19,7 +34,9 @@
 .product-detail {
     border-right: solid 1px;
     border-bottom: solid 1px;
-    height: 285px;
+    border-color: lightgray;
+    height: 310px;
+>>>>>>> master
 }
 
 #block-image {
@@ -30,26 +47,47 @@
     height: 200px;
 }
 
+
 #detail-image {
-    background-color: #d9534f;
+    background-color: #1f253d;
 }
 
 .product-detail:hover {
     box-shadow: 0 0 15px #191919;
     opacity: 0.7;
+    background-color: orange;
 }
+
 
 #brand {
     color: white;
 }
+
 
 #name {
     color:white;
 }
 
 #price {
-    color:yellow;
+    color: yellow;
 }
+
+#product-content {
+    margin-outside: 0px;
+}
+
+#product-content:hover > #hoverbar {
+    visibility: visible;
+}
+
+
+/*.product-detail:hover > #hoverbar {*/
+    /*visibility: visible;*/
+/*}*/
+
+
+
+
 
 /*#product-image .img-responsive {*/
 /*margin: 0 auto;*/

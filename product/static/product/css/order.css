@@ -14,3 +14,17 @@ div {
     font-size: small;
     font-weight: bold;
 }
+
+#order-list-brand {
+    font-size: small;
+    font-weight: bold;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+#order-list-name {
+    font-size: small;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
