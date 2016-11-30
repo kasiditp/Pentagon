@@ -4,26 +4,27 @@
 {% block content %}
 
     <link href="{% static "base/css/simulate.css" %}" rel="stylesheet">
-
     <section>
-        <div class="row">
+        <br><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" id="simulate_zone">
+                    <div id ="top_zone">
+                        {% include 'pages/simulate/showcase/show_top.html' %}
+                    </div>
+                    <div id ="bottom_zone">
+                        {% include 'pages/simulate/showcase/show_bottom.html' %}
+                    </div>
 
-
-            <div class="col-md-6" id="simulate_zone">
-                <div id ="top_zone">
-                    {% include 'pages/simulate/showcase/show_top.html' %}
                 </div>
-                <div id ="bottom_zone">
-                    {% include 'pages/simulate/showcase/show_bottom.html' %}
-                </div>
 
-            </div>
-
-            <div class="col-md-6 right">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#selection_top">Top</a></li>
-                        <li><a data-toggle="tab" href="#selection_bottom">Bottom</a></li>
-                    </ul>
+                <div class="col-md-6 right">
+                    <nav class="navbar">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#selection_top">Top</a></li>
+                            <li><a data-toggle="tab" href="#selection_bottom">Bottom</a></li>
+                        </ul>
+                    </nav>
 
                     <div class="tab-content" id="selection_zone">
                         <div id ="selection_top" class="tab-pane fade in active">
@@ -33,13 +34,36 @@
                             {% include 'pages/simulate/catagory/selection_bottom.html' %}
                         </div>
                     </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dropdown invisible text-right" id = "top_dropdown_div">
+                        Top :
+                        <button id="top_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+                         <span class="caret"></span></button>
+                     <ul id="top_size_dropdown_menu" class="dropdown-menu">
+
+                    </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                     <div class="dropdown invisible text-left" id="bottom_dropdown_div" >
+                         Bottom :
+                        <button id="bottom_size_dropdown_button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Size
+                        <span class="caret"></span></button>
+                        <ul id="bottom_size_dropdown_menu" class="dropdown-menu">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="text-center">
+                <div class="btn btn-success" onclick="addToCart()">Add Selected item to cart</div>
             </div>
         </div>
-        <br>
-        <div class="text-center">
-            <div class="btn btn-success" onclick="addToCart()">Add Selected item to cart</div>
-        </div>
-
     </section>
 
     <script>
@@ -75,7 +99,7 @@
                 data: {
                     name: currentSelectedProductName
                 },
-               success: function (json) {
+                success: function (json) {
                     if (json.content['result']) {
                         sizeList = json.content['content'];
                         if(type == 'top') {
@@ -135,8 +159,8 @@
                     'bottom_stock_id' : bottomStockId
                 },
                 success: function (json) {
-{#                    $('#top_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
-{#                    $('#bottom_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
+                    {#                    $('#top_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
+                    {#                    $('#bottom_size_dropdown_button').html("Size <span class=\"caret\"></span>");#}
                     if(json.content['Fail'])
                         console.log("Do nothing");
                     else

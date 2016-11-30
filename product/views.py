@@ -95,10 +95,14 @@ def product_type_view(request, product_type):
 
 def simulate_view(request):
     simulate_list_top = Product.objects.filter(type=PRODUCT_TYPES["top"])
+    simulate_list_brand_top = get_all_brand('top')
     simulate_list_bottom = Product.objects.filter(type=PRODUCT_TYPES["bottom"])
+    simulate_list_brand_bottom = get_all_brand('bottom')
     context = {
         'simulate_list_top': simulate_list_top,
         'simulate_list_bottom': simulate_list_bottom,
+        'simulate_list_brand_top': simulate_list_brand_top,
+        'simulate_list_brand_bottom': simulate_list_brand_bottom
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/simulate/simulate.html',context)

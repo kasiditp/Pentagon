@@ -1,26 +1,62 @@
 {% load static %}
 
-<div class="row">
-    {% for product in simulate_list_bottom %}
-        <a onclick="simulate('{{ product.name }}','{{ product.get_image.image.url }}','bottom')">
-        <div class="col-md-3 selection_block">
-            <div id = "selection_content">
-                <div class="row" id="selection_block_image">
-                    <div>
-                        <img class="img-responsive center-block" id="selection_image" src="{{ product.get_image.image.url }} ">
+<nav class="navbar">
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#all_bottom">All</a></li>
+    {% for brand in simulate_list_brand_bottom %}
+        <li><a data-toggle="pill" href="#{{ brand }}">{{ brand }}</a></li>
+    {% endfor %}
+    </ul>
+</nav>
+
+<div class="tab-content">
+    <div id = "all_bottom" class="tab-pane fade in active">
+        <div class="row">
+            {% for product in simulate_list_bottom %}
+                <a onclick="simulate('{{ product.name }}','{{ product.get_image.image.url }}','bottom')">
+                    <div class="col-md-4 selection_block">
+                        <div id = "selection_content">
+                            <div class="row" id="selection_block_image">
+                                <div>
+                                    <img class="img-responsive center-block" id="selection_image" src="{{ product.get_image.image.url }} ">
+                                </div>
+                                <div class="text-center">
+                                    <h6 id ="image_name">{{ product.name }}</h6>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <h6 id ="image_name">{{ product.name }}</h6>
-                    </div>
-                </div>
+                </a>
+            {% endfor %}
+            </div>
+    </div>
+
+    {% for brand in simulate_list_brand_bottom %}
+        <div id ="{{ brand }}" class="tab-pane fade">
+            <div class="row">
+            {% for product in simulate_list_bottom %}
+                {% if product.brand == brand %}
+                    <a onclick="simulate('{{ product.name }}','{{ product.get_image.image.url }}','bottom')">
+                        <div class="col-md-4 selection_block">
+                            <div id = "selection_content">
+                                <div class="row" id="selection_block_image">
+                                    <div>
+                                        <img class="img-responsive center-block" id="selection_image" src="{{ product.get_image.image.url }} ">
+                                    </div>
+                                    <div class="text-center">
+                                        <h6 id ="image_name">{{ product.name }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+
+           {% endfor %}
+
             </div>
         </div>
-        </a>
-        {% if forloop.counter|divisibleby:4 %}
-            </div>
-            <div class="row">
-        {% endif %}
-
     {% endfor %}
-
 </div>
+
+
