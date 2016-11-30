@@ -14,7 +14,8 @@ urlpatterns = [
     url(r'^admin_product_view/$', admin_product_view, name="admin_product_view"),
     url(r'^add_new_product/$', add_new_product, name="add_new_product"),
     url(r'^simulate/$', simulate_view, name="simulate_view"),
-    url(r'^(?P<product_type>[\w]+)/$', product_type_view, name="product_type"),
+    url(r'^paypal_checkout/$', paypal_ordered, name="paypal_checkout"),
+    url(r'^(?P<product_type>[\w]+)/$', product_type_view, name="product_type")
 
 
 ]

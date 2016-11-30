@@ -1,82 +1,276 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-    {% if message %}
-        <div class="alert alert-success  ">
-              <center><strong>{{ message }}</strong></center>
-          </div>
-    {% endif %}
+    <link href="{% static 'webadmin/css/add-product.css' %}" rel="stylesheet">
+    <div class="alert alert-success" id="message-dialog" style="display: none">
+        <center><strong id="message-text">{{ message }}</strong></center>
+    </div>
     <section>
-        <div class="container">
-            <div class="col-md-12">
-                <h1>Add new product</h1>
-                <form action="{% url 'webadmin:add_new_product' %}" method="post" enctype="multipart/form-data">
+        <div class="container" style="text-align:center;"><h1>Add new product</h1></div>
+        <div class="col-md-4">
+            <div class="add-img" style="padding: 20px;">
+                <form id="form-product-image-upload" action="{% url 'webadmin:add_product_images' %}" method="post"
+                      enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="form-group row">
-                        <div><label for="inputName">Name</label></div>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="name" id="inputName">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label for="sel1">Type</label></div>
-                        <div class="col-md-6">
-                            <select class="form-control" id="sel1" name="type">
-                                <option value="1">Top</option>
-                                <option value="2">Bottom</option>
-                                <option value="3">Overall</option>
-                                <option value="4">Footwear</option>
-                                <option value="5">Accessory</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label for="sex">Sex</label></div>
-                        <div class="col-md-6">
-                            <select class="form-control" id="sex" name="sex">
-                                <option value="1">Male</option>
-                                <option value="2">Female</option>
-                                <option value="3">Unisex</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label for="inputBrand">Brand</label></div>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="brand" id="inputBrand">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label>Picture</label></div>
-                        <div class="col-md-6"><input type="file" id="img-file" name="img-file" accept="image/*"
-                                                     class="upload"/></div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label>Price</label></div>
-                        <div class="col-md-6"><input type="number" class="form-control" name="price"
-                                                     id="inputBrand"></div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label>Size</label></div>
-                        <div class="col-md-6"><input type="text" class="form-control" name="size"
-                                                     id="inputBrand"></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div><label>Amount</label></div>
-                        <div class="col-md-6"><input type="number" class="form-control" name="amount"
-                                                     id="inputBrand"></div>
-                    </div>
-                    <div class="form-group row">
-                        <div><label>Description</label></div>
-                        <div class="col-md-6">
-                            <textarea id="txtArea" rows="5" cols="70" name="description"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <img src="{% static 'webadmin/images/boxadd.png' %}" id="product-image-1"><br/>
+                    <img id="product-image-2" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-3" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-4" src="#" alt="your image" style="display: none"/>
+                    <img id="product-image-5" src="#" alt="your image" style="display: none"/>
+                    <span><h3>Add image</h3></span>
+                    <span><h5>You can add more than one image</h5></span>
+                    <input type="file" id="product-img" name="img-file" accept="image/*" class="upload"
+                           style="margin-left: 50px;" multiple="multiple"/>
                 </form>
             </div>
         </div>
+        <div id="exTab1" class="container col-md-8">
+            <ul class="nav nav-pills">
+                <li class="active">
+                    <a href="#1a" data-toggle="tab">General</a>
+                </li>
+                <li><a href="#2a" data-toggle="tab">Stock</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="1a" style="background: #F5F5F5;padding: 20px;width: 60%">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row" style="height: 5em;">
+                            <div class="col-md-12">
+                                <div><label for="inputName">Name</label></div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="name" id="product-name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 5em;">
+                            <div class="col-md-6">
+                                <div><label for="product-type">Type</label></div>
+                                <div class="col-md-6">
+                                    <select class="form-control" id="product-type" name="type">
+                                        <option value="1">Top</option>
+                                        <option value="2">Bottom</option>
+                                        <option value="3">Overall</option>
+                                        <option value="4">Footwear</option>
+                                        <option value="5">Accessory</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div><label for="product-sex">Sex</label></div>
+                                <div class="col-md-6">
+                                    <select class="form-control" id="product-sex" name="sex">
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Unisex</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 5em;">
+                            <div class="col-md-6">
+                                <div><label for="product-brand">Brand</label></div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="brand" id="product-brand">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 7em;">
+                            <div class="col-md-6">
+                                <div><label>Description</label></div>
+                                <div class="col-md-12">
+                                    <textarea id="product-description" rows="3" cols="50" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 5em;">
+                            <div class="col-md-6">
+                                <div><label>Price</label></div>
+                                <div class="col-md-6"><input type="number" class="form-control" name="price"
+                                                             id="product-price"></div>
+                            </div>
+                        </div>
+                        <ul class="pager" style="text-align: left">
+                            {#                            <button type="submit" class="btn btn-success">Submit</button>#}
+                            {#                            <li><a href="#">Previous</a></li>#}
+                            <li><a href="#" style="color: red;">Cancel</a></li>
+                            <li><a href="#2a" data-toggle="tab">Next</a></li>
+                        </ul>
+                    </form>
+                </div>
+                <div class="tab-pane" id="2a" style="background: #F5F5F5;padding: 20px;width:60%">
+                    <div id="tab2-content">
+                        <div class="row" id="stock-row">
+                            <div class="col-md-4">
+                                <div><label>Size</label></div>
+                                <div class="col-md-6"><input type="text" id="product-size-1" value=""/></div>
+                            </div>
+                            <div class="col-md-5">
+                                <div><label>Amount</label></div>
+                                <div class="col-md-6"><input type="text" id="product-amount-1" value=""/></div>
+                            </div>
+                            <button type="button" class="btn btn-default" aria-label="Left Align"
+                                    style="margin-top: 10px"
+                                    id="add-stock-row-0">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <ul class="pager" style="text-align: left">
+                        <li><a href="#1a" data-toggle="tab">Previous</a></li>
+                        <li><a href="#" style="color: green;" id="submit">Submit</a></li>
+                        <li><a href="#3a" style="color: red;">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </section>
+    <script>
+        var product_name = "";
+        var product_type = "";
+        var product_sex = "";
+        var product_brand = "";
+        var product_description = "";
+        var product_price = "";
+        var image = "";
+
+        $('#tokenfield').autocomplete({
+            source: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+            showAutocompleteOnFocus: true
+        });
+        var rowcounter = 0;
+        function addproductrow() {
+            $('#tab2-content').append(
+                    "<div class='row' id='stock-row'>" +
+                    "<div class='col-md-4'>" +
+                    "<div><label></label></div>" +
+                    "<div class='col-md-6'>" +
+                    "<input type='text' id='" + "product-size-" + (rowcounter + 1) + "'/>" +
+                    "</div>" +
+                    "</div>" +
+                    "<div class='col-md-5'>" +
+                    "<div><label></label></div>" +
+                    "<div class='col-md-6'>" +
+                    "<input type='text' id='" + "product-amount-" + (rowcounter + 1) + "'/>" +
+                    "</div>" +
+                    "</div>" +
+                    "<button type='button' class='btn btn-default' aria-label='Left Align' style='margin-top: 10px' id='add-stock-row-" + rowcounter + "'>" +
+                    "<i class='fa fa-plus' aria-hidden='true'></i>" +
+                    "</button>" +
+                    "</div>"
+            );
+        }
+        function addRowButton() {
+            $('#add-stock-row-' + rowcounter).click(function () {
+                rowcounter++;
+                addproductrow();
+                addRowButton();
+            });
+        }
+        $(document).ready(function () {
+            addRowButton();
+        });
+
+        $('#submit').click(function () {
+            $('#loadingModal').modal('show');
+            getNewProductDetail();
+            console.log(product_name);
+            console.log({
+                "product_name": product_name,
+                'product_type': product_type,
+                'clinic': product_sex,
+                'product_brand': product_brand,
+                'product_description': product_description,
+                'product_price': product_price,
+                'product_sex': product_sex,
+                'image': image
+            });
+            $.ajax({
+                url: "{% url 'webadmin:add_new_product' %}", // the endpoint
+                type: "POST",
+                data: {
+                    "product_name": product_name,
+                    'product_type': product_type,
+                    'product_sex': product_sex,
+                    'product_brand': product_brand,
+                    'product_description': product_description,
+                    'product_price': product_price,
+                    'image': image,
+                    'product_size': getProductSizeAndAmount()
+                },
+                // handle a successful response
+                success: function (json) {
+                    $('#loadingModal').hide();
+                    if (json.content['result']) {
+                        console.log('Done add product');
+{#                        window.location.reload();#}
+                        $('#loadingModal').hide();
+                        $('#message-dialog').show();
+                        $('#message-text').text(json.content['message']);
+                        $("form#form-product-image-upload").submit();
+                    } else {
+                        $('#message-dialog').className('alert-error');
+                        $('#message-dialog').show();
+                        $('#message-text').text(json.content['message']);
+                    }
+                },
+
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                    $('#loadingModal').hide();
+                }
+            });
+        });
+
+        function getNewProductDetail() {
+            product_name = $('#product-name').val();
+            product_type = $('#product-type').val();
+            product_sex = $("#product-sex").val();
+            product_brand = $("#product-brand").val();
+            product_description = $("#product-description").val();
+            product_price = $("#product-price").val();
+            image = $("#product-img").val();
+            var product = {
+                "product_name": product_name,
+                'product_type': product_type,
+                'clinic': product_sex,
+                'product_brand': product_brand,
+                'product_description': product_description,
+                'product_price': product_price,
+                'image': image
+            };
+        }
+
+        function getProductSizeAndAmount() {
+            var product_size = []
+            for (var i = 1; i < (rowcounter + 2); ++i) {
+                var size = $('#product-size-' + i).val();
+                var amount = $('#product-amount-' + i).val();
+                product_size.push({'size': size, 'amount': amount});
+            }
+            console.log(product_size);
+            return JSON.stringify(product_size);
+        }
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#product-image-1').attr('src', e.target.result);
+                    $('#product-image-1').css('width', '300px');
+                    $('#product-image-1').css('width', '200px');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#product-img").change(function () {
+            readURL(this);
+        });
+    </script>
 {% endblock %}

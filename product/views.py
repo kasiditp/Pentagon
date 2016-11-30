@@ -1,3 +1,5 @@
+import random
+import string
 from sets import Set
 
 from django.db.models import Max,Min
@@ -24,6 +26,12 @@ PRODUCT_TYPES = {
     "footwear": 4,
     "accessory": 5
 }
+ORDERSTATUS = [
+    (1, "Ordered"),
+    (2, "Payment accepted"),
+    (3, "Delivery")
+]
+
 num = 0
 
 def product_view(request):
@@ -185,7 +193,7 @@ def put_in_cart(request):
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        new_cart_item = Cart(user=user, stock=stock, amount=1)
+        new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
         new_cart_item.save()
         stock.amount -= 1
         stock.save()
@@ -205,7 +213,7 @@ def put_in_cart_by_simulate(request):
             if top_stock.amount <= 0:
                 print "Do nothing"
             else:
-                new_cart_item = Cart(user=user, stock=top_stock, amount=1)
+                new_cart_item = Cart(user=user, stock=top_stock, amount=1, status=0, invoice_number=None)
                 new_cart_item.save()
                 top_stock.amount -=1
                 top_stock.save()
@@ -216,7 +224,7 @@ def put_in_cart_by_simulate(request):
             if bottom_stock.amount <= 0:
                 print "Do nothing"
             else:
-                new_cart_item = Cart(user=user, stock=bottom_stock, amount=1)
+                new_cart_item = Cart(user=user, stock=bottom_stock, amount=1, status=0, invoice_number=None)
                 new_cart_item.save()
                 bottom_stock.amount -=1
                 bottom_stock.save()
@@ -316,6 +324,29 @@ def clear_cart(request):
 
 @ajax
 @csrf_exempt
+def paypal_ordered(request):
+    if request.POST:
+        print("POST1")
+        user_id = request.POST.get('user')
+        print(user_id)
+        user = get_object_or_404(User, unique_id=user_id)
+        print(user.first_name)
+        carts = Cart.objects.filter(user=user)
+        trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        print("POST2")
+        for cart in carts:
+            print(cart.stock.product.name)
+            cart.status = 3
+            cart.invoice_number = trans_id
+            cart.save()
+            print(cart.updated)
+
+    request.session['success'] = True
+    request.session['success_message'] = "Thank you for shopping with us!"
+    return HttpResponseRedirect(reverse('product:product_view'))
+
+@ajax
+@csrf_exempt
 def change_page(request):
     if request.POST:
         type = request.POST.get('type')
@@ -376,6 +407,7 @@ def filtered(request):
         rendered = template.render(context)
 
         return {'result': True, 'rendered': rendered}
+
 
 def is_number(s):
     try:
