@@ -34,6 +34,7 @@ ORDERSTATUS = [
 
 num = 0
 
+
 def product_view(request):
     product_list = Product.objects.all()
     max_price = Product.objects.all().aggregate(Max('price'))
@@ -93,15 +94,21 @@ def product_type_view(request, product_type):
     else:
         return HttpResponse(reverse('product_view'))
 
+
 def simulate_view(request):
     simulate_list_top = Product.objects.filter(type=PRODUCT_TYPES["top"])
+    simulate_list_brand_top = get_all_brand('top')
     simulate_list_bottom = Product.objects.filter(type=PRODUCT_TYPES["bottom"])
+    simulate_list_brand_bottom = get_all_brand('bottom')
     context = {
         'simulate_list_top': simulate_list_top,
         'simulate_list_bottom': simulate_list_bottom,
+        'simulate_list_brand_top': simulate_list_brand_top,
+        'simulate_list_brand_bottom': simulate_list_brand_bottom
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/simulate/simulate.html',context)
+
 
 @ajax
 @csrf_exempt
@@ -127,6 +134,7 @@ def get_all_brand(type):
 
     return brand
 
+
 def value_to_key(type):
     if type == '0' or type == 0:
         return 'all'
@@ -148,6 +156,9 @@ def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     images = product.get_all_image()
     stocks = product.get_stocks()
+    no_stock = False
+    if stocks.__len__() == 0:
+        no_stock = True
     error = False
     error_message = ""
     success = False
@@ -176,6 +187,7 @@ def product_details(request, product_id):
         'success': success,
         'success_message': success_message,
         'suggest': suggest,
+        'no_stock': no_stock,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/productdetails/details.html', context)
@@ -193,13 +205,22 @@ def put_in_cart(request):
         request.session['error_message'] = "There is something wrong putting this item into your cart. Please check again"
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
     else:
-        new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
-        new_cart_item.save()
+        cart_check = Cart.objects.filter(stock=stock, user=user, status=0)
+        if cart_check.__len__() < 1:
+            new_cart_item = Cart(user=user, stock=stock, amount=1, status=0, invoice_number=None)
+            new_cart_item.save()
+        else:
+            for cart in cart_check:
+                cart.amount += 1
+                cart.save()
+
         stock.amount -= 1
         stock.save()
+
         request.session['success'] = True
         request.session['success_message'] = "Done! Successfully added this item into your cart."
         return HttpResponseRedirect(reverse('product:product_details', args=[product_id]))
+
 
 @ajax
 @csrf_exempt
@@ -232,14 +253,15 @@ def put_in_cart_by_simulate(request):
             return {'Fail': True }
         return HttpResponseRedirect(reverse('manage_cart'))
 
+
 def manage_cart(request):
     user_id = request.session['user_unique_id']
     cart_items = []
-    cart = Cart.objects.filter(user__unique_id=user_id)
+    cart = Cart.objects.filter(user__unique_id=user_id, status=0)
     # for item in cart:
     #     stock = get_object_or_404(Stock, pk=item.stock)
     #     cart_items.append(stock)
-    total_price = Cart.get_total_price(user_id)
+    total_price = Cart.get_total_price_in_cart(user_id)
     error = False
     error_message = ""
     success = False
@@ -270,10 +292,12 @@ def manage_cart(request):
 def order_checkout(request):
     user_id = request.session['user_unique_id']
     user = get_object_or_404(User, unique_id=user_id)
-    carts = Cart.objects.filter(user=user)
+    carts = Cart.objects.filter(user=user, status=0)
+    total_price = Cart.get_total_price_in_cart(user_id)
     context = {
         'user': user,
         'carts': carts,
+        'total_price': total_price,
     }
     context.update(get_nav_context(request))
     return render(request, 'pages/cart/order.html', context)
@@ -311,9 +335,10 @@ def remove_from_cart(request):
 
     return HttpResponseRedirect(reverse('manage_cart'))
 
+
 def clear_cart(request):
     user_id = request.session['user_unique_id']
-    all_cart = Cart.objects.filter(user__unique_id=user_id)
+    all_cart = Cart.objects.filter(user__unique_id=user_id, status=0)
     for item in all_cart:
         item.stock.amount += item.amount
         item.stock.save()
@@ -321,6 +346,25 @@ def clear_cart(request):
     request.session['success'] = True
     request.session['success_message'] = "Successfully updated your cart."
     return HttpResponseRedirect(reverse('manage_cart'))
+
+
+def purchase_complete(request):
+    context = {}
+    context.update(get_nav_context(request))
+    return render(request, 'pages/cart/purchase_complete.html', context)
+
+
+def transfer_ordered(request):
+    user_id = request.session.get('user_unique_id')
+    user = get_object_or_404(User, unique_id=user_id)
+    carts = Cart.objects.filter(user=user, status=0)
+    trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+    for cart in carts:
+        print(cart.stock.product.name)
+        cart.status = 1
+        cart.invoice_number = trans_id
+        cart.save()
+    return HttpResponseRedirect(reverse('purchase_complete'))
 
 @ajax
 @csrf_exempt
@@ -331,7 +375,7 @@ def paypal_ordered(request):
         print(user_id)
         user = get_object_or_404(User, unique_id=user_id)
         print(user.first_name)
-        carts = Cart.objects.filter(user=user)
+        carts = Cart.objects.filter(user=user, status=0)
         trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
         print("POST2")
         for cart in carts:
@@ -341,9 +385,8 @@ def paypal_ordered(request):
             cart.save()
             print(cart.updated)
 
-    request.session['success'] = True
-    request.session['success_message'] = "Thank you for shopping with us!"
-    return HttpResponseRedirect(reverse('product:product_view'))
+    return HttpResponseRedirect(reverse('purchase_complete'))
+
 
 @ajax
 @csrf_exempt
@@ -361,7 +404,6 @@ def change_page(request):
         else:
             product_list = product_list[(int(num_page)-1)*8:]
 
-
         template = loader.get_template('pages/product/item/product_item.html')
         context = Context({
             'product_list': product_list,
@@ -369,6 +411,7 @@ def change_page(request):
         })
         rendered = template.render(context)
         return {'result': True, 'rendered': rendered}
+
 
 @ajax
 @csrf_exempt
@@ -387,6 +430,7 @@ def get_product_stock(request):
             stock_id_list.append(stock.id)
 
         return {'result': True, 'content' : return_list, 'stock_id': stock_id_list }
+
 
 @ajax
 @csrf_exempt
@@ -416,7 +460,8 @@ def is_number(s):
     except ValueError:
         return False
 
-def filter_by_value(filter,type,brand):
+
+def filter_by_value(filter, type, brand):
     # filter_product = None
     filter_product_set = Set()
     # filter_button = request.POST.get('button_id')
@@ -439,7 +484,6 @@ def filter_by_value(filter,type,brand):
         universe_set = Product.objects.all()
     else:
         universe_set = Product.objects.filter(type=type)
-
 
     for data in filter_data:
         if data == 'null':
@@ -518,6 +562,7 @@ def filter_by_value(filter,type,brand):
 
     filter_product_set = list(filter_product_set)
     return filter_product_set
+
 
 def what_sex(sex):
     if sex == 'Men':

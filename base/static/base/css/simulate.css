@@ -11,5 +11,10 @@
     border-left: solid 1px;
     border-right: solid 1px;
     border-bottom: solid 1px;
+    border-top: solid 1px;
     height: 220px;
+}
+
+.selection_brand {
+    margin-top: 10px;
 }
