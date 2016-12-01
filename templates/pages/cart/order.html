@@ -46,6 +46,35 @@
                             <a href="{% url 'manage_cart' %}" class="btn btn-primary btn-borderless">RETURN TO CART</a>
                         </div>
                     </div>
+                    <div class="panel panel-info" style="border-radius: 0">
+                        <div class="panel-heading" style="border-radius: 0">
+                            <h3 class="panel-title checkout-header" style="border-radius: 0">
+                                PLEASE SELECT SHIPMENT PROVIDER</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="shipmentOption" id="shipmentOption" value="0" checked>
+                                    Thai Post
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="shipmentOption" id="shipmentOption" value="1">
+                                    DHL
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="shipmentOption" id="shipmentOption" value="2">
+                                    FedEx
+                                </label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
 
                     <div class="panel panel-info" style="border-radius: 0">
                         <div class="panel-heading" style="border-radius: 0">
@@ -68,8 +97,11 @@
                             {#                                </label>#}
                             {#                            </div>#}
                             <div id="paypal-button"></div>
-                            <a href="{% url 'product:transfer_checkout' %}" class="btn btn-success btn-borderless">
-                                BANK TRANSFER<br>CASH TRANSFER</a>
+                            <form method="post" action="{% url 'product:transfer_checkout' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="shipment" id="shipment">
+                                <input type="submit" onClick="transferData()" class="btn btn-success btn-borderless" value="CASH or TRANSFER">
+                            </form>
                         </div>
 
 
@@ -80,6 +112,10 @@
         </div>
     </section>
     <script>
+        var transferData = function() {
+            var selected = $('input[name=shipmentOption]:checked').val();
+            $('#shipment').val(selected)
+        };
         paypal.Button.render({
 
             env: 'sandbox', // Specify 'sandbox' for the test environment
@@ -106,7 +142,10 @@
                     url: "{% url 'product:paypal_checkout' %}",
                     type: 'POST',
                     traditional: true,
-                    data: {'user':"{{ user.unique_id }}"},
+                    data: {
+                        'user':"{{ user.unique_id }}",
+                        'shipment':$('input[name=shipmentOption]:checked').val()
+                    },
 
                     success: function (json) {
                         window.location.replace(json.content);
