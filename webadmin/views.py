@@ -8,12 +8,51 @@ from django_ajax.decorators import ajax
 from django.urls import reverse
 
 from base.views import get_nav_context
-from product.models import Product, Stock, ProductImage
+from product.models import *
 from models import *
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+#from product.views import get_all_brand
+
+
 def admin_home(request):
-    return render(request, 'pages/admin/admin-home.html',get_nav_context(request))
+    transaction_list = Transaction.objects.filter(status__gte=3)
+    ctemp = []
+    for tl in transaction_list:
+        ctemp.append(tl.invoice_number)
+    cart_list = Cart.objects.filter(invoice_number__in=ctemp)
+    dtemp = []
+    for cl in cart_list:
+        dtemp.append(cl.stock_id)
+    stock = Stock.objects.filter(pk__in=dtemp)
+    sell_out = {}
+    for s in stock:
+        cart_amount = Cart.objects.filter(stock=s)[0]
+        if s.product.brand in sell_out:
+            sell_out[s.product.brand] += cart_amount.amount
+        else:
+            sell_out[s.product.brand] = cart_amount.amount
+
+    sell_out_price = {}
+    for s in stock:
+        cart_amount = Cart.objects.filter(stock=s)[0]
+        if s.product.brand in sell_out_price:
+            sell_out_price[s.product.brand] += (s.product.price * cart_amount.amount)
+        else:
+            sell_out_price[s.product.brand] = (s.product.price * cart_amount.amount)
+
+    total_price = 0
+    for tl in transaction_list:
+        total_price += tl.total_amount
+
+    context = {
+        'sell_out': json.dumps(sell_out),
+        'sell_out_price': json.dumps(sell_out_price),
+        'total_price': total_price
+    }
+    context.update(get_nav_context(request))
+    return render(request, 'pages/admin/admin-home.html', context)
 
 def admin_product(request):
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))

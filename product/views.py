@@ -15,6 +15,7 @@ from django.template import loader, Context
 from base.views import get_nav_context
 from member.models import User
 from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
+from webadmin.views import create_transaction
 
 SIZE_LIST = set()
 SEX_LIST = ['Men', 'Women', 'Unisex']
@@ -364,6 +365,7 @@ def transfer_ordered(request):
         cart.status = 1
         cart.invoice_number = trans_id
         cart.save()
+    create_transaction()
     return HttpResponseRedirect(reverse('purchase_complete'))
 
 @ajax
@@ -384,6 +386,7 @@ def paypal_ordered(request):
             cart.invoice_number = trans_id
             cart.save()
             print(cart.updated)
+        create_transaction()
 
     return HttpResponseRedirect(reverse('purchase_complete'))
 
