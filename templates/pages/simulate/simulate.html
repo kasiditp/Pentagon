@@ -12,7 +12,7 @@
                     <div id="top_zone">
                         <div class="row">
                             <div class="col-md-12">
-                                <img style="margin-bottom: 0; padding-bottom: 0;"
+                                <img style="margin-bottom: 0; padding-bottom: 0; width: 500px"
                                      class="img-responsive center-block simulate_image" id="simulate_image_top"
                                      src="http://www.clipartkid.com/images/277/ist2-379063-t-shirt-template-jpg-photo-by-mikomiko321-photobucket-wvSDrk-clipart.jpg">
                             </div>
@@ -96,6 +96,17 @@
             $('#' + type + '_size_dropdown_button').html("Size " + "<span class = \"caret\"></span>");
 
             changeDropDownMenu(type);
+        }
+
+        function changePicSize() {
+            var pic_real_width, pic_real_height;
+            $("#simulate_image_top") // Make in memory copy of image to avoid css issues
+                    .attr("src", $(img).attr("src"))
+                    .load(function () {
+                        pic_real_width = this.width;   // Note: $(this).width() will not
+                        pic_real_height = this.height; // work for in memory images.
+                    });
+                console.log(pic_real_width);
         }
 
         function changeDropDownMenu(type) {

@@ -18,3 +18,11 @@
 .selection_brand {
     margin-top: 10px;
 }
+
+.simulate_image_top {
+    width: 500px;
+}
+
+.simulate_image_bottom {
+    width: 400px;
+}
