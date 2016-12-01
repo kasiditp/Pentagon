@@ -7,8 +7,8 @@
         <div class="container" id="product_info">
             <div class="row">
                 <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">{{ sex }}</a></li>
+                    <li><a href="{% url "home:index" %}">Home</a></li>
+                    <li><a href="{% url "product:product_view" %} }">Product</a></li>
                     <li class="active">{{ type }}</li>
                 </ol>
             </div>

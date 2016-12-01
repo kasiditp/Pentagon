@@ -10,7 +10,8 @@
     <section>
         <div class="row">
             <ol class="breadcrumb" id="breadcrumb">
-                <li><a href="#">Home</a></li>
+                <li><a href="{% url "home:index" %}">Home</a></li>
+                <li><a href="#">Product</a></li>
             </ol>
         </div>
 
@@ -244,7 +245,7 @@
                     console.log("New ID : " + newId);
                 }
                 else
-                    newId = filtered_list['size']
+                    newId = filtered_list['size'];
                 $('#size_' + newId).removeClass("btn-success");
             }
 
