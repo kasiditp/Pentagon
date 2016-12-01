@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^success/$', success, name="success_page"),
     url(r'^login/$', login, name="login"),
     url(r'^logout/$', logout, name="logout"),
-    url(r'^trace/$', trace , name="trace"),
+    url(r'^trace/$', trace, name="trace"),
     url(r'^payment_upload/$', payment_upload , name="payment_upload"),
 ]

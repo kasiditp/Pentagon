@@ -2,12 +2,23 @@
 {% load static %}
 {% block content %}
     <section>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         {% if success %}
             <div class="alert alert-success  ">
                 <center><strong>{{ success }}</strong></center>
             </div>
         {% endif %}
+<<<<<<< HEAD
         <div class="container">
+=======
+
+        <div class="container">
+
+
+>>>>>>> master
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -27,6 +38,10 @@
                             <td>{{ transaction.updated }}</td>
                             <td>{{ transaction.total_amount }}</td>
                             <td>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                             </td>
                             <td>
                                 {% if transaction.status == 1 %}
@@ -37,6 +52,10 @@
                                             <div class="col-md-6">
                                                 <input type="file" id="img-file" name="img-file" accept="image/*"
                                                        class="upload"/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                                             </div>
                                             <div class="col-md-6">
                                                 <button class="btn btn-primary"
@@ -46,16 +65,25 @@
                                             </div>
                                         </form>
                                     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                                 {% endif %}
                                 {% if transaction.status == 2 %}
                                     <div class="col-md-6">
                                         <h6>Payment reference uploaded <br> Wait for Confirmation</h6>
                                     </div>
                                 {% endif %}
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                                 {% if transaction.status == 3 %}
                                     <div class="col-md-6">
                                         <h6>Payment accpeted <br> Wait for delivery code</h6>
                                     </div>
+<<<<<<< HEAD
                                 {% endif %}
                                 {% if transaction.status == 4 %}
                                     <h5>Delivery process <br> Delivery code : {{ transaction.delivery_code }}</h5>
@@ -65,6 +93,18 @@
                                 {% if transaction.status == 4 %}
                                     <a href="http://track.thailandpost.co.th/tracking/default.aspx">Click Here</a>
                                 {% endif %}
+=======
+
+                                {% endif %}
+                                {% if transaction.status == 4 %}
+                                    <h6>Delivery process <br> Delivery code : {{ transaction.delivery_code }}</h6>
+
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                <a href="http://track.thailandpost.co.th/tracking/default.aspx">Click Here</a>
+>>>>>>> master
                             </td>
                         </tr>
                     {% endif %}

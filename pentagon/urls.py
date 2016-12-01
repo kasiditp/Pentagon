@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from base.views import search_redirect
 from member.views import login_view
 from product.views import *
 
@@ -20,6 +21,7 @@ urlpatterns = [
     url(r'^clear_cart/', clear_cart, name='clear_cart'),
     url(r'^checkout/', order_checkout, name="checkout"),
     url(r'^login', login_view, name='login_view'),
+    url(r'^search_redirect/$', search_redirect, name='search_redirect'),
     url(r'^purchase_complete/', purchase_complete, name="purchase_complete"),
     # url(r'^webadmin/', include(admin.site.urls)),
 ]

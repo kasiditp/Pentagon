@@ -4,82 +4,66 @@
 {% block content %}
     <link href="{% static 'product/css/admin_home.css' %}" rel="stylesheet">
     <section>
-        {# row 1 #}
         <div class="row">
             <img src="{% static 'base/image/statistic_bg.png' %}">
         </div>
-
-        {# row 2 #}
-        <div class="row">
-            <div class="col-md-2">
-
-            </div>
-            <div class="col-md-8 all-statistic">
-                <div class="bar-chart-block block">
-                    <h2 class='titular'>Income categorized by type</h2>
-                    <div class='grafico bar-chart'>
-                        <ul class='cht-y'>
-                            <li datacht-Y='60'></li>
-                            <li datacht-Y='45'></li>
-                            <li datacht-Y='30'></li>
-                            <li datacht-Y='15'></li>
-                            <li datacht-Y='0'></li>
-                        </ul>
-                        <ul class='cht-x'>
-                            <li datacht-X='37'><i>1</i></li>
-                            <li datacht-X='56'><i>2</i></li>
-                            <li datacht-X='25'><i>3</i></li>
-                            <li datacht-X='18'><i>4</i></li>
-                            <li datacht-X='45'><i>5</i></li>
-                            <li datacht-X='50'><i>6</i></li>
-                            <li datacht-X='33'><i>7</i></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="donut-chart-block block">
-                <h2 class="titular">INCOME STATS</h2>
-                <div class="donut-chart">
-                    <div id="porcion1" class="recorte">
-                        <div class="quesito ios" data-rel="21"></div>
-                    </div>
-                    <div id="porcion2" class="recorte">
-                        <div class="quesito mac" data-rel="39"></div>
-                    </div>
-                    <div id="porcion3" class="recorte">
-                        <div class="quesito win" data-rel="31"></div>
-                    </div>
-                    <div id="porcionFin" class="recorte">
-                        <div class="quesito linux" data-rel="9"></div>
-                    </div>
-                    <p class="center-date">DECEMBER<br><span class="scnd-font-color">2016</span></p>
-                </div>
-                <ul class="os-percentages horizontal-list">
-                    <li>
-                        <p class="ios os scnd-font-color">Top</p>
-                        <p class="os-percentage">21<sup>%</sup></p>
-                    </li>
-                    <li>
-                        <p class="mac os scnd-font-color">Bottom</p>
-                        <p class="os-percentage">39<sup>%</sup></p>
-                    </li>
-                    <li>
-                        <p class="linux os scnd-font-color">Footwear</p>
-                        <p class="os-percentage">9<sup>%</sup></p>
-                    </li>
-                    <li>
-                        <p class="win os scnd-font-color">Accessory</p>
-                        <p class="os-percentage">31<sup>%</sup></p>
-                    </li>
-                </ul>
-            </div>
-            </div>
-
-
+        <div style="text-align: center">
+            <div id="piechart" style="width: 900px; height: 500px;display: block; margin: 0 auto;"></div>
         </div>
-        <div class="col-md-2">
+        <div id="chart_div" style="width: 600px; height: 500px;display: block; margin: 0 auto;"></div>
 
-        </div>
-        </div>
     </section>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        //Creat Pie Chart
+        var tagbs = JSON.stringify({{ sell_out|safe }});
+        data = $.parseJSON(tagbs);
+        var result_data = [['Task', 'Hours per Day']];
+        $.each(data, function (i, item) {
+            result_data.push([i,item])
+        });
+        console.log(result_data);
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(result_data);
+            var options = {
+                title: 'Amount of product sale'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+        //Create Colum Chart
+        var price_list = JSON.stringify({{ sell_out_price|safe }});
+        price_data = $.parseJSON(price_list);
+        result_price_data = [['Element', 'Amount', {role: 'style'}]];
+        $.each(price_data, function (i, item) {
+            result_price_data.push([i, item, 'blue']);
+        });
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+            var colum_data = google.visualization.arrayToDataTable(result_price_data);
+            var view = new google.visualization.DataView(colum_data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2]);
+
+            var options = {
+                title: "Total sold price by brand",
+                width: 600,
+                height: 400,
+                bar: {groupWidth: "95%"},
+                legend: {position: "none"},
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
+            chart.draw(view, options)
+        }
+    </script>
 {% endblock %}

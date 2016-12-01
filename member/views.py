@@ -205,7 +205,7 @@ def trace(request):
     }
     context.update(get_nav_context(request))
 
-    return render(request, 'pages/member/trace.html' , context)
+    return render(request, 'pages/member/trace.html', context)
 
 def payment_upload(request):
     unique_id = request.session['user_unique_id']

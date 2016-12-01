@@ -198,7 +198,8 @@ def put_in_cart(request):
     product_id = request.POST['product_id']
     stock_id = request.POST['size_select']
     user_unique_id = request.session['user_unique_id']
-    product = get_object_or_404(Product, pk=product_id)
+    print product_id
+    # product = get_object_or_404(Product, pk=product_id)
     stock = get_object_or_404(Stock, pk=stock_id)
     user = get_object_or_404(User, unique_id=user_unique_id)
     if stock.amount <= 0:
@@ -357,6 +358,7 @@ def purchase_complete(request):
 
 def transfer_ordered(request):
     user_id = request.session.get('user_unique_id')
+    shipment = request.POST.get('shipment')
     user = get_object_or_404(User, unique_id=user_id)
     carts = Cart.objects.filter(user=user, status=0)
     trans_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
@@ -364,6 +366,7 @@ def transfer_ordered(request):
         print(cart.stock.product.name)
         cart.status = 1
         cart.invoice_number = trans_id
+        cart.shipment = shipment
         cart.save()
     create_transaction()
     return HttpResponseRedirect(reverse('purchase_complete'))
@@ -374,6 +377,7 @@ def paypal_ordered(request):
     if request.POST:
         print("POST1")
         user_id = request.POST.get('user')
+        shipment = request.POST.get('shipment')
         print(user_id)
         user = get_object_or_404(User, unique_id=user_id)
         print(user.first_name)
@@ -384,6 +388,7 @@ def paypal_ordered(request):
             print(cart.stock.product.name)
             cart.status = 3
             cart.invoice_number = trans_id
+            cart.shipment = shipment
             cart.save()
             print(cart.updated)
         create_transaction()
