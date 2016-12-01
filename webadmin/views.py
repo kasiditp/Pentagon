@@ -14,11 +14,9 @@ from models import *
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-<<<<<<< HEAD
+
 #from product.views import get_all_brand
 
-=======
->>>>>>> master
 
 def admin_home(request):
     transaction_list = Transaction.objects.filter(status__gte=3)
@@ -37,36 +35,27 @@ def admin_home(request):
             sell_out[s.product.brand] += cart_amount.amount
         else:
             sell_out[s.product.brand] = cart_amount.amount
-
     sell_out_price = {}
     for s in stock:
         cart_amount = Cart.objects.filter(stock=s)[0]
         if s.product.brand in sell_out_price:
-<<<<<<< HEAD
+
             sell_out_price[s.product.brand] += (s.product.price * cart_amount.amount)
         else:
             sell_out_price[s.product.brand] = (s.product.price * cart_amount.amount)
-=======
-            sell_out_price[s.product.brand] += (s.product.price*cart_amount.amount)
-        else:
-            sell_out_price[s.product.brand] = (s.product.price*cart_amount.amount)
->>>>>>> master
 
     total_price = 0
     for tl in transaction_list:
         total_price += tl.total_amount
-
     context = {
         'sell_out': json.dumps(sell_out),
         'sell_out_price': json.dumps(sell_out_price),
         'total_price': total_price
     }
     context.update(get_nav_context(request))
-    return render(request, 'pages/admin/admin-home.html', context)
-<<<<<<< HEAD
-=======
 
->>>>>>> master
+    return render(request, 'pages/admin/admin-home.html', context)
+
 
 def admin_product(request):
     return render(request, 'pages/admin/admin-product.html', get_nav_context(request))

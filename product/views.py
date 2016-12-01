@@ -14,7 +14,7 @@ from django.template import loader, Context
 
 from base.views import get_nav_context
 from member.models import User
-from product.models import Product, PRODUCT_TYPE, SEX, ProductImage, Stock, Cart
+from product.models import *
 from webadmin.views import create_transaction
 
 SIZE_LIST = set()

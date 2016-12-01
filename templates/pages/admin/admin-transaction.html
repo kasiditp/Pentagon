@@ -13,7 +13,7 @@
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Customer ID</th>
+                <th>Customer Info</th>
                 <th>Amount</th>
                   <th>Date Requested</th>
                   <th>Status</th>
@@ -31,11 +31,19 @@
                       <td>{{ transaction.invoice_number }}</td>
 
                       <td>
-{#                          <a id="user_info" href="#" data-toggle="tooltip" data-placement="top" data-html="true"#}
-{#                             title="First Name : {{  }}  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
-{#                             Last Name : {{  }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
-{#                             Address : {{  }}">#}
-{#                              {{  }}</a>#}
+                            <button type="button" class="btn btn-info" data-toggle="collapse"
+                                                data-target="#demo_{{ transaction.invoice_number }}">Info
+                            </button>
+                            <div id="demo_{{ transaction.invoice_number }}" class="collapse">
+                            {% for cart in cart_list %}
+                                {% if cart.invoice_number == transaction.invoice_number%}
+                                    {{ cart.user.first_name }} <br>
+                                    {{ cart.user.last_name }} <br>
+                                    {{ cart.user.address }}
+                                {% endif %}
+
+                            {% endfor %}
+                            </div>
 
                       </td>
 
@@ -74,7 +82,7 @@
                                         <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success" >Enter</button>
                                     {% endif %}
                                        {% if transaction.status == 4 %}
-                                            <h6>{{ transaction.delivery_code }}</h6>
+                                           <h6>{{ transaction.delivery_code }}</h6>
                                         {% endif %}
                                     {% if transaction.status == 1 or transaction.status == 2 %}
                                         <h6>Wait for order acceptation</h6>

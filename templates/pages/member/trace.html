@@ -1,120 +1,127 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <style>
+        .glyphicon.glyphicon-one-fine-dot:before {
+            content: "\25cf";
+            font-size: 1.5em;
+        }
+    </style>
     <section>
-<<<<<<< HEAD
-=======
 
->>>>>>> master
         {% if success %}
             <div class="alert alert-success  ">
                 <center><strong>{{ success }}</strong></center>
             </div>
         {% endif %}
-<<<<<<< HEAD
-        <div class="container">
-=======
 
         <div class="container">
 
 
->>>>>>> master
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Invoice Number</th>
-                    <th>Date</th>
-                    <th>Total price</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Delivery Track</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for transaction in user_transaction %}
-                    {% if transaction.status != 0 %}
-                        <tr>
-                            <td>{{ transaction.invoice_number }}</td>
-                            <td>{{ transaction.updated }}</td>
-                            <td>{{ transaction.total_amount }}</td>
-                            <td>
-<<<<<<< HEAD
-=======
+            <div class="container">
 
->>>>>>> master
-                            </td>
-                            <td>
-                                {% if transaction.status == 1 %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Invoice Number</th>
+                        <th>Date</th>
+                        <th>Total price</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Delivery Track</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in user_transaction %}
+                        {% if transaction.status != 0 %}
+                            <tr>
+                                <td>{{ transaction.invoice_number }}</td>
+                                <td>{{ transaction.updated }}</td>
+                                <td>{{ transaction.total_amount }}</td>
+                                <td>
                                     <div>
-                                        <form action="{% url 'member:payment_upload' %}" method="POST"
-                                              enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <div class="col-md-6">
-                                                <input type="file" id="img-file" name="img-file" accept="image/*"
-                                                       class="upload"/>
-<<<<<<< HEAD
-=======
+                                        <button type="button" class="btn btn-info" data-toggle="collapse"
+                                                data-target="#demo_{{ transaction.invoice_number }}">Detail
+                                        </button>
+                                        <div id="demo_{{ transaction.invoice_number }}" class="collapse">
+                                            {% for cart in cart_list %}
+                                                {% if cart.invoice_number == transaction.invoice_number %}
+                                                    Product : <strong>{{ cart.stock.product.name }}</strong>
+                                                    <br>
+                                                    Brand : <strong>{{ cart.stock.product.brand }}</strong>
+                                                    <br>
+                                                    Amount : <strong>{{ cart.amount }}</strong>
+                                                    <br>
+                                                    <hr size=2>
 
->>>>>>> master
-                                            </div>
-                                            <div class="col-md-6">
-                                                <button class="btn btn-primary"
-                                                        value="{{ transaction.invoice_number }}" name="invoice_number">
-                                                    Upload
-                                                </button>
-                                            </div>
-                                        </form>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
                                     </div>
-<<<<<<< HEAD
-=======
+                                </td>
+                                <td>
+                                    {% if transaction.status == 1 %}
+                                        <div>
+                                            <form action="{% url 'member:payment_upload' %}" method="POST"
+                                                  enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    <input type="file" id="img-file" name="img-file" accept="image/*"
+                                                           class="upload"/>
 
->>>>>>> master
-                                {% endif %}
-                                {% if transaction.status == 2 %}
-                                    <div class="col-md-6">
-                                        <h6>Payment reference uploaded <br> Wait for Confirmation</h6>
-                                    </div>
-                                {% endif %}
-<<<<<<< HEAD
-=======
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-primary"
+                                                            value="{{ transaction.invoice_number }}"
+                                                            name="invoice_number">
+                                                        Upload
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
 
->>>>>>> master
-                                {% if transaction.status == 3 %}
-                                    <div class="col-md-6">
-                                        <h6>Payment accpeted <br> Wait for delivery code</h6>
-                                    </div>
-<<<<<<< HEAD
-                                {% endif %}
-                                {% if transaction.status == 4 %}
-                                    <h5>Delivery process <br> Delivery code : {{ transaction.delivery_code }}</h5>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if transaction.status == 4 %}
-                                    <a href="http://track.thailandpost.co.th/tracking/default.aspx">Click Here</a>
-                                {% endif %}
-=======
+                                    {% endif %}
+                                    {% if transaction.status == 2 %}
+                                        <div>
+                                            <span class="glyphicon glyphicon-one-fine-dot" style="color:red"></span>
+                                            Payment reference uploaded <br> Wait for Confirmation
+                                        </div>
+                                    {% endif %}
 
-                                {% endif %}
-                                {% if transaction.status == 4 %}
-                                    <h6>Delivery process <br> Delivery code : {{ transaction.delivery_code }}</h6>
+                                    {% if transaction.status == 3 %}
+                                        <div>
+                                            <span class="glyphicon glyphicon-one-fine-dot" style="color:green"></span>
+                                            Payment accpeted
+                                        </div>
 
-                                {% endif %}
+                                    {% endif %}
+                                    {% if transaction.status == 4 %}
+                                        <span class="glyphicon glyphicon-one-fine-dot" style="color:blue"></span>
+                                        Delivery in process
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if transaction.status == 4 %}
+                                        <a href="http://track.thailandpost.co.th/tracking/default.aspx">Click Here</a>
+                                        <br>
+                                        <br> Delivery code : {{ transaction.delivery_code }}
+                                    {% endif %}
 
-                            </td>
-                            <td>
-                                <a href="http://track.thailandpost.co.th/tracking/default.aspx">Click Here</a>
->>>>>>> master
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-            {% if user_transaction %}
-            {% else %}
-                <h1>You don't have any transaction.</h1>
-            {% endif %}
-        </div>
+                                    {% if transaction.status != 4 %}
+                                        <span class="glyphicon glyphicon-one-fine-dot" style="color:blue"></span>
+                                        Wait for confirmation
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if user_transaction %}
+                {% else %}
+                    <h1>You don't have any transaction.</h1>
+                {% endif %}
+            </div>
     </section>
 {% endblock %}

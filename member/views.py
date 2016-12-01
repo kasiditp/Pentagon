@@ -201,7 +201,8 @@ def trace(request):
     user_transaction = Transaction.objects.filter(invoice_number__in=user_invoice_number)
 
     context = {
-        'user_transaction' : user_transaction
+        'user_transaction' : user_transaction,
+        'cart_list' : cart_list
     }
     context.update(get_nav_context(request))
 
