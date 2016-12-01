@@ -21,7 +21,7 @@ div {
     padding-bottom: 0;
     margin-bottom: 0;
 }
-#order-list-name {
+#order-list-name, #order-list-price, #order-list-size {
     font-size: small;
     padding-top: 0;
     padding-bottom: 0;

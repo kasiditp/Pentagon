@@ -4,6 +4,8 @@
     <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
     <link href="{% static 'product/css/order.css' %}" rel="stylesheet">
     <section>
+        {% load humanize %}
+
         <div class="container" id="order_panel">
             <div class="row">
                 <div class="col-md-12">
@@ -25,18 +27,22 @@
                         </div>
                         <div class="panel-body">
                             {% for cart in carts %}
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <img src="{{ cart.stock.product.get_image.image.url }}" height="75px">
-                                </div>
-                                <div class="col-md-10">
-                                    <p id="order-list-brand">{{ cart.stock.product.brand | upper }}</p>
-                                    <p id="order-list-name">{{ cart.stock.product.name }}</p>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <img src="{{ cart.stock.product.get_image.image.url }}" height="75px">
+                                    </div>
+                                    <div class="col-md-11">
+                                        <p id="order-list-brand">{{ cart.stock.product.brand | upper }}</p>
+                                        <p id="order-list-name">{{ cart.stock.product.name }}</p>
+                                        <p id="order-list-size">SIZE: {{ cart.stock.size }}</p>
+                                        <span id="order-list-price">{{ cart.stock.product.price| intcomma | floatformat:2}} THB × {{ cart.amount }}</span>
 
+                                    </div>
                                 </div>
-                            </div>
                                 <hr>
                             {% endfor %}
+                            <p style="padding-bottom: 0; margin-bottom: 0; font-size: medium; font-weight: bold">TOTAL</p>
+                            <h2 style="margin-top: 0; padding-top: 0">{{ total_price|floatformat:2|intcomma}} THB</h2>
                             <a href="{% url 'manage_cart' %}" class="btn btn-primary btn-borderless">RETURN TO CART</a>
                         </div>
                     </div>
@@ -47,23 +53,23 @@
                                 PLEASE SELECT PAYMENT METHOD</h3>
                         </div>
                         <div class="panel-body">
-{#                            <div class="radio">#}
-{#                                <label>#}
-{#                                    <input type="radio" name="paymentOption" id="paymentOption" value="option1" checked>#}
-{#                                    <!-- PayPal Logo -->#}
-{#                                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">#}
-{#                                    <!-- PayPal Logo -->#}
-{#                                </label>#}
-{#                            </div>#}
-{#                            <div class="radio">#}
-{#                                <label>#}
-{#                                    <input type="radio" name="paymentOption" id="paymentOption" value="option2">#}
-{#                                    Bank transfer or cash transfer#}
-{#                                </label>#}
-{#                            </div>#}
-                                <div id="paypal-button"></div>
-                                <a href="{% url 'product:transfer_checkout' %}" class="btn btn-success btn-borderless">
-                                    BANK TRANSFER<br>CASH TRANSFER</a>
+                            {#                            <div class="radio">#}
+                            {#                                <label>#}
+                            {#                                    <input type="radio" name="paymentOption" id="paymentOption" value="option1" checked>#}
+                            {#                                    <!-- PayPal Logo -->#}
+                            {#                                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">#}
+                            {#                                    <!-- PayPal Logo -->#}
+                            {#                                </label>#}
+                            {#                            </div>#}
+                            {#                            <div class="radio">#}
+                            {#                                <label>#}
+                            {#                                    <input type="radio" name="paymentOption" id="paymentOption" value="option2">#}
+                            {#                                    Bank transfer or cash transfer#}
+                            {#                                </label>#}
+                            {#                            </div>#}
+                            <div id="paypal-button"></div>
+                            <a href="{% url 'product:transfer_checkout' %}" class="btn btn-success btn-borderless">
+                                BANK TRANSFER<br>CASH TRANSFER</a>
                         </div>
 
 
@@ -87,7 +93,7 @@
                 return paypal.rest.payment.create(env, client, {
                     transactions: [
                         {
-                            amount: {total: '600.0', currency: 'THB'}
+                            amount: {total: '{{ total_price }}', currency: 'THB'}
                         }
                     ]
                 })

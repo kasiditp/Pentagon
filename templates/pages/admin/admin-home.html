@@ -4,21 +4,19 @@
 {% block content %}
     <link href="{% static 'product/css/admin_home.css' %}" rel="stylesheet">
     <section>
-        <h1>{{ sell_out }}</h1>
         <div class="row">
             <img src="{% static 'base/image/statistic_bg.png' %}">
         </div>
         <div style="text-align: center">
             <div id="piechart" style="width: 900px; height: 500px;display: block; margin: 0 auto;"></div>
-            <div id="chart_div"></div>
         </div>
+        <div id="chart_div" style="width: 600px; height: 500px;display: block; margin: 0 auto;"></div>
 
     </section>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        {#        console.log({{ sell_out }});#}
+        //Creat Pie Chart
         var tagbs = JSON.stringify({{ sell_out|safe }});
-        console.log(tagbs);
         data = $.parseJSON(tagbs);
         var result_data = [['Task', 'Hours per Day']];
         $.each(data, function (i, item) {
@@ -30,24 +28,24 @@
         function drawChart() {
             var data = google.visualization.arrayToDataTable(result_data);
             var options = {
-                title: 'My Daily Activities'
+                title: 'Amount of product sale'
             };
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
             chart.draw(data, options);
         }
-
+        //Create Colum Chart
+        var price_list = JSON.stringify({{ sell_out_price|safe }});
+        price_data = $.parseJSON(price_list);
+        result_price_data = [['Element', 'Amount', {role: 'style'}]];
+        $.each(price_data, function (i, item) {
+            result_price_data.push([i, item, 'blue']);
+        });
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawBasic);
 
         function drawBasic() {
-            var data = google.visualization.arrayToDataTable([
-                ['Element', 'Amount', {role: 'style'}],
-                ['Copper', 8.94, '#b87333'],            // RGB value
-                ['Silver', 10.49, 'silver'],            // English color name
-                ['Gold', 19.30, 'gold'],
-                ['Platinum', 21.45, 'color: #e5e4e2'], // CSS-style declaration
-            ]);
-            var view = new google.visualization.DataView(data);
+            var colum_data = google.visualization.arrayToDataTable(result_price_data);
+            var view = new google.visualization.DataView(colum_data);
             view.setColumns([0, 1,
                 {
                     calc: "stringify",
@@ -58,7 +56,7 @@
                 2]);
 
             var options = {
-                title: "Density of Precious Metals, in g/cm^3",
+                title: "Total sold price by brand",
                 width: 600,
                 height: 400,
                 bar: {groupWidth: "95%"},

@@ -26,18 +26,19 @@ def admin_home(request):
     stock = Stock.objects.filter(pk__in=dtemp)
     sell_out = {}
     for s in stock:
+        cart_amount = Cart.objects.filter(stock=s)[0]
         if s.product.brand in sell_out:
-            sell_out[s.product.brand] += 1
+            sell_out[s.product.brand] += cart_amount.amount
         else:
-            sell_out[s.product.brand] = 1
-        print s.product.brand
+            sell_out[s.product.brand] = cart_amount.amount
 
     sell_out_price = {}
     for s in stock:
+        cart_amount = Cart.objects.filter(stock=s)[0]
         if s.product.brand in sell_out_price:
-            sell_out_price[s.product.brand] += s.product.price
+            sell_out_price[s.product.brand] += (s.product.price*cart_amount.amount)
         else:
-            sell_out_price[s.product.brand] = s.product.price
+            sell_out_price[s.product.brand] = (s.product.price*cart_amount.amount)
 
     total_price = 0
     for tl in transaction_list:
