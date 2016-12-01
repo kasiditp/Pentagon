@@ -7,8 +7,8 @@
     <div class="alert alert-success  ">
           <center><strong>There are {{ num_transaction }} available transactions</strong></center>
     </div>
-    <div class = "container">
-      <div class = "col-md-12">
+
+      <div >
           <table class="table table-hover">
             <thead>
               <tr>
@@ -26,7 +26,7 @@
             <tbody>
 
                 {% for transaction in transaction_list %}
-                    <div>
+                    <div >
                     <tr>
                       <td>{{ transaction.invoice_number }}</td>
 
@@ -36,7 +36,6 @@
 {#                             Last Name : {{  }} &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp#}
 {#                             Address : {{  }}">#}
 {#                              {{  }}</a>#}
-
 
                       </td>
 
@@ -68,12 +67,19 @@
 
                         <td>
                                 <div>
+                                    <form action="{% url 'webadmin:enter_delivery_code' %}" id="change_password_form" method="POST">
+                                    {% csrf_token %}
                                    {% if transaction.status == 3 %}
-                                        <input type = "text" name = "order_id">
-                                        <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success btn-small" >Enter</button>
-                                    {% else %}
+                                        <input type = "text" name = "delivery_code">
+                                        <button type = "submit" value = {{ transaction.invoice_number }} name = "invoice_number" class="btn btn-success" >Enter</button>
+                                    {% endif %}
+                                       {% if transaction.status == 4 %}
+                                            <h6>{{ transaction.delivery_code }}</h6>
+                                        {% endif %}
+                                    {% if transaction.status == 1 or transaction.status == 2 %}
                                         <h6>Wait for order acceptation</h6>
                                     {% endif %}
+                                    </form>
                                 </div>
 
 
@@ -97,7 +103,7 @@
           </table>
       </div>
 
-    </div>
+
 
     <script>
 // Get the modal
